@@ -1,4 +1,4 @@
-package botLogic
+package helpingMethods
 
 import (
 	"fmt"
