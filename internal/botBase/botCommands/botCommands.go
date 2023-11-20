@@ -18,13 +18,13 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	messageData := &structures.MessageData{
 		MessageID:   update.Message.MessageID,
 		ChatID:      update.Message.Chat.ID,
-		Command:     "start",
+		Command:     "mainMenu",
 		PrevCommand: "",
 	}
 	fmt.Println(messageData)
 	positions := []int{2, 2}
 	commands := &[]structures.Command{
-		{Text: "Магазин", Command: "mainMenu"},
+		{Text: "Магазин", Command: "showShop"},
 		{Text: "Кабинет", Command: "showPersonalArea"},
 		{Text: "Поддержка", Command: "showSupport"},
 		{Text: "FAQ", Command: "showFAQ"},
@@ -39,13 +39,14 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	fmt.Println(message.MessageID, "MESSAGEID SHOP")
 	newKB := helpingMethods.CreateInline(&structures.MessageData{
 		MessageID:   message.MessageID,
-		ChatID:      update.Message.Chat.ID,
-		Command:     "start",
+		ChatID:      message.Chat.ID,
+		Command:     "mainMenu",
 		PrevCommand: "",
 	}, []int{2, 2}, *commands...)
 	newKBConf := tgbotapi.NewEditMessageReplyMarkup(chatID, message.MessageID, *newKB)
 	_, err = bot.Send(newKBConf)
 	if err != nil {
+		fmt.Println(messageData)
 		loggers.ErrorLogger.Println(err.Error(), "editKBError")
 	}
 }

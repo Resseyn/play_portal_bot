@@ -35,3 +35,25 @@ func ParseData(callbackData string) *structures.MessageData {
 	}
 	return messageData
 }
+func EditMessageWithPhotoAndReplyMarkup(data *structures.MessageData, commands *[]structures.Command, messageContent, picPath string, positions []int) *tgbotapi.EditMessageMediaConfig {
+	picBytes, err := ioutil.ReadFile(picPath)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+	}
+	photo := tgbotapi.NewPhoto(data.ChatID, tgbotapi.FileBytes{Name: "cat2", Bytes: picBytes})
+	kb := CreateInline(data, positions, *commands...)
+	editMediaConf := &tgbotapi.EditMessageMediaConfig{Media: tgbotapi.InputMediaPhoto{BaseInputMedia: tgbotapi.BaseInputMedia{
+		Type:      "photo",
+		Media:     photo.File,
+		Caption:   messageContent,
+		ParseMode: "Markdown",
+	},
+	},
+		BaseEdit: tgbotapi.BaseEdit{
+			ChatID:          data.ChatID,
+			MessageID:       data.MessageID,
+			InlineMessageID: "",
+			ReplyMarkup:     kb,
+		}}
+	return editMediaConf
+}
