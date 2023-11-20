@@ -6,3 +6,8 @@ type MessageData struct {
 	Command     string
 	PrevCommand string
 }
+
+type Command struct {
+	Text    string
+	Command string
+}
