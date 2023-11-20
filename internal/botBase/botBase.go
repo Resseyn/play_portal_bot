@@ -31,8 +31,10 @@ func BotStart() {
 				}
 			}
 		} else if update.CallbackQuery != nil {
-			data := strings.Split(update.CallbackQuery.Data, ",")
+			data := strings.Split(update.CallbackQuery.Data, ",") //0 - chatID 1- messageID 2 - command 3 - prevCommand
 			switch data[2] {
+			case "mainMenu":
+				botCommands.Menu(bot, &update)
 			case "showShop":
 				botCommands.Shop(bot, &update)
 			case "showPersonalArea":
