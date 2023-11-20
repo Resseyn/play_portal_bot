@@ -10,7 +10,7 @@ import (
 func Menu(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.MessageData) {
 
 	// =========PARAMS=========
-	picPath := "pkg/utils/data/img/gettyimages-1067956982.jpg"
+	picPath := "pkg/utils/data/img/Hydra.webp"
 	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
 	data.Command = "mainMenu"
 	data.PrevCommand = ""
