@@ -70,12 +70,12 @@ import (
 
 func CreateInline(data *structures.MessageData, positions []int, commands ...structures.Command) *tgbotapi.InlineKeyboardMarkup {
 	rows := len(positions)
-	sum := 0
+	su := 0
 	for _, v := range positions {
-		sum += v
+		su += v
 	}
 
-	if sum-len(commands) != 0 {
+	if su-len(commands) != 0 {
 		panic(fmt.Errorf("ТЫ ЕБАНАТ ПОСЧИТАЙ СТРОЧКИ И СТОЛБЦЫ"))
 	}
 	resrows := make([][]tgbotapi.InlineKeyboardButton, rows)

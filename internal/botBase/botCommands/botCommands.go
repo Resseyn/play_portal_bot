@@ -18,7 +18,7 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		Command:     "start",
 		PrevCommand: "",
 	}
-	positions := []int{2, 2}
+	positions := []int{4}
 	commands := &[]structures.Command{
 		{Text: "Магазин", Command: "mainMenu"},
 		{Text: "Кабинет", Command: "showPersonalArea"},

@@ -31,7 +31,7 @@ func Menu(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.Messag
 		loggers.ErrorLogger.Println(err)
 	}
 	editMediaConf := tgbotapi.EditMessageMediaConfig{Media: tgbotapi.FileBytes{Name: "cat2", Bytes: picBytes}}
-	kb := helpingMethods.CreateInline(data, []int{2, 2}, *commands...)
+	kb := helpingMethods.CreateInline(data, []int{4}, *commands...)
 	editTextConfig := tgbotapi.NewEditMessageTextAndMarkup(chatID, data.MessageID, messageContent, *kb)
 	_, err = bot.Send(editTextConfig)
 	if err != nil {
