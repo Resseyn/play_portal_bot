@@ -1,7 +1,6 @@
 package botBase
 
 import (
-	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"play_portal_bot/internal/botBase/botCommands"
 	"play_portal_bot/internal/loggers"
@@ -31,13 +30,17 @@ func BotStart() {
 					botCommands.BotStart(bot, &update)
 				}
 			}
-		}
-		if update.CallbackQuery != nil {
-			fmt.Println(update.CallbackQuery.Data)
+		} else if update.CallbackQuery != nil {
 			data := strings.Split(update.CallbackQuery.Data, ",")
 			switch data[2] {
-			case "123":
-
+			case "showShop":
+				botCommands.Shop(bot, &update)
+			case "showPersonalArea":
+				botCommands.Shop(bot, &update)
+			case "showFAQ":
+				botCommands.Shop(bot, &update)
+			case "showSupport":
+				botCommands.Shop(bot, &update)
 			}
 		}
 
