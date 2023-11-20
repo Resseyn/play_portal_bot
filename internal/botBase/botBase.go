@@ -2,6 +2,7 @@ package botBase
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"play_portal_bot/internal/botBase/botLogic"
 	"play_portal_bot/internal/loggers"
 )
 
@@ -10,6 +11,8 @@ func BotStart() {
 	if err != nil {
 		loggers.ErrorLogger.Panic(err)
 	}
+
+	botLogic.DoSomething()
 
 	bot.Debug = false
 
@@ -24,7 +27,11 @@ func BotStart() {
 		if update.Message.IsCommand() {
 			switch update.Message.Command() {
 			case "start":
-
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "123")
+				_, err := bot.Send(msg)
+				if err != nil {
+					return
+				}
 			}
 		}
 
