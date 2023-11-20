@@ -1,0 +1,5 @@
+package botLogic
+
+func DoSomething() {
+
+}
