@@ -2,11 +2,11 @@ package botLogic
 
 import (
 	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"play_portal_bot/pkg/utils/structures"
 )
 
-func SendInline(data *structures.MessageData) *tgbotapi.InlineKeyboardMarkup {
+func CreateInline(data *structures.MessageData) *tgbotapi.InlineKeyboardMarkup {
 	dataFormat := fmt.Sprintf("%v,%v,%v", data.ChatID, data.MessageID, data.Command)
 	switch data.Command {
 	case "start":

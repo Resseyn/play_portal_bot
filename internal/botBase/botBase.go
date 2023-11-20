@@ -2,10 +2,9 @@ package botBase
 
 import (
 	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"play_portal_bot/internal/botBase/botLogic"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"play_portal_bot/internal/botBase/botCommands"
 	"play_portal_bot/internal/loggers"
-	"play_portal_bot/pkg/utils/structures"
 )
 
 func BotStart() {
@@ -21,20 +20,14 @@ func BotStart() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
-	updates := bot.GetUpdatesChan(u)
+	updates, _ := bot.GetUpdatesChan(u)
 
 	for update := range updates {
 		if update.Message != nil {
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
 				case "start":
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "123")
-					msg.ReplyMarkup = botLogic.SendInline(&structures.MessageData{MessageID: update.Message.MessageID,
-						ChatID: update.Message.Chat.ID, Command: "start"})
-					_, err := bot.Send(msg)
-					if err != nil {
-						return
-					}
+					botCommands.BotStart(bot, &update)
 				}
 			}
 		}

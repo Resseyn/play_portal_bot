@@ -1,7 +1,19 @@
 package botCommands
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"play_portal_bot/internal/botBase/botLogic"
+	"play_portal_bot/internal/loggers"
+	"play_portal_bot/pkg/utils/structures"
+)
 
-func botStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-
+func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+	msg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, "pkg/utils/data/img/pngtree-isolated-cat-on-white-background-png-image_7094927.png")
+	msg.Caption = "Описание изображения"
+	msg.ReplyMarkup = botLogic.CreateInline(&structures.MessageData{MessageID: update.Message.MessageID,
+		ChatID: update.Message.Chat.ID, Command: "start"})
+	_, err := bot.Send(msg)
+	if err != nil {
+		loggers.ErrorLogger.Println(err.Error())
+	}
 }
