@@ -2,7 +2,7 @@ package helpingMethods
 
 import (
 	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"play_portal_bot/pkg/utils/structures"
 )
 

@@ -1,7 +1,7 @@
 package botCommands
 
 import (
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
@@ -21,7 +21,7 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	rows := 2
 	columns := 2
 	commands := &[]structures.Command{
-		{Text: "Магазин", Command: "showShop"},
+		{Text: "Магазин", Command: "mainMenu"},
 		{Text: "Кабинет", Command: "showPersonalArea"},
 		{Text: "Поддержка", Command: "showSupport"},
 		{Text: "FAQ", Command: "showFAQ"},

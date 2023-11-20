@@ -1,10 +1,11 @@
 package botBase
 
 import (
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"play_portal_bot/internal/botBase/botCommands"
+	"play_portal_bot/internal/botBase/botLogic"
+	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/loggers"
-	"strings"
 )
 
 func BotStart() {
@@ -20,7 +21,7 @@ func BotStart() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
-	updates, _ := bot.GetUpdatesChan(u)
+	updates := bot.GetUpdatesChan(u)
 
 	for update := range updates {
 		if update.Message != nil {
@@ -31,18 +32,18 @@ func BotStart() {
 				}
 			}
 		} else if update.CallbackQuery != nil {
-			data := strings.Split(update.CallbackQuery.Data, ",") //0 - chatID 1- messageID 2 - command 3 - prevCommand
-			switch data[2] {
+			messageData := helpingMethods.ParseData(update.CallbackQuery.Data)
+			switch messageData.Command {
 			case "mainMenu":
-				botCommands.Menu(bot, &update)
+				botLogic.Menu(bot, &update, messageData)
 			case "showShop":
-				botCommands.Shop(bot, &update)
-			case "showPersonalArea":
-				botCommands.Shop(bot, &update)
-			case "showFAQ":
-				botCommands.Shop(bot, &update)
-			case "showSupport":
-				botCommands.Shop(bot, &update)
+				botLogic.ShowShop(bot, &update, messageData)
+				//case "showPersonalArea":
+				//	botCommands.Shop(bot, &update)
+				//case "showFAQ":
+				//	botCommands.Shop(bot, &update)
+				//case "showSupport":
+				//	botCommands.Shop(bot, &update)
 			}
 		}
 
