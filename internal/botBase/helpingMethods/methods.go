@@ -35,6 +35,8 @@ func ParseData(callbackData string) *structures.MessageData {
 	}
 	return messageData
 }
+
+// EditMessageWithPhotoAndReplyMarkup ИЗМЕНЯЕТ СООБЩЕНИЕ С КАРТИНКОЙ И КЛАВОЙ
 func EditMessageWithPhotoAndReplyMarkup(data *structures.MessageData, commands *[]structures.Command, messageContent, picPath string, positions []int) *tgbotapi.EditMessageMediaConfig {
 	picBytes, err := ioutil.ReadFile(picPath)
 	if err != nil {

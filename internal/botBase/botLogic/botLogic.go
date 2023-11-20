@@ -41,7 +41,7 @@ func ShowShop(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.Me
 	commands := &[]structures.Command{
 		{Text: "Игровые сервисы", Command: ""},
 		{Text: "Сервисы", Command: ""},
-		{Text: "НАРКОТА", Command: ""},
+		{Text: "Pepega", Command: ""},
 	}
 	// =========PARAMS=========
 
