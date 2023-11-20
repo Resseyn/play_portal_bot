@@ -5,6 +5,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"play_portal_bot/internal/botBase/botCommands"
 	"play_portal_bot/internal/loggers"
+	"strings"
 )
 
 func BotStart() {
@@ -20,7 +21,7 @@ func BotStart() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
-	updates := bot.GetUpdatesChan(u)
+	updates, _ := bot.GetUpdatesChan(u)
 
 	for update := range updates {
 		if update.Message != nil {
@@ -33,6 +34,11 @@ func BotStart() {
 		}
 		if update.CallbackQuery != nil {
 			fmt.Println(update.CallbackQuery.Data)
+			data := strings.Split(update.CallbackQuery.Data, ",")
+			switch data[2] {
+			case "123":
+
+			}
 		}
 
 	}
