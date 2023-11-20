@@ -33,10 +33,23 @@ func CreateInline(data *structures.MessageData, rows, columns int, commands ...s
 	if len(commands) != rows*columns {
 		panic(fmt.Errorf("ТЫ ЕБАНАТ ПОСЧИТАЙ СТРОЧКИ И СТОЛБЦЫ"))
 	}
-
 	resrows := make([][]tgbotapi.InlineKeyboardButton, rows)
 	for i := range resrows {
 		resrows[i] = make([]tgbotapi.InlineKeyboardButton, columns)
+	}
+	prev := false
+	if data.PrevCommand != "" {
+		rows++
+		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
+		for i := range resrows {
+			if i == rows {
+				resrows[i] = make([]tgbotapi.InlineKeyboardButton, 1)
+				break
+			}
+			resrows[i] = make([]tgbotapi.InlineKeyboardButton, columns)
+		}
+		rows--
+		prev = true
 	}
 
 	cmdcount := 0
@@ -48,6 +61,10 @@ func CreateInline(data *structures.MessageData, rows, columns int, commands ...s
 
 			cmdcount++
 		}
+	}
+	if prev {
+		backFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.PrevCommand, "")
+		resrows[rows][0] = tgbotapi.NewInlineKeyboardButtonData("Назад", backFormat)
 	}
 
 	kb := tgbotapi.NewInlineKeyboardMarkup(resrows...)
