@@ -9,28 +9,36 @@ import (
 )
 
 func Menu(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.MessageData) {
+
+	// =========PARAMS=========
 	chatID := update.CallbackQuery.Message.Chat.ID
 	picPath := "pkg/utils/data/img/gettyimages-1067956982.jpg"
-	messageContent := "МАГАЗИН ГИДРА"
-	//messageData := &structures.MessageData{
-	//	MessageID:   update.Message.MessageID,
-	//	ChatID:      update.Message.Chat.ID,
-	//	Command:     "start",
-	//	PrevCommand: "mainMenu",
-	//}
-	//rows := 2
-	//columns := 2
+	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
 	commands := &[]structures.Command{
 		{Text: "Магазин", Command: "showShop"},
 		{Text: "Кабинет", Command: "showPersonalArea"},
 		{Text: "Поддержка", Command: "showSupport"},
 		{Text: "FAQ", Command: "showFAQ"},
 	}
+	// =========PARAMS=========
+
 	picBytes, err := ioutil.ReadFile(picPath)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 	}
-	editMediaConf := tgbotapi.EditMessageMediaConfig{Media: tgbotapi.FileBytes{Name: "cat2", Bytes: picBytes}}
+	photo := tgbotapi.NewPhoto(chatID, tgbotapi.FileBytes{Name: "cat2", Bytes: picBytes})
+	editMediaConf := tgbotapi.EditMessageMediaConfig{Media: tgbotapi.InputMediaPhoto{BaseInputMedia: tgbotapi.BaseInputMedia{
+		Type:      "photo",
+		Media:     photo.File,
+		Caption:   "Обновленная картинка",
+		ParseMode: "Markdown",
+	},
+	},
+		BaseEdit: tgbotapi.BaseEdit{
+			ChatID:          chatID,
+			MessageID:       data.MessageID,
+			InlineMessageID: "",
+		}}
 	kb := helpingMethods.CreateInline(data, []int{4}, *commands...)
 	editTextConfig := tgbotapi.NewEditMessageTextAndMarkup(chatID, data.MessageID, messageContent, *kb)
 	_, err = bot.Send(editTextConfig)
@@ -44,6 +52,8 @@ func Menu(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.Messag
 }
 
 func ShowShop(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.MessageData) {
+
+	// =========PARAMS=========
 	chatID := update.Message.Chat.ID
 	picPath := "pkg/utils/data/img/gettyimages-1067956982.jpg"
 	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
@@ -60,6 +70,8 @@ func ShowShop(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.Me
 		{Text: "Поддержка", Command: "showSupport"},
 		{Text: "FAQ", Command: "showFAQ"},
 	}
+	// =========PARAMS=========
+
 	msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, positions)
 	_, err := bot.Send(msg)
 	if err != nil {

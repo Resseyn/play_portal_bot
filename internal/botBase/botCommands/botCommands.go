@@ -9,6 +9,8 @@ import (
 
 // BotStart КОМАНДА СТАРТА, ПО СОВМЕСТИТЕЛЬСТВУ ВЫВОД ГЛАВНОГО МЕНЮ
 func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+
+	// =========PARAMS=========
 	chatID := update.Message.Chat.ID
 	picPath := "pkg/utils/data/img/pngtree-isolated-cat-on-white-background-png-image_7094927.png"
 	messageContent := "МАГАЗИН ГИДРА"
@@ -25,6 +27,8 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		{Text: "Поддержка", Command: "showSupport"},
 		{Text: "FAQ", Command: "showFAQ"},
 	}
+	// =========PARAMS=========
+
 	msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, positions)
 	_, err := bot.Send(msg)
 	if err != nil {

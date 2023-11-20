@@ -22,6 +22,7 @@ func CreateMessage(chatID int64, picPath, messageContent string, commands *[]str
 	return &msg
 }
 
+// парсит строку с колбек кновпеи в структуру
 func ParseData(callbackData string) *structures.MessageData {
 	data := strings.Split(callbackData, ",") //0 - chatID 1- messageID 2 - command 3 - prevCommand
 	data0, _ := strconv.Atoi(data[0])
