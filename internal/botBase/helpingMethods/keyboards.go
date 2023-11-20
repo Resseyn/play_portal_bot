@@ -51,7 +51,6 @@ func CreateInline(data *structures.MessageData, rows, columns int, commands ...s
 		rows--
 		prev = true
 	}
-
 	cmdcount := 0
 	for row := 0; row < rows; row++ {
 		for column := 0; column < columns; column++ {

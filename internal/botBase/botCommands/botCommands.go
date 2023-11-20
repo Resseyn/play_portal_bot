@@ -9,33 +9,24 @@ import (
 
 // BotStart КОМАНДА СТАРТА, ПО СОВМЕСТИТЕЛЬСТВУ ВЫВОД ГЛАВНОГО МЕНЮ
 func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	msg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, "pkg/utils/data/img/pngtree-isolated-cat-on-white-background-png-image_7094927.png")
-	msg.Caption = "МАГАЗИН ГИДРА"
-	msg.ReplyMarkup = helpingMethods.CreateInline(
-		&structures.MessageData{
-			MessageID:   update.Message.MessageID,
-			ChatID:      update.Message.Chat.ID,
-			Command:     "start",
-			PrevCommand: "",
-		}, 2, 2,
-		[]structures.Command{
-			{
-				Text:    "Магазин",
-				Command: "showShop",
-			},
-			{
-				Text:    "Кабинет",
-				Command: "showPersonalArea",
-			},
-			{
-				Text:    "Поддержка",
-				Command: "showSupport",
-			},
-			{
-				Text:    "FAQ",
-				Command: "showFAQ",
-			},
-		}...)
+	chatID := update.Message.Chat.ID
+	picPath := "pkg/utils/data/img/pngtree-isolated-cat-on-white-background-png-image_7094927.png"
+	messageContent := "МАГАЗИН ГИДРА"
+	messageData := &structures.MessageData{
+		MessageID:   update.Message.MessageID,
+		ChatID:      update.Message.Chat.ID,
+		Command:     "start",
+		PrevCommand: "",
+	}
+	rows := 2
+	columns := 2
+	commands := &[]structures.Command{
+		{Text: "Магазин", Command: "showShop"},
+		{Text: "Кабинет", Command: "showPersonalArea"},
+		{Text: "Поддержка", Command: "showSupport"},
+		{Text: "FAQ", Command: "showFAQ"},
+	}
+	msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, rows, columns)
 	_, err := bot.Send(msg)
 	if err != nil {
 		loggers.ErrorLogger.Println(err.Error())
