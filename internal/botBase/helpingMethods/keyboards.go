@@ -8,52 +8,97 @@ import (
 
 // TODO: ПАДРАЧИТЬ ХУЙ
 
-// makeInline(&data,[]zalupa{})
-//func CreateInline(data *structures.MessageData) *tgbotapi.InlineKeyboardMarkup {
-//	dataFormat := fmt.Sprintf("%v,%v,%v", data.ChatID, data.MessageID, data.Command)
-//	switch data.Command {
-//	case "start":
-//		mainMenuKeyboard := tgbotapi.NewInlineKeyboardMarkup(
-//			tgbotapi.NewInlineKeyboardRow(
-//				tgbotapi.NewInlineKeyboardButtonData("Магазин", dataFormat),
-//				tgbotapi.NewInlineKeyboardButtonData("Кабинет", dataFormat)),
-//			tgbotapi.NewInlineKeyboardRow(
-//				tgbotapi.NewInlineKeyboardButtonData("FAQ", dataFormat),
-//				tgbotapi.NewInlineKeyboardButtonData("Поддержка", dataFormat)),
-//		)
-//		return &mainMenuKeyboard
-//	case "":
+//func CreateInline(data *structures.MessageData, rows, columns int, commands ...structures.Command) *tgbotapi.InlineKeyboardMarkup {
 //
+//	if len(commands) != rows*columns {
+//		panic(fmt.Errorf("ТЫ ЕБАНАТ ПОСЧИТАЙ СТРОЧКИ И СТОЛБЦЫ"))
 //	}
-//	return nil
+//	resrows := make([][]tgbotapi.InlineKeyboardButton, rows)
+//	for i := range resrows {
+//		resrows[i] = make([]tgbotapi.InlineKeyboardButton, columns)
+//	}
+//	prev := false
+//	if data.PrevCommand != "" {
+//		rows++
+//		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
+//		for i := range resrows {
+//			if i == rows {
+//				resrows[i] = make([]tgbotapi.InlineKeyboardButton, 1)
+//				break
+//			}
+//			resrows[i] = make([]tgbotapi.InlineKeyboardButton, columns)
+//		}
+//		rows--
+//		prev = true
+//	}
+//	cmdcount := 0
+//	for row := 0; row < rows; row++ {
+//		for column := 0; column < columns; column++ {
+//			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, commands[cmdcount].Command, data.Command)
+//
+//			resrows[row][column] = tgbotapi.NewInlineKeyboardButtonData(commands[cmdcount].Text, dataFormat)
+//
+//			cmdcount++
+//		}
+//	}
+//	if prev {
+//		backFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.PrevCommand, "")
+//		resrows[rows][0] = tgbotapi.NewInlineKeyboardButtonData("Назад", backFormat)
+//	}
+//
+//	kb := tgbotapi.NewInlineKeyboardMarkup(resrows...)
+//	return &kb
 //}
 
-func CreateInline(data *structures.MessageData, rows, columns int, commands ...structures.Command) *tgbotapi.InlineKeyboardMarkup {
+/*
+НОВАЯ КЛАВИАТУРА:
+теперь вместо rows и columns используется слайс с количеством элементов в строке
+раньше:
+	3 rows 2 columns:
+---------------------
+|	button, button  |
+|	button, button  |
+|   button, button  |
+---------------------
+теперь: positions = []int{3,1,2}
+----------------------------
+|  button, button, button  |
+|          button          |
+|      button,button       |
+----------------------------
+*/
 
-	if len(commands) != rows*columns {
+func CreateInline(data *structures.MessageData, positions []int, commands ...structures.Command) *tgbotapi.InlineKeyboardMarkup {
+	rows := len(positions)
+	sum := 0
+	for _, v := range positions {
+		sum += v
+	}
+
+	if sum-len(commands) != 0 {
 		panic(fmt.Errorf("ТЫ ЕБАНАТ ПОСЧИТАЙ СТРОЧКИ И СТОЛБЦЫ"))
 	}
 	resrows := make([][]tgbotapi.InlineKeyboardButton, rows)
-	for i := range resrows {
-		resrows[i] = make([]tgbotapi.InlineKeyboardButton, columns)
+	for k, v := range positions {
+		resrows[k] = make([]tgbotapi.InlineKeyboardButton, v)
 	}
 	prev := false
 	if data.PrevCommand != "" {
-		rows++
+		positions = append(positions, 1)
 		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
-		for i := range resrows {
-			if i == rows {
-				resrows[i] = make([]tgbotapi.InlineKeyboardButton, 1)
+		for k, v := range positions {
+			if k == rows {
+				resrows[k] = make([]tgbotapi.InlineKeyboardButton, 1)
 				break
 			}
-			resrows[i] = make([]tgbotapi.InlineKeyboardButton, columns)
+			resrows[k] = make([]tgbotapi.InlineKeyboardButton, v)
 		}
 		rows--
 		prev = true
 	}
 	cmdcount := 0
 	for row := 0; row < rows; row++ {
-		for column := 0; column < columns; column++ {
+		for column := 0; column < positions[row]; column++ {
 			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, commands[cmdcount].Command, data.Command)
 
 			resrows[row][column] = tgbotapi.NewInlineKeyboardButtonData(commands[cmdcount].Text, dataFormat)

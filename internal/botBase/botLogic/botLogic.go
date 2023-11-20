@@ -31,7 +31,7 @@ func Menu(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.Messag
 		loggers.ErrorLogger.Println(err)
 	}
 	editMediaConf := tgbotapi.EditMessageMediaConfig{Media: tgbotapi.FileBytes{Name: "cat2", Bytes: picBytes}}
-	kb := helpingMethods.CreateInline(data, 2, 2, *commands...)
+	kb := helpingMethods.CreateInline(data, []int{2, 2}, *commands...)
 	editTextConfig := tgbotapi.NewEditMessageTextAndMarkup(chatID, data.MessageID, messageContent, *kb)
 	_, err = bot.Send(editTextConfig)
 	if err != nil {
@@ -53,15 +53,14 @@ func ShowShop(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.Me
 		Command:     "start",
 		PrevCommand: "mainMenu",
 	}
-	rows := 2
-	columns := 2
+	positions := []int{2, 2}
 	commands := &[]structures.Command{
 		{Text: "Магазин", Command: "showShop"},
 		{Text: "Кабинет", Command: "showPersonalArea"},
 		{Text: "Поддержка", Command: "showSupport"},
 		{Text: "FAQ", Command: "showFAQ"},
 	}
-	msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, rows, columns)
+	msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, positions)
 	_, err := bot.Send(msg)
 	if err != nil {
 		loggers.ErrorLogger.Println(err.Error())

@@ -10,14 +10,14 @@ import (
 )
 
 // СОЗДАЕТ НУЖНОЕ СООБЩЕНИЕ
-func CreateMessage(chatID int64, picPath, messageContent string, commands *[]structures.Command, messageData *structures.MessageData, rows, columns int) *tgbotapi.PhotoConfig {
+func CreateMessage(chatID int64, picPath, messageContent string, commands *[]structures.Command, messageData *structures.MessageData, positions []int) *tgbotapi.PhotoConfig {
 	picBytes, err := ioutil.ReadFile(picPath)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 	}
 	msg := tgbotapi.NewPhoto(chatID, tgbotapi.FileBytes{Name: "cat1", Bytes: picBytes})
 	msg.Caption = messageContent
-	msg.ReplyMarkup = CreateInline(messageData, rows, columns,
+	msg.ReplyMarkup = CreateInline(messageData, positions,
 		*commands...)
 	return &msg
 }

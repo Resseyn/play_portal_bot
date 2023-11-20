@@ -18,15 +18,14 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		Command:     "start",
 		PrevCommand: "",
 	}
-	rows := 2
-	columns := 2
+	positions := []int{2, 2}
 	commands := &[]structures.Command{
 		{Text: "Магазин", Command: "mainMenu"},
 		{Text: "Кабинет", Command: "showPersonalArea"},
 		{Text: "Поддержка", Command: "showSupport"},
 		{Text: "FAQ", Command: "showFAQ"},
 	}
-	msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, rows, columns)
+	msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, positions)
 	_, err := bot.Send(msg)
 	if err != nil {
 		loggers.ErrorLogger.Println(err.Error())
