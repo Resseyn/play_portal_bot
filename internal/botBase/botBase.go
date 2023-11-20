@@ -24,7 +24,8 @@ func BotStart() {
 		if update.Message.IsCommand() {
 			switch update.Message.Command() {
 			case "start":
-
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+				bot.Send(msg)
 			}
 		}
 
