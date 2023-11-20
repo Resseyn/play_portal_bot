@@ -1,0 +1,3 @@
+package botBase
+
+var BotKey = ""
