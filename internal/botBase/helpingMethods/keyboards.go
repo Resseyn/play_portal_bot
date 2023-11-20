@@ -85,6 +85,7 @@ func CreateInline(data *structures.MessageData, positions []int, commands ...str
 	prev := false
 	if data.PrevCommand != "" {
 		positions = append(positions, 1)
+		rows = len(positions)
 		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
 		for k, v := range positions {
 			if k == rows {

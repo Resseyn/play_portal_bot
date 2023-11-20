@@ -1,6 +1,7 @@
 package botBase
 
 import (
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"play_portal_bot/internal/botBase/botCommands"
 	"play_portal_bot/internal/botBase/botLogic"
@@ -26,6 +27,7 @@ func BotStart() {
 	for update := range updates {
 		if update.Message != nil {
 			if update.Message.IsCommand() {
+				fmt.Println(update.Message.MessageID)
 				switch update.Message.Command() {
 				case "start":
 					botCommands.BotStart(bot, &update)
@@ -33,6 +35,7 @@ func BotStart() {
 			}
 		} else if update.CallbackQuery != nil {
 			messageData := helpingMethods.ParseData(update.CallbackQuery.Data)
+			fmt.Println(messageData)
 			switch messageData.Command {
 			case "mainMenu":
 				botLogic.Menu(bot, &update, messageData)

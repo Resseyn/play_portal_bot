@@ -1,6 +1,7 @@
 package botCommands
 
 import (
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/loggers"
@@ -20,7 +21,8 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		Command:     "start",
 		PrevCommand: "",
 	}
-	positions := []int{4}
+	fmt.Println(messageData)
+	positions := []int{2, 2}
 	commands := &[]structures.Command{
 		{Text: "Магазин", Command: "mainMenu"},
 		{Text: "Кабинет", Command: "showPersonalArea"},
@@ -30,8 +32,20 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	// =========PARAMS=========
 
 	msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, positions)
-	_, err := bot.Send(msg)
+	message, err := bot.Send(msg)
 	if err != nil {
 		loggers.ErrorLogger.Println(err.Error())
+	}
+	fmt.Println(message.MessageID, "MESSAGEID SHOP")
+	newKB := helpingMethods.CreateInline(&structures.MessageData{
+		MessageID:   message.MessageID,
+		ChatID:      update.Message.Chat.ID,
+		Command:     "start",
+		PrevCommand: "",
+	}, []int{4}, *commands...)
+	newKBConf := tgbotapi.NewEditMessageReplyMarkup(chatID, message.MessageID, *newKB)
+	_, err = bot.Send(newKBConf)
+	if err != nil {
+		loggers.ErrorLogger.Println(err.Error(), "editKBError")
 	}
 }
