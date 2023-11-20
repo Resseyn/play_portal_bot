@@ -11,7 +11,7 @@ func BotStart() {
 		loggers.ErrorLogger.Panic(err)
 	}
 
-	bot.Debug = false
+	bot.Debug = true
 
 	loggers.GlobalLogger.Printf("Authorized on account %s", bot.Self.UserName)
 
