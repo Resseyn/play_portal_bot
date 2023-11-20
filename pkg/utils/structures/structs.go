@@ -1,7 +1,7 @@
 package structures
 
 type MessageData struct {
-	ChatID    int
+	ChatID    int64
 	MessageID int
 	Command   string
 }
