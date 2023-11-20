@@ -78,17 +78,15 @@ func CreateInline(data *structures.MessageData, positions []int, commands ...str
 	if su-len(commands) != 0 {
 		panic(fmt.Errorf("ТЫ ЕБАНАТ ПОСЧИТАЙ СТРОЧКИ И СТОЛБЦЫ"))
 	}
-	resrows := make([][]tgbotapi.InlineKeyboardButton, rows)
-	for k, v := range positions {
-		resrows[k] = make([]tgbotapi.InlineKeyboardButton, v)
-	}
 	prev := false
+
+	var resrows [][]tgbotapi.InlineKeyboardButton
 	if data.PrevCommand != "" {
 		positions = append(positions, 1)
 		rows = len(positions)
 		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
 		for k, v := range positions {
-			if k == rows {
+			if k == rows && k > 0 {
 				resrows[k] = make([]tgbotapi.InlineKeyboardButton, 1)
 				break
 			}
@@ -96,6 +94,11 @@ func CreateInline(data *structures.MessageData, positions []int, commands ...str
 		}
 		rows--
 		prev = true
+	} else {
+		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
+		for k, v := range positions {
+			resrows[k] = make([]tgbotapi.InlineKeyboardButton, v)
+		}
 	}
 	cmdcount := 0
 	for row := 0; row < rows; row++ {
