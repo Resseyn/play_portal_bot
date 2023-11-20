@@ -42,7 +42,7 @@ func BotStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		ChatID:      update.Message.Chat.ID,
 		Command:     "start",
 		PrevCommand: "",
-	}, []int{4}, *commands...)
+	}, []int{2, 2}, *commands...)
 	newKBConf := tgbotapi.NewEditMessageReplyMarkup(chatID, message.MessageID, *newKB)
 	_, err = bot.Send(newKBConf)
 	if err != nil {

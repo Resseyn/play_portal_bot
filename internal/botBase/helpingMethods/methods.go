@@ -26,10 +26,10 @@ func CreateMessage(chatID int64, picPath, messageContent string, commands *[]str
 func ParseData(callbackData string) *structures.MessageData {
 	data := strings.Split(callbackData, ",") //0 - chatID 1- messageID 2 - command 3 - prevCommand
 	data0, _ := strconv.Atoi(data[0])
-	data1, _ := strconv.Atoi(data[0])
+	data1, _ := strconv.Atoi(data[1])
 	messageData := &structures.MessageData{
-		MessageID:   data0,
-		ChatID:      int64(data1),
+		ChatID:      int64(data0),
+		MessageID:   data1,
 		Command:     data[2],
 		PrevCommand: data[3],
 	}

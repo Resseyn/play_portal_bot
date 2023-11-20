@@ -9,34 +9,7 @@ import (
 )
 
 func Menu(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.MessageData) {
-	//// Create a FileBytes from the temporary file
-	//fileBytes := tgbotapi.FileBytes{
-	//	Name:  fileName,
-	//	Bytes: imageBytes,
-	//}
-	//
-	//baseInputMedia := tgbotapi.BaseInputMedia{
-	//	Type:      "photo", // Set the desired media type
-	//	Media:     fileBytes,
-	//	ParseMode: "markdown", // Set the desired parse mode
-	//}
-	//
-	//// Create an EditMessageMediaConfig to update the message
-	//editMessageConfig := tgbotapi.EditMessageMediaConfig{
-	//	BaseEdit: tgbotapi.BaseEdit{
-	//		ChatID:    chatID,
-	//		MessageID: messageID,
-	//	},
-	//	Media: tgbotapi.InputMediaPhoto{
-	//		BaseInputMedia: baseInputMedia,
-	//	},
-	//}
-	//
-	//// Edit the existing message with the updated photo and inline keyboard
-	//_, err = bot.Send(&editMessageConfig)
-	//if err != nil {
-	//	return fmt.Errorf("error editing message: %v", err)
-	//}
+
 	// =========PARAMS=========
 	chatID := update.CallbackQuery.Message.Chat.ID
 	picPath := "pkg/utils/data/img/gettyimages-1067956982.jpg"
@@ -54,10 +27,11 @@ func Menu(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.Messag
 		loggers.ErrorLogger.Println(err)
 	}
 	photo := tgbotapi.NewPhoto(chatID, tgbotapi.FileBytes{Name: "cat2", Bytes: picBytes})
+	kb := helpingMethods.CreateInline(data, []int{2, 2}, *commands...)
 	editMediaConf := tgbotapi.EditMessageMediaConfig{Media: tgbotapi.InputMediaPhoto{BaseInputMedia: tgbotapi.BaseInputMedia{
 		Type:      "photo",
 		Media:     photo.File,
-		Caption:   "Обновленная картинка",
+		Caption:   messageContent,
 		ParseMode: "Markdown",
 	},
 	},
@@ -65,13 +39,8 @@ func Menu(bot *tgbotapi.BotAPI, update *tgbotapi.Update, data *structures.Messag
 			ChatID:          chatID,
 			MessageID:       data.MessageID,
 			InlineMessageID: "",
+			ReplyMarkup:     kb,
 		}}
-	kb := helpingMethods.CreateInline(data, []int{2, 2}, *commands...)
-	editTextConfig := tgbotapi.NewEditMessageTextAndMarkup(chatID, data.MessageID, messageContent, *kb)
-	_, err = bot.Send(editTextConfig)
-	if err != nil {
-		loggers.ErrorLogger.Println(err.Error(), "textAndKbError")
-	}
 	_, err = bot.Send(editMediaConf)
 	if err != nil {
 		loggers.ErrorLogger.Println(err.Error(), "mediaError")
