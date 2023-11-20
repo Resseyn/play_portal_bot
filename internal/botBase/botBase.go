@@ -2,7 +2,6 @@ package botBase
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"play_portal_bot/internal/botBase/botLogic"
 	"play_portal_bot/internal/loggers"
 )
 
@@ -11,8 +10,6 @@ func BotStart() {
 	if err != nil {
 		loggers.ErrorLogger.Panic(err)
 	}
-
-	botLogic.DoSomething()
 
 	bot.Debug = false
 

@@ -1,21 +1,31 @@
 package botLogic
 
 import (
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"strconv"
-	"strings"
 )
 
 type MessageData struct {
-	ChatID  int
-	Command string
+	ChatID    int
+	MessageID int
+	Command   string
 }
 
-func SendInline(userid int64, command string) tgbotapi.InlineKeyboardMarkup {
-	msgData = strings.Split("123, start", ",")
-	id, _ := strconv.Atoi(msgData[0])
-	newData := MessageData{chatid: id, command: msgData[1]}
-	var kb = tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData("MessageData")))
+func SendInline(data *MessageData) *tgbotapi.InlineKeyboardMarkup {
+	dataFormat := fmt.Sprintf("%v,%v,%v", data.ChatID, data.MessageID, data.Command)
+	switch data.Command {
+	case "start":
+		mainMenuKeyboard := tgbotapi.NewInlineKeyboardMarkup(
+			tgbotapi.NewInlineKeyboardRow(
+				tgbotapi.NewInlineKeyboardButtonData("Магазин", dataFormat),
+				tgbotapi.NewInlineKeyboardButtonData("Кабинет", dataFormat)),
+			tgbotapi.NewInlineKeyboardRow(
+				tgbotapi.NewInlineKeyboardButtonData("FAQ", dataFormat),
+				tgbotapi.NewInlineKeyboardButtonData("Поддержка", dataFormat)),
+		)
+		return &mainMenuKeyboard
+	case "":
+
+	}
+	return nil
 }
