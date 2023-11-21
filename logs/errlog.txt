@@ -2,7 +2,3 @@
 ебать
 2023/11/20 09:49:24 общий лог ура
 ffsdfsdfdsfsd2023/11/20 14:27:21 bad file type
-2023/11/20 14:28:25 bad file type
-2023/11/20 14:31:39 bad file type
-2023/11/20 16:20:36 Bad Request: can't parse inline keyboard button: Text buttons are unallowed in the inline keyboard textAndKbError
-2023/11/20 16:20:36 Bad Request: parameter "media" is required mediaError
