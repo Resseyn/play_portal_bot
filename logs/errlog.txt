@@ -2,3 +2,4 @@
 ебать
 2023/11/20 09:49:24 общий лог ура
 ffsdfsdfdsfsd2023/11/20 14:27:21 bad file type
+2023/11/22 16:08:37 telebot: Post "https://api.telegram.org/bot6978330124:AAF6heejvu7NpzhDaa8v7zPwlOLdMLjb7-M/getMe": dial tcp: lookup api.telegram.org: no such host

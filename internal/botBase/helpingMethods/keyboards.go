@@ -99,7 +99,7 @@ func CreateInline(data *structures.MessageData, commands ...*[]structures.Comman
 
 		for _, cmd := range *cmdRow {
 
-			dataFormat := fmt.Sprintf("%v,%v,%v", int(data.ChatID), data.MessageID, data.Command)
+			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.Command, data.PrevCommand)
 			fmt.Println(dataFormat)
 			unique := fmt.Sprintf("%v_%v_%v", data.ChatID, data.MessageID, cmd.Command)
 
