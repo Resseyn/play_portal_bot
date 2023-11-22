@@ -3,6 +3,7 @@ package botCommands
 import (
 	"fmt"
 	"gopkg.in/telebot.v3"
+	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/pkg/utils/structures"
 )
 
@@ -48,6 +49,7 @@ import (
 //			loggers.ErrorLogger.Println(err.Error(), "editKBError")
 //		}
 //	}
+
 func Start(c telebot.Context) error {
 
 	// =========PARAMS=========
@@ -62,12 +64,14 @@ func Start(c telebot.Context) error {
 	}
 	fmt.Println(messageData)
 	//positions := []int{2, 2}
-	//commands := &[]structures.Command{
-	//	{Text: "Магазин", Command: "showShop"},
-	//	{Text: "Кабинет", Command: "showPersonalArea"},
-	//	{Text: "Поддержка", Command: "showSupport"},
-	//	{Text: "FAQ", Command: "showFAQ"},
-	//}
+	commands := []*[]structures.Command{
+		{
+			{Text: "Магазин", Command: "showShop"},
+			{Text: "Кабинет", Command: "showPersonalArea"}},
+		{
+			{Text: "Поддержка", Command: "showSupport"},
+			{Text: "FAQ", Command: "showFAQ"}},
+	}
 	// =========PARAMS=========
 
 	//msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, positions)
@@ -75,26 +79,30 @@ func Start(c telebot.Context) error {
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
 	}
-	keys := [][]telebot.InlineButton{
-		{
-			{
-				Text: "Button 1",
-			},
-			{
-				Text: "Button 2",
-			},
-		},
-	}
 
-	keyboard := &telebot.ReplyMarkup{
-		InlineKeyboard: keys,
-	}
-	fmt.Println(msg)
+	//keys := [][]telebot.InlineButton{
+	//	{
+	//		{
+	//			Text: "Button 1",
+	//		},
+	//		{
+	//			Text: "Button 2",
+	//		},
+	//	},
+	//}
+	//
+	//keyboard := &telebot.ReplyMarkup{
+	//	InlineKeyboard: keys,
+	//	ForceReply:     false,
+	//}
+
+	fmt.Println(*msg)
 	_, err := c.Bot().Send(telebot.ChatID(chatID), msg, &telebot.SendOptions{
 		ParseMode:   telebot.ModeHTML,
-		ReplyMarkup: keyboard})
+		ReplyMarkup: helpingMethods.CreateInline(messageData, commands...),
+	})
 	return err
-	//
+
 	//fmt.Println(message.MessageID, "MESSAGEID SHOP")
 	//newKB := helpingMethods.CreateInline(&structures.MessageData{
 	//	MessageID:   message.MessageID,

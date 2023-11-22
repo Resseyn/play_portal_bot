@@ -63,6 +63,10 @@ func BotStart() {
 	b.Handle("/start", func(c telebot.Context) error {
 		return botCommands.Start(c)
 	})
+	if err != nil {
+		loggers.ErrorLogger.Fatal(err)
+		panic(err)
+	}
 
 	b.Start()
 }

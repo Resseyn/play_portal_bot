@@ -2,53 +2,11 @@ package helpingMethods
 
 import (
 	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"gopkg.in/telebot.v3"
 	"play_portal_bot/pkg/utils/structures"
 )
 
 // TODO: ПАДРАЧИТЬ ХУЙ
-
-//func CreateInline(data *structures.MessageData, rows, columns int, commands ...structures.Command) *tgbotapi.InlineKeyboardMarkup {
-//
-//	if len(commands) != rows*columns {
-//		panic(fmt.Errorf("ТЫ ЕБАНАТ ПОСЧИТАЙ СТРОЧКИ И СТОЛБЦЫ"))
-//	}
-//	resrows := make([][]tgbotapi.InlineKeyboardButton, rows)
-//	for i := range resrows {
-//		resrows[i] = make([]tgbotapi.InlineKeyboardButton, columns)
-//	}
-//	prev := false
-//	if data.PrevCommand != "" {
-//		rows++
-//		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
-//		for i := range resrows {
-//			if i == rows {
-//				resrows[i] = make([]tgbotapi.InlineKeyboardButton, 1)
-//				break
-//			}
-//			resrows[i] = make([]tgbotapi.InlineKeyboardButton, columns)
-//		}
-//		rows--
-//		prev = true
-//	}
-//	cmdcount := 0
-//	for row := 0; row < rows; row++ {
-//		for column := 0; column < columns; column++ {
-//			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, commands[cmdcount].Command, data.Command)
-//
-//			resrows[row][column] = tgbotapi.NewInlineKeyboardButtonData(commands[cmdcount].Text, dataFormat)
-//
-//			cmdcount++
-//		}
-//	}
-//	if prev {
-//		backFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.PrevCommand, "")
-//		resrows[rows][0] = tgbotapi.NewInlineKeyboardButtonData("Назад", backFormat)
-//	}
-//
-//	kb := tgbotapi.NewInlineKeyboardMarkup(resrows...)
-//	return &kb
-//}
 
 /*
 НОВАЯ КЛАВИАТУРА:
@@ -68,53 +26,107 @@ import (
 ----------------------------
 */
 
-func CreateInline(data *structures.MessageData, positions []int, commands ...structures.Command) *tgbotapi.InlineKeyboardMarkup {
-	rows := len(positions)
-	su := 0
-	for _, v := range positions {
-		su += v
-	}
+//func CreateInline(data *structures.MessageData, positions []int, commands ...structures.Command) *telebotbot.ReplyMarkup {
+//	rows := len(positions)
+//	su := 0
+//	for _, v := range positions {
+//		su += v
+//	}
+//
+//	if su-len(commands) != 0 {
+//		panic(fmt.Errorf(" ПОСЧИТАЙ СТРОЧКИ И СТОЛБЦЫ"))
+//	}
+//	prev := false
+//
+//	var resrows [][]telebotbot.InlineButton
+//	if data.PrevCommand != "" {
+//		positions = append(positions, 1)
+//		rows = len(positions)
+//		resrows = make([][]telebotbot.InlineButton, rows)
+//		for k, v := range positions {
+//			if k == rows && k > 0 {
+//				resrows[k] = make([]telebotbot.InlineButton, 1)
+//				break
+//			}
+//			resrows[k] = make([]telebotbot.InlineButton, v)
+//		}
+//		rows--
+//		prev = true
+//	} else {
+//		resrows = make([][]telebotbot.InlineButton, rows)
+//		for k, v := range positions {
+//			resrows[k] = make([]telebotbot.InlineButton, v)
+//		}
+//	}
+//	cmdcount := 0
+//	for row := 0; row < rows; row++ {
+//		for column := 0; column < positions[row]; column++ {
+//			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, commands[cmdcount].Command, data.Command)
+//
+//			resrows[row][column] = telebotbot.InlineButton{
+//				Unique: "unique",
+//				Data:   dataFormat,
+//				Text:   commands[cmdcount].Text,
+//			}
+//
+//			cmdcount++
+//		}
+//	}
+//	if prev {
+//		backFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.PrevCommand, "")
+//		resrows[rows][0] = telebotbot.InlineButton{
+//			Unique: "backButton",
+//			Data:   backFormat,
+//			Text:   "Назад",
+//		}
+//	}
+//
+//	kb := &telebotbot.ReplyMarkup{
+//		InlineKeyboard: resrows,
+//	}
+//	return kb
+//}
 
-	if su-len(commands) != 0 {
-		panic(fmt.Errorf("ТЫ ЕБАНАТ ПОСЧИТАЙ СТРОЧКИ И СТОЛБЦЫ"))
-	}
-	prev := false
+// CreateInline создает инлайн-клавиатуру с кнопками и кнопкой возврата.
+// Каждый вложенный массив команд создает новую строку кнопок.
+func CreateInline(data *structures.MessageData, commands ...*[]structures.Command) *telebot.ReplyMarkup {
 
-	var resrows [][]tgbotapi.InlineKeyboardButton
-	if data.PrevCommand != "" {
-		positions = append(positions, 1)
-		rows = len(positions)
-		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
-		for k, v := range positions {
-			if k == rows && k > 0 {
-				resrows[k] = make([]tgbotapi.InlineKeyboardButton, 1)
-				break
+	var rows [][]telebot.InlineButton
+
+	for _, cmdRow := range commands {
+
+		var row []telebot.InlineButton
+
+		for _, cmd := range *cmdRow {
+
+			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, cmd.Command, data.Command)
+			fmt.Println(dataFormat)
+			unique := fmt.Sprintf("%v_%v_%v", data.ChatID, data.MessageID, cmd.Command)
+
+			button := telebot.InlineButton{
+				Unique: unique,
+				Data:   dataFormat,
+				Text:   cmd.Text,
 			}
-			resrows[k] = make([]tgbotapi.InlineKeyboardButton, v)
+			row = append(row, button)
 		}
-		rows--
-		prev = true
-	} else {
-		resrows = make([][]tgbotapi.InlineKeyboardButton, rows)
-		for k, v := range positions {
-			resrows[k] = make([]tgbotapi.InlineKeyboardButton, v)
-		}
+		rows = append(rows, row)
 	}
-	cmdcount := 0
-	for row := 0; row < rows; row++ {
-		for column := 0; column < positions[row]; column++ {
-			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, commands[cmdcount].Command, data.Command)
 
-			resrows[row][column] = tgbotapi.NewInlineKeyboardButtonData(commands[cmdcount].Text, dataFormat)
-
-			cmdcount++
-		}
-	}
-	if prev {
+	if data.PrevCommand != "" {
 		backFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.PrevCommand, "")
-		resrows[rows][0] = tgbotapi.NewInlineKeyboardButtonData("Назад", backFormat)
+		backUnique := fmt.Sprintf("%v_%v_back", data.ChatID, data.MessageID)
+
+		backButton := telebot.InlineButton{
+			Unique: backUnique,
+			Data:   backFormat,
+			Text:   "Назад",
+		}
+		rows = append(rows, []telebot.InlineButton{backButton})
 	}
 
-	kb := tgbotapi.NewInlineKeyboardMarkup(resrows...)
-	return &kb
+	kb := &telebot.ReplyMarkup{
+		InlineKeyboard: rows,
+	}
+	return kb
 }
