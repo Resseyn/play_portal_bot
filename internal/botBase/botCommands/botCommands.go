@@ -1,7 +1,6 @@
 package botCommands
 
 import (
-	"fmt"
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/pkg/utils/structures"
@@ -61,7 +60,6 @@ func Start(c telebot.Context) error {
 		Command:     "mainMenu",
 		PrevCommand: "",
 	}
-	fmt.Println(messageData)
 	commands := []*[]structures.Command{
 		{
 			{Text: "Магазин", Command: "showShop"},
@@ -72,7 +70,6 @@ func Start(c telebot.Context) error {
 	}
 	// =========PARAMS=========
 
-	//msg := helpingMethods.CreateMessage(chatID, picPath, messageContent, commands, messageData, positions)
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
