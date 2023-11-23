@@ -9,5 +9,8 @@ import (
 func main() {
 	fmt.Println("hello world")
 	loggers.InitLogger()
-	botBase.BotStart()
+	err := botBase.BotStart()
+	if err != nil {
+		panic(err)
+	}
 }

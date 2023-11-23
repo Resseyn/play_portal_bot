@@ -28,7 +28,7 @@ func CreateInline(data *structures.MessageData, commands ...*[]structures.Comman
 		}
 		rows = append(rows, row)
 	}
-
+	fmt.Println(data)
 	if data.PrevCommand != "" {
 		backFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.PrevCommand, "")
 
