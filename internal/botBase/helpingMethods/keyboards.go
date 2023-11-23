@@ -90,7 +90,7 @@ import (
 // CreateInline создает инлайн-клавиатуру с кнопками и кнопкой возврата.
 // Каждый вложенный массив команд создает новую строку кнопок.
 func CreateInline(data *structures.MessageData, commands ...*[]structures.Command) *telebot.ReplyMarkup {
-
+	fmt.Println(data, "data from kb cration")
 	var rows [][]telebot.InlineButton
 
 	for _, cmdRow := range commands {
@@ -99,13 +99,10 @@ func CreateInline(data *structures.MessageData, commands ...*[]structures.Comman
 
 		for _, cmd := range *cmdRow {
 
-			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.Command, data.PrevCommand)
-			fmt.Println(dataFormat)
-			unique := fmt.Sprintf("%v_%v_%v", data.ChatID, data.MessageID, cmd.Command)
-
+			dataFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, cmd.Command, data.PrevCommand)
+			//unique := fmt.Sprintf("%v_%v_%v", data.ChatID, data.MessageID, cmd.Command)
 			button := telebot.InlineButton{
-				Unique: unique,
-				Data:   dataFormat,
+				Unique: dataFormat,
 				Text:   cmd.Text,
 			}
 			row = append(row, button)
@@ -113,37 +110,12 @@ func CreateInline(data *structures.MessageData, commands ...*[]structures.Comman
 		rows = append(rows, row)
 	}
 
-	/*
-				1. Which two historical events gave birth to British Parliament?
-		agreed list of 63 rules,invite for kto-to tam for first parlament in 1265
-				2. Which parts does Parliament consist of? What are their purposes?
-		house of commons, house of lords,and the sovereign???
-				3. How many MPs are there? Must they belong to any political party?
-		650, they belong to a political party or can be independent
-				4. Who does the House of Lords consist of? How many Lords are there?
-		bishops,life peers and hereditary peers, 800 members
-				5. How can Parliament influence the work of Government?
-		influences the work of the Government by questioning ministers, debating policies, and examining work through committees
-				6. How does Parliament make and shape laws?
-		parlament makes and shapes laws through a process of several reading and stages in both house of commons and house of lords
-				7. How are MPs elected through the General Elections?
-		mps are elected through
-				8. How can candidates campaign to get people to vote for them?
-		candidates can campaign by holding public meetings, door-to-door visits, distributing leaflets
-				9. What happens when there is a “hung Parliament”?
-		“hung Parliament” happens when no single political party has an absolute majority in the House of Commons after a General Election
-				10. How can people participate in the political life of the UK?
-		people can participate in the political life of the UK by voting, joining a political party, standing as a candidate, contacting their local MP or Lord, and participating in demonstrations or protests
-	*/
-
 	if data.PrevCommand != "" {
 		backFormat := fmt.Sprintf("%v,%v,%v,%v", data.ChatID, data.MessageID, data.PrevCommand, "")
-		backUnique := fmt.Sprintf("%v_%v_back", data.ChatID, data.MessageID)
 
 		backButton := telebot.InlineButton{
-			Unique: backUnique,
-			Data:   backFormat,
-			Text:   "Назад",
+			Data: backFormat,
+			Text: "Назад",
 		}
 		rows = append(rows, []telebot.InlineButton{backButton})
 	}

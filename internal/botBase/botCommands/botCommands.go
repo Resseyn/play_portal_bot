@@ -53,7 +53,6 @@ import (
 func Start(c telebot.Context) error {
 
 	// =========PARAMS=========
-	chatID := c.Chat().ID
 	picPath := "pkg/utils/data/img/pngtree-isolated-cat-on-white-background-png-image_7094927.png"
 	messageContent := "МАГАЗИН ГИДРА"
 	messageData := &structures.MessageData{
@@ -63,7 +62,6 @@ func Start(c telebot.Context) error {
 		PrevCommand: "",
 	}
 	fmt.Println(messageData)
-	//positions := []int{2, 2}
 	commands := []*[]structures.Command{
 		{
 			{Text: "Магазин", Command: "showShop"},
@@ -79,41 +77,11 @@ func Start(c telebot.Context) error {
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
 	}
-
-	//keys := [][]telebot.InlineButton{
-	//	{
-	//		{
-	//			Text: "Button 1",
-	//		},
-	//		{
-	//			Text: "Button 2",
-	//		},
-	//	},
-	//}
-	//
-	//keyboard := &telebot.ReplyMarkup{
-	//	InlineKeyboard: keys,
-	//	ForceReply:     false,
-	//}
-
-	fmt.Println(*msg)
-	_, err := c.Bot().Send(telebot.ChatID(chatID), msg, &telebot.SendOptions{
+	keyboard := helpingMethods.CreateInline(messageData, commands...)
+	err := c.Send(msg, &telebot.SendOptions{
 		ParseMode:   telebot.ModeHTML,
-		ReplyMarkup: helpingMethods.CreateInline(messageData, commands...),
+		ReplyMarkup: keyboard,
 	})
 	return err
 
-	//fmt.Println(message.MessageID, "MESSAGEID SHOP")
-	//newKB := helpingMethods.CreateInline(&structures.MessageData{
-	//	MessageID:   message.MessageID,
-	//	ChatID:      message.Chat.ID,
-	//	Command:     "mainMenu",
-	//	PrevCommand: "",
-	//}, []int{2, 2}, *commands...)
-	//newKBConf := tgbotapi.NewEditMessageReplyMarkup(chatID, message.MessageID, *newKB)
-	//_, err = bot.Send(newKBConf)
-	//if err != nil {
-	//	fmt.Println(messageData)
-	//	loggers.ErrorLogger.Println(err.Error(), "editKBError")
-	//}
 }

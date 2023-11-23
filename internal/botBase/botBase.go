@@ -3,6 +3,7 @@ package botBase
 import (
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/botCommands"
+	"play_portal_bot/internal/botBase/botLogic"
 	"play_portal_bot/internal/loggers"
 	"time"
 )
@@ -60,9 +61,8 @@ func BotStart() {
 		return
 	}
 
-	b.Handle("/start", func(c telebot.Context) error {
-		return botCommands.Start(c)
-	})
+	b.Handle("/start", botCommands.Start)
+	b.Handle(telebot.OnCallback, botLogic.ShowShop)
 
 	b.Start()
 }
