@@ -60,7 +60,7 @@ services := []*[]structures.Command{
 
 steam := []*[]structures.Command{
 		{
-			{Text: "Пополнить баланс", Command: "shop_gameServices_steam_topUpBalance"}},
+			{Text: "Пополнить баланс", Command: "steam_topUpBalance"}},
 		{
 			{Text: "Аккаунты", Command: "steam_accounts"}},
 	}

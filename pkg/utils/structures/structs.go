@@ -8,6 +8,7 @@ type MessageData struct {
 	MessageID   int
 	Command     string
 	PrevCommand string
+	Price       int
 }
 
 type Command struct {
@@ -18,5 +19,14 @@ type UserInteraction struct {
 	IsInteracting bool   //optional probably
 	Type          string //shop_gameServices_steam_topUpBalance, etc.
 	Step          int
+	Price         int
 	DataCase      []string
 }
+
+//type UserTransaction struct {
+//	IsTransacting bool   //optional probably
+//	Type          string //shop_gameServices_steam_topUpBalance, etc.
+//	Step          int
+//	Price         int
+//	DataCase      []string
+//}

@@ -1,11 +1,13 @@
 package botBase
 
 import (
+	"fmt"
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/botCommands"
 	"play_portal_bot/internal/botBase/botLogic"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons"
+	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons/servicesButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons/steamButtons"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/botBase/keys"
@@ -44,8 +46,11 @@ func BotStart() error {
 
 // CallbackHandle handles all the existing callbacks
 func CallbackHandle(c telebot.Context) error {
+	fmt.Println(c.Callback().Data)
 	data := helpingMethods.ParseData(c.Callback().Data)
 	switch data.Command {
+	case "buy":
+		return helpingMethods.TopUpBalance(c)
 	case "mainMenu":
 		return botLogic.Menu(c)
 	case "shop":
@@ -62,7 +67,10 @@ func CallbackHandle(c telebot.Context) error {
 		return mainMenuButtons.Services(c)
 	case "shop_gameServices_steam":
 		return shopButtons.Steam(c)
-
+	case "spotify":
+		return servicesButtons.Spotify(c)
+	case "spotify_individual_1":
+		return servicesButtons.Spotify_Individual_1(c)
 	case "steam_topUpBalance":
 		return steamButtons.SteamTopUpBalance(c)
 	}

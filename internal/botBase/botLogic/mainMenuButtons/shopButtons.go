@@ -43,7 +43,7 @@ func Services(c telebot.Context) error {
 	commands := []*[]structures.Command{
 		{
 			{Text: "Подписка Twitch", Command: ""},
-			{Text: "Spotify", Command: "shop_services_spotify"}},
+			{Text: "Spotify", Command: "spotify"}},
 		{
 			{Text: "Подписка 7TV", Command: ""},
 			{Text: "AppStore", Command: ""}},

@@ -17,6 +17,7 @@ func Start(c telebot.Context) error {
 		ChatID:      c.Chat().ID,
 		Command:     "mainMenu",
 		PrevCommand: "",
+		Price:       0,
 	}
 	commands := []*[]structures.Command{
 		{

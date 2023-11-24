@@ -19,7 +19,7 @@ func Steam(c telebot.Context) error {
 			{Text: "Аккаунты", Command: "steam_accounts"}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
-	data.PrevCommand = "gameServices"
+	data.PrevCommand = "shop_gameServices"
 	// =========PARAMS=========
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
