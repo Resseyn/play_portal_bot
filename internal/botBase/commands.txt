@@ -37,7 +37,7 @@ faq := []*[]structures.Command{
 
 gameServices := []*[]structures.Command{
 		{
-			{Text: "Steam", Command: ""},
+			{Text: "Steam", Command: "steam"},
 			{Text: "Xbox/Microsoft", Command: ""}},
 		{
 			{Text: "Playstation", Command: ""},
@@ -53,3 +53,21 @@ services := []*[]structures.Command{
 		{
         	{Text: "Adobe", Command: ""}},
 	}
+
+================================================================================================================
+---------GAME SERVICES---------------GAME SERVICES---------------GAME SERVICES-------------GAME SERVICES--------
+================================================================================================================
+
+steam := []*[]structures.Command{
+		{
+			{Text: "Пополнить баланс", Command: "steam_top_up_balance"}},
+		{
+			{Text: "Аккаунты", Command: "steam_accounts"}},
+	}
+
+
+================================================================================================================
+---------STEAM---------------STEAM---------------STEAM-------------STEAM------------STEAM--------STEAM----------
+================================================================================================================
+
+steam_top_up_balance := []*[]structures.Command{{}}

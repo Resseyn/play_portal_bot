@@ -1,3 +1,0 @@
-package botBase
-
-var BotKey = ""

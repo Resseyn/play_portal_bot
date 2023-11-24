@@ -1,4 +1,4 @@
-package botLogic
+package mainMenuButtons
 
 import (
 	"gopkg.in/telebot.v3"
@@ -14,7 +14,7 @@ func GameServices(c telebot.Context) error {
 	messageContent := "Выберите категорию"
 	commands := []*[]structures.Command{
 		{
-			{Text: "Steam", Command: ""},
+			{Text: "Steam", Command: "steam"},
 			{Text: "Xbox/Microsoft", Command: ""}},
 		{
 			{Text: "Playstation", Command: ""},
