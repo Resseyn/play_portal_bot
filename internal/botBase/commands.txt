@@ -9,8 +9,8 @@ mainMenu := []*[]structures.Command{
 
 shop := []*[]structures.Command{
 		{
-			{Text: "Игровые сервисы", Command: "gameServices"},
-			{Text: "Сервисы", Command: "services"}},
+			{Text: "Игровые сервисы", Command: "shop_gameServices"},
+			{Text: "Сервисы", Command: "shop_services"}},
 		{
 			{Text: "Pepega", Command: ""},
 		}}
@@ -37,7 +37,7 @@ faq := []*[]structures.Command{
 
 gameServices := []*[]structures.Command{
 		{
-			{Text: "Steam", Command: "steam"},
+			{Text: "Steam", Command: "shop_gameServices_steam"},
 			{Text: "Xbox/Microsoft", Command: ""}},
 		{
 			{Text: "Playstation", Command: ""},
@@ -46,7 +46,7 @@ gameServices := []*[]structures.Command{
 services := []*[]structures.Command{
 		{
 			{Text: "Подписка Twitch", Command: ""},
-			{Text: "Spotify", Command: ""}},
+			{Text: "Spotify", Command: "shop_services_spotify"}},
 		{
 			{Text: "Подписка 7TV", Command: ""},
 			{Text: "AppStore", Command: ""}},
@@ -60,7 +60,7 @@ services := []*[]structures.Command{
 
 steam := []*[]structures.Command{
 		{
-			{Text: "Пополнить баланс", Command: "steam_top_up_balance"}},
+			{Text: "Пополнить баланс", Command: "shop_gameServices_steam_topUpBalance"}},
 		{
 			{Text: "Аккаунты", Command: "steam_accounts"}},
 	}

@@ -44,8 +44,8 @@ func Shop(c telebot.Context) error {
 	data.PrevCommand = "mainMenu"
 	commands := []*[]structures.Command{
 		{
-			{Text: "Игровые сервисы", Command: "gameServices"},
-			{Text: "Сервисы", Command: "services"}},
+			{Text: "Игровые сервисы", Command: "shop_gameServices"},
+			{Text: "Сервисы", Command: "shop_services"}},
 		{
 			{Text: "Pepega(насвай не завезли)", Command: ""},
 		}}

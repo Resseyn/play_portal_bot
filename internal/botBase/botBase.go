@@ -19,7 +19,6 @@ func BotStart() error {
 		Token:  keys.BotKey,
 		Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
 	}
-
 	b, err := telebot.NewBot(settings)
 	if err != nil {
 		loggers.ErrorLogger.Fatal(err)
@@ -31,7 +30,7 @@ func BotStart() error {
 	b.Handle(telebot.OnText, func(c telebot.Context) error {
 		if _, ok := structures.UserStates[c.Chat().ID]; ok {
 			if structures.UserStates[c.Chat().ID].IsInteracting {
-				return botLogic.SteamTopUpBalanceHandle(c)
+				return nil
 			} else {
 				return botCommands.Start(c)
 			}
@@ -57,14 +56,14 @@ func CallbackHandle(c telebot.Context) error {
 		return botLogic.Support(c)
 	case "faq":
 		return botLogic.FAQ(c)
-	case "gameServices": //TODO: change to shop_gameServices
+	case "shop_gameServices": //TODO: change to shop_gameServices
 		return mainMenuButtons.GameServices(c)
-	case "services":
+	case "shop_services":
 		return mainMenuButtons.Services(c)
-	case "steam":
+	case "shop_gameServices_steam":
 		return shopButtons.Steam(c)
 
-	case "steam_top_up_balance":
+	case "steam_topUpBalance":
 		return steamButtons.SteamTopUpBalance(c)
 	}
 	return nil

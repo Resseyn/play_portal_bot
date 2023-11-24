@@ -18,7 +18,7 @@ func SteamTopUpBalance(c telebot.Context) error {
 	// =========PARAMS=========
 	currentInteraction := &structures.UserInteraction{
 		IsInteracting: true,
-		Type:          "steam_top_up_balance",
+		Type:          "steam_topUpBalance",
 		Step:          0,
 		DataCase:      make([]string, 2),
 	}

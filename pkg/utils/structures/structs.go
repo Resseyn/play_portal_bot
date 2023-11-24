@@ -16,7 +16,7 @@ type Command struct {
 }
 type UserInteraction struct {
 	IsInteracting bool   //optional probably
-	Type          string //steam_top_up_balance, etc.
+	Type          string //shop_gameServices_steam_topUpBalance, etc.
 	Step          int
 	DataCase      []string
 }

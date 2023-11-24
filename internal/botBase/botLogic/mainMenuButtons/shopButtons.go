@@ -14,7 +14,7 @@ func GameServices(c telebot.Context) error {
 	messageContent := "Выберите категорию"
 	commands := []*[]structures.Command{
 		{
-			{Text: "Steam", Command: "steam"},
+			{Text: "Steam", Command: "shop_gameServices_steam"},
 			{Text: "Xbox/Microsoft", Command: ""}},
 		{
 			{Text: "Playstation", Command: ""},
@@ -43,7 +43,7 @@ func Services(c telebot.Context) error {
 	commands := []*[]structures.Command{
 		{
 			{Text: "Подписка Twitch", Command: ""},
-			{Text: "Spotify", Command: ""}},
+			{Text: "Spotify", Command: "shop_services_spotify"}},
 		{
 			{Text: "Подписка 7TV", Command: ""},
 			{Text: "AppStore", Command: ""}},
