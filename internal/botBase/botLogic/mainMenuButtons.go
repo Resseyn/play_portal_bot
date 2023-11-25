@@ -21,6 +21,7 @@ func Menu(c telebot.Context) error {
 			{Text: "FAQ", Command: "faq"}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
+	data.PrevCommand = ""
 	// =========PARAMS=========
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
