@@ -62,31 +62,31 @@ func CallbackHandle(c telebot.Context) error {
 	fmt.Println(c.Callback().Data)
 	data := helpingMethods.ParseData(c.Callback().Data)
 	switch data.Command {
-	case "buy":
+	case structures.Commands["buy"]:
 		return helpingMethods.TopUpBalance(c)
-	case "createCheck":
+	case structures.Commands["createCheck"]:
 		return helpingMethods.CreateBill(c)
-	case "mainMenu":
+	case structures.Commands["mainMenu"]:
 		return botLogic.Menu(c)
-	case "shop":
+	case structures.Commands["shop"]:
 		return botLogic.Shop(c)
-	case "personalCabinet":
+	case structures.Commands["personalCabinet"]:
 		return botLogic.PersonalCabinet(c)
-	case "support":
+	case structures.Commands["support"]:
 		return botLogic.Support(c)
-	case "faq":
+	case structures.Commands["faq"]:
 		return botLogic.FAQ(c)
-	case "shop_gameServices": //TODO: change to shop_gameServices
+	case structures.Commands["shop_gameServices"]: //TODO: change to shop_gameServices
 		return mainMenuButtons.GameServices(c)
-	case "shop_services":
+	case structures.Commands["shop_services"]:
 		return mainMenuButtons.Services(c)
-	case "shop_gameServices_steam":
+	case structures.Commands["shop_gameServices_steam"]:
 		return shopButtons.Steam(c)
-	case "spotify":
+	case structures.Commands["spotify"]:
 		return servicesButtons.Spotify(c)
-	case "spotify_individual_1":
+	case structures.Commands["spotify_individual_1"]:
 		return servicesButtons.Spotify_Individual_1(c)
-	case "steam_topUpBalance":
+	case structures.Commands["steam_topUpBalance"]:
 		return steamButtons.SteamTopUpBalance(c)
 	}
 	return nil

@@ -15,17 +15,17 @@ func Start(c telebot.Context) error {
 	messageData := &structures.MessageData{
 		MessageID:   c.Message().ID,
 		ChatID:      c.Chat().ID,
-		Command:     "mainMenu",
+		Command:     structures.Commands["mainMenu"],
 		PrevCommand: "",
 		Price:       0,
 	}
 	commands := []*[]structures.Command{
 		{
-			{Text: "Магазин", Command: "shop"},
-			{Text: "Кабинет", Command: "personalCabinet"}},
+			{Text: "Магазин", Command: structures.Commands["shop"]},
+			{Text: "Кабинет", Command: structures.Commands["personalCabinet"]}},
 		{
-			{Text: "Поддержка", Command: "support"},
-			{Text: "FAQ", Command: "faq"}},
+			{Text: "Поддержка", Command: structures.Commands["support"]},
+			{Text: "FAQ", Command: structures.Commands["faq"]}},
 	}
 	// =========PARAMS=========
 
