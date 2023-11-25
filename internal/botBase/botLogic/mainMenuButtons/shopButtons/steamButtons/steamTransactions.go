@@ -22,7 +22,7 @@ func SteamTopUpBalance(c telebot.Context) error {
 		Step:          0,
 		DataCase:      make([]string, 2),
 	}
-	structures.UserStates[c.Chat().ID] = currentInteraction
+	structures.UserStates[c.Chat().ID] = *currentInteraction
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{

@@ -1,7 +1,6 @@
 package botBase
 
 import (
-	"encoding/json"
 	"fmt"
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/botCommands"
@@ -14,7 +13,6 @@ import (
 	"play_portal_bot/internal/botBase/keys"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
-	"strconv"
 	"time"
 )
 
@@ -42,17 +40,17 @@ func BotStart() error {
 			return botCommands.Start(c)
 		}
 	})
-	b.Handle(telebot.OnCheckout, func(c telebot.Context) error {
-		ans := answer{Id: c.Update().PreCheckoutQuery.ID, Ok: true, ErrorMessage: ""}
-		resp, err := ans.Send(c.Bot(), telebot.ChatID(1), &telebot.SendOptions{})
-		fmt.Println(resp.Payment)
-		if err != nil {
-			loggers.ErrorLogger.Println(err)
-			return err
-		}
-		c.Send("аххаха заскамлен)))")
-		return nil
-	})
+	//b.Handle(telebot.OnCheckout, func(c telebot.Context) error {
+	//	ans := answer{Id: c.Update().PreCheckoutQuery.ID, Ok: true, ErrorMessage: ""}
+	//	resp, err := ans.Send(c.Bot(), telebot.ChatID(1), &telebot.SendOptions{})
+	//	fmt.Println(resp.Payment)
+	//	if err != nil {
+	//		loggers.ErrorLogger.Println(err)
+	//		return err
+	//	}
+	//	c.Send("аххаха заскамлен)))")
+	//	return nil
+	//})
 	b.Start()
 	return nil
 }
@@ -92,40 +90,40 @@ func CallbackHandle(c telebot.Context) error {
 	return nil
 }
 
-type answer struct {
-	Id           string `json:"pre_checkout_query_id"`
-	Ok           bool   `json:"ok"`
-	ErrorMessage string `json:"error_message"`
-	telebot.Sendable
-}
-
-func (i *answer) Send(b *telebot.Bot, to telebot.Recipient, opt *telebot.SendOptions) (*telebot.Message, error) {
-	params := make(map[string]string)
-	params["pre_checkout_query_id"] = i.Id
-	params["ok"] = strconv.FormatBool(i.Ok)
-	params["error_message"] = i.ErrorMessage
-
-	data, err := b.Raw("answerPreCheckoutQuery", params)
-	if err != nil {
-		return nil, err
-	}
-	return extractMessage(data)
-}
-func extractMessage(data []byte) (*telebot.Message, error) {
-	var resp struct {
-		Result *telebot.Message
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
-		var resp struct {
-			Result bool
-		}
-		if err := json.Unmarshal(data, &resp); err != nil {
-			return nil, err
-		}
-		if resp.Result {
-			return nil, telebot.ErrTrueResult
-		}
-		return nil, err
-	}
-	return resp.Result, nil
-}
+//type answer struct {
+//	Id           string `json:"pre_checkout_query_id"`
+//	Ok           bool   `json:"ok"`
+//	ErrorMessage string `json:"error_message"`
+//	telebot.Sendable
+//}
+//
+//func (i *answer) Send(b *telebot.Bot, to telebot.Recipient, opt *telebot.SendOptions) (*telebot.Message, error) {
+//	params := make(map[string]string)
+//	params["pre_checkout_query_id"] = i.Id
+//	params["ok"] = strconv.FormatBool(i.Ok)
+//	params["error_message"] = i.ErrorMessage
+//
+//	data, err := b.Raw("answerPreCheckoutQuery", params)
+//	if err != nil {
+//		return nil, err
+//	}
+//	return extractMessage(data)
+//}
+//func extractMessage(data []byte) (*telebot.Message, error) {
+//	var resp struct {
+//		Result *telebot.Message
+//	}
+//	if err := json.Unmarshal(data, &resp); err != nil {
+//		var resp struct {
+//			Result bool
+//		}
+//		if err := json.Unmarshal(data, &resp); err != nil {
+//			return nil, err
+//		}
+//		if resp.Result {
+//			return nil, telebot.ErrTrueResult
+//		}
+//		return nil, err
+//	}
+//	return resp.Result, nil
+//}

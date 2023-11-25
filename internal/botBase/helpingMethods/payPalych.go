@@ -44,6 +44,7 @@ func CreateBill(c telebot.Context) error {
 		Custom:              "кастомное поле со свободным текстом",
 		PayerPaysCommission: 1,
 		Name:                "Платёж",
+		SuccessUrl:          "https://t.me/play_portal_bot",
 	}
 	jsonData, _ := json.Marshal(*data)
 
@@ -71,6 +72,57 @@ func CreateBill(c telebot.Context) error {
 
 	// Отправка ссылки на оплату пользователю
 	_, err = c.Bot().Send(telebot.ChatID(c.Chat().ID), "Пожалуйста, оплатите счет по этой ссылке: "+billCreateResponse.LinkPageUrl)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+	return nil
+}
+
+type Payout struct {
+	ID                string  `json:"id"`
+	Status            string  `json:"status"`
+	Amount            float64 `json:"amount"`
+	AccountAmount     float64 `json:"account_amount"`
+	Commission        float64 `json:"commission"`
+	AccountIdentifier string  `json:"account_identifier"`
+	Currency          string  `json:"currency"`
+	AccountCurrency   string  `json:"account_currency"`
+	ErrorCode         int     `json:"error_code"`
+	CreatedAt         string  `json:"created_at"`
+	Success           bool    `json:"success"`
+}
+type StatusParams struct {
+	Id      string `json:"id"`
+	OrderId string `json:"order_id"`
+}
+
+func PayoutStatus(c telebot.Context) error {
+	data := &StatusParams{
+		OrderId: "123",
+	}
+	jsonData, _ := json.Marshal(*data)
+	req, _ := http.NewRequest("POST", "https://paypalych.com/api/v1/payout/status", bytes.NewBuffer(jsonData))
+	req.Header.Set("Authorization", "Bearer 123|q4uNcWNKMNZoSFSY1XTxp36nsM0kUMSu0otSA95")
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
+
+	var billCreateResponse Payout
+	err = json.Unmarshal(body, &billCreateResponse)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+
+	_, err = c.Bot().Send(telebot.ChatID(c.Chat().ID), "status: "+billCreateResponse.Status)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
