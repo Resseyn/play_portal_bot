@@ -10,14 +10,14 @@ import (
 
 // CreateInline создает инлайн-клавиатуру с кнопками и кнопкой возврата.
 // Каждый вложенный массив команд создает новую строку кнопок.
-func CreateInline(data *structures.MessageData, commands ...*[]structures.Command) *telebot.ReplyMarkup {
+func CreateInline(data *structures.MessageData, commands ...[]structures.Command) *telebot.ReplyMarkup {
 	var rows [][]telebot.InlineButton
 
 	for _, cmdRow := range commands {
 
 		var row []telebot.InlineButton
 
-		for _, cmd := range *cmdRow {
+		for _, cmd := range cmdRow {
 
 			dataFormat := fmt.Sprintf("%v,%v,%v,%v,%v", data.ChatID, data.MessageID, cmd.Command, data.Command, data.Price)
 			button := telebot.InlineButton{

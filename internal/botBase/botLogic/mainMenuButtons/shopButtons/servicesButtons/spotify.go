@@ -12,7 +12,7 @@ func Spotify(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/spotify.jpg"
 	messageContent := "Выберите товар:"
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Spotify Individual 1 месяц", Command: structures.Commands["spotify_individual_1"]}},
 		{
@@ -46,7 +46,7 @@ func Spotify_Individual_1(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg"
 	messageContent := "Выберите товар:"
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Купить", Command: structures.Commands["buy"]}},
 	}

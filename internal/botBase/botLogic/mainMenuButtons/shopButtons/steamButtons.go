@@ -12,7 +12,7 @@ func Steam(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	messageContent := "• Аккаунты: купить новый аккаунт Steam.\n\n• Пополнить баланс: автоматическая система пополнения Steam баланса для России, Казахстана, Украины.\n\n жирный шрифт добавить"
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Пополнить баланс", Command: "steam_topUpBalance"}},
 		{

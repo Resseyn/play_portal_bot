@@ -19,7 +19,7 @@ func Start(c telebot.Context) error {
 		PrevCommand: "",
 		Price:       0,
 	}
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Магазин", Command: structures.Commands["shop"]},
 			{Text: "Кабинет", Command: structures.Commands["personalCabinet"]}},

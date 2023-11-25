@@ -13,7 +13,7 @@ func TopUpBalance(c telebot.Context) error {
 	data := ParseData(c.Callback().Data)
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
 	messageContent := fmt.Sprintf("Вам не хватает %v на балансе\n\nВведите сумму для пополнения от 20₽ и до 20000₽", data.Price)
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: fmt.Sprintf("%v₽", data.Price), Command: structures.Commands["createCheck"]}},
 		{

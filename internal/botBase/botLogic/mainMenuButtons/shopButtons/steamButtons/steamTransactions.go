@@ -12,7 +12,7 @@ func SteamTopUpBalance(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	messageContent := "Укажите логин Steam аккаунта, на который хотите пополнить баланс: \n \nАвтоматическое пополнение баланса в Steam на аккаунты России, Украины, Казахстана. \n \n⚠️ Обратите внимание! Логин - это то, что вы указываете при входе в Steam. Указав неверные данные, средства уйдут другому пользователю. посмотреть свой логин\n\nПрочитай если уровень STEAM LVL 0"
-	commands := []*[]structures.Command{{}}
+	commands := [][]structures.Command{{}}
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["steam"]
 	// =========PARAMS=========

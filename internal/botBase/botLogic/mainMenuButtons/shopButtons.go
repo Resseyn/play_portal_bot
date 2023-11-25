@@ -12,7 +12,7 @@ func GameServices(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	messageContent := "Выберите категорию"
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Steam", Command: "shop_gameServices_steam"},
 			{Text: "Xbox/Microsoft", Command: ""}},
@@ -40,7 +40,7 @@ func Services(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	messageContent := "Выберите категорию"
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Подписка Twitch", Command: ""},
 			{Text: "Spotify", Command: "spotify"}},

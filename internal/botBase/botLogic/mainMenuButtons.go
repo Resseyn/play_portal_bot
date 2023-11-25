@@ -12,7 +12,7 @@ func Menu(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
 	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Магазин", Command: structures.Commands["shop"]},
 			{Text: "Кабинет", Command: structures.Commands["personalCabinet"]}},
@@ -43,7 +43,7 @@ func Shop(c telebot.Context) error {
 	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["mainMenu"]
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Игровые сервисы", Command: structures.Commands["shop_gameServices"]},
 			{Text: "Сервисы", Command: structures.Commands["shop_services"]}},
@@ -70,7 +70,7 @@ func PersonalCabinet(c telebot.Context) error {
 	messageContent := "Общие нары"
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["mainMenu"]
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Пополнить баланс💘", Command: structures.Commands[""]}},
 		{
@@ -98,7 +98,7 @@ func Support(c telebot.Context) error {
 	messageContent := "Вы можете задать свой вопрос в поддержку создав тикет, но перед этим рекомендуем ознакомиться с нашим FAQ"
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["mainMenu"]
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{
 			{Text: "Создать тикет", Command: structures.Commands[""]}}}
 	// =========PARAMS=========
@@ -121,7 +121,7 @@ func FAQ(c telebot.Context) error {
 	messageContent := "Здесь можно почитать ответы на Часто задаваемые вопросы. НУ И ТИПО ССЫЛОЧКУ СЮДА АГА" //сюда ссылку
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["mainMenu"]
-	commands := []*[]structures.Command{
+	commands := [][]structures.Command{
 		{}}
 	// =========PARAMS=========
 
