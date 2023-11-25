@@ -14,20 +14,20 @@ func Spotify(c telebot.Context) error {
 	messageContent := "Выберите товар:"
 	commands := []*[]structures.Command{
 		{
-			{Text: "Spotify Individual 1 месяц", Command: "spotify_individual_1"}},
+			{Text: "Spotify Individual 1 месяц", Command: structures.Commands["spotify_individual_1"]}},
 		{
-			{Text: "Spotify Individual 3 месяца", Command: "steam_accounts"}},
+			{Text: "Spotify Individual 3 месяца", Command: structures.Commands["steam_accounts"]}},
 		{
-			{Text: "Spotify Individual 6 месяцев", Command: "steam_accounts"}},
+			{Text: "Spotify Individual 6 месяцев", Command: structures.Commands["steam_accounts"]}},
 		{
-			{Text: "Spotify Individual 12 месяцев", Command: "steam_accounts"}},
+			{Text: "Spotify Individual 12 месяцев", Command: structures.Commands["steam_accounts"]}},
 		{
-			{Text: "Spotify DUO 1 месяц", Command: "steam_accounts"}},
+			{Text: "Spotify DUO 1 месяц", Command: structures.Commands["steam_accounts"]}},
 		{
-			{Text: "Spotify Family 1 месяц", Command: "steam_accounts"}},
+			{Text: "Spotify Family 1 месяц", Command: structures.Commands["steam_accounts"]}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
-	data.PrevCommand = "shop_services"
+	data.PrevCommand = structures.Commands["shop_services"]
 	// =========PARAMS=========
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
@@ -48,10 +48,10 @@ func Spotify_Individual_1(c telebot.Context) error {
 	messageContent := "Выберите товар:"
 	commands := []*[]structures.Command{
 		{
-			{Text: "Купить", Command: "buy"}},
+			{Text: "Купить", Command: structures.Commands["buy"]}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
-	data.PrevCommand = "shop_services"
+	data.PrevCommand = structures.Commands["shop_services"]
 	data.Price = 332
 	// =========PARAMS=========
 	//currentInteraction := &structures.UserInteraction{
