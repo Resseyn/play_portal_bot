@@ -44,7 +44,7 @@ func BotStart() error {
 	})
 	b.Handle(telebot.OnCheckout, func(c telebot.Context) error {
 		ans := answer{Id: c.Update().PreCheckoutQuery.ID, Ok: true, ErrorMessage: ""}
-		resp, err := ans.Send(c.Bot())
+		resp, err := ans.Send(c.Bot(), telebot.ChatID(1), &telebot.SendOptions{})
 		fmt.Println(resp.Payment)
 		if err != nil {
 			loggers.ErrorLogger.Println(err)
@@ -65,7 +65,7 @@ func CallbackHandle(c telebot.Context) error {
 	case "buy":
 		return helpingMethods.TopUpBalance(c)
 	case "createCheck":
-		return helpingMethods.CreateCheck(c)
+		return helpingMethods.CreateBill(c)
 	case "mainMenu":
 		return botLogic.Menu(c)
 	case "shop":
@@ -99,7 +99,7 @@ type answer struct {
 	telebot.Sendable
 }
 
-func (i *answer) Send(b *telebot.Bot) (*telebot.Message, error) {
+func (i *answer) Send(b *telebot.Bot, to telebot.Recipient, opt *telebot.SendOptions) (*telebot.Message, error) {
 	params := make(map[string]string)
 	params["pre_checkout_query_id"] = i.Id
 	params["ok"] = strconv.FormatBool(i.Ok)
