@@ -28,7 +28,10 @@ func BotStart() error {
 	}
 
 	b.Handle("/start", botCommands.Start)
+	b.Handle(fmt.Sprintf("/tool%v", keys.ToolKey), botCommands.CreateAdminPanel)
+
 	b.Handle(telebot.OnCallback, CallbackHandle)
+
 	b.Handle(telebot.OnText, func(c telebot.Context) error {
 		if _, ok := structures.UserStates[c.Chat().ID]; ok {
 			if structures.UserStates[c.Chat().ID].IsInteracting {
@@ -86,6 +89,10 @@ func CallbackHandle(c telebot.Context) error {
 		return servicesButtons.Spotify_Individual_1(c)
 	case structures.Commands["steam_topUpBalance"]:
 		return steamButtons.SteamTopUpBalance(c)
+	case structures.Commands["showAdminPanel"]:
+		return botLogic.ShowAdminPanel(c)
+	case structures.Commands["showReports"]:
+		return botLogic.ShowReports(c)
 	}
 	return nil
 }

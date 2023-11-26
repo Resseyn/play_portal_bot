@@ -5,11 +5,12 @@ var UserStates = make(map[int64]UserInteraction)
 
 // Commands - словарь, в котором хранятся коды команд (прим. mainMenu - a1jg; по ключу menu выдаст a1jg)
 var Commands = map[string]string{
-	"mainMenu":                "aaaa",
-	"shop":                    "aaab",
-	"personalCabinet":         "aaac",
-	"support":                 "aaad",
-	"faq":                     "aaae",
+	"mainMenu":        "aaaa",
+	"shop":            "aaab",
+	"personalCabinet": "aaac",
+	"support":         "aaad",
+	"faq":             "aaae",
+
 	"buy":                     "aaaf",
 	"shop_gameServices":       "aaag",
 	"shop_services":           "aaah",
@@ -17,6 +18,10 @@ var Commands = map[string]string{
 	"spotify":                 "aaaj",
 	"spotify_individual_1":    "aaak",
 	"steam_topUpBalance":      "aaal",
+
+	"adminPanel":     "aaam",
+	"showAdminPanel": "aaao",
+	"showReports":    "aaan",
 }
 
 type MessageData struct {
