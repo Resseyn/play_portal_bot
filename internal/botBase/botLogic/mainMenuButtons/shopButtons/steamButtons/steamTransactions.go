@@ -16,6 +16,7 @@ func SteamTopUpBalance(c telebot.Context) error {
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["steam"]
 	// =========PARAMS=========
+
 	currentInteraction := &structures.UserInteraction{
 		IsInteracting: true,
 		Type:          structures.Commands["steam_topUpBalance"],

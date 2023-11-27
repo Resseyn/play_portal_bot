@@ -18,3 +18,12 @@ ffsdfsdfdsfsd2023/11/20 14:27:21 bad file type
 2023/11/24 23:24:51 telegram: BUTTON_DATA_INVALID (400)
 2023/11/25 19:27:47 telebot: unsupported what argument
 2023/11/25 19:29:23 telegram: Bad Request: PAYMENT_PROVIDER_INVALID (400)
+2023/11/27 20:00:04 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/11/27 20:00:32 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/11/27 20:00:42 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/11/27 20:01:41 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/11/27 21:09:58 telegram: Bad Request: there is no media in the message to edit (400)
+2023/11/27 21:09:59 telegram: Bad Request: there is no media in the message to edit (400)
+2023/11/27 21:10:01 telegram: Bad Request: there is no media in the message to edit (400)
+2023/11/27 21:10:01 telegram: Bad Request: there is no media in the message to edit (400)
+2023/11/27 21:27:03 telegram: chat not found (400)

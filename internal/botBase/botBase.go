@@ -9,10 +9,12 @@ import (
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons/servicesButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons/steamButtons"
+	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/supportMethods"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/botBase/keys"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
+	"strconv"
 	"time"
 )
 
@@ -28,6 +30,7 @@ func BotStart() error {
 	}
 
 	b.Handle("/start", botCommands.Start)
+	b.Handle("/end", supportMethods.EndTicket)
 	b.Handle(fmt.Sprintf("/tool%v", keys.ToolKey), botCommands.CreateAdminPanel)
 
 	b.Handle(telebot.OnCallback, CallbackHandle)
@@ -35,13 +38,18 @@ func BotStart() error {
 	b.Handle(telebot.OnText, func(c telebot.Context) error {
 		if _, ok := structures.UserStates[c.Chat().ID]; ok {
 			if structures.UserStates[c.Chat().ID].IsInteracting {
-				return nil
+				switch structures.UserStates[c.Chat().ID].Type {
+				case "moderatorDialog":
+					convWith, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
+					c.Bot().Send(telebot.ChatID(convWith), c.Message().Text)
+				}
 			} else {
 				return botCommands.Start(c)
 			}
 		} else {
 			return botCommands.Start(c)
 		}
+		return nil
 	})
 	//b.Handle(telebot.OnCheckout, func(c telebot.Context) error {
 	//	ans := answer{Id: c.Update().PreCheckoutQuery.ID, Ok: true, ErrorMessage: ""}
@@ -75,6 +83,14 @@ func CallbackHandle(c telebot.Context) error {
 		return botLogic.PersonalCabinet(c)
 	case structures.Commands["support"]:
 		return botLogic.Support(c)
+
+	case structures.Commands["createTicket"]:
+		return supportMethods.CreateTicket(c)
+	case structures.Commands["respondToTicket"]:
+		return supportMethods.RespondToTicket(c)
+	case structures.Commands["endTicket"]:
+		return supportMethods.EndTicket(c)
+
 	case structures.Commands["faq"]:
 		return botLogic.FAQ(c)
 	case structures.Commands["shop_gameServices"]: //TODO: change to shop_gameServices
@@ -86,7 +102,7 @@ func CallbackHandle(c telebot.Context) error {
 	case structures.Commands["spotify"]:
 		return servicesButtons.Spotify(c)
 	case structures.Commands["spotify_individual_1"]:
-		return servicesButtons.Spotify_Individual_1(c)
+		return servicesButtons.SpotifyIndividual1(c)
 	case structures.Commands["steam_topUpBalance"]:
 		return steamButtons.SteamTopUpBalance(c)
 	case structures.Commands["showAdminPanel"]:

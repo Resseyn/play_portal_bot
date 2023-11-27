@@ -41,7 +41,7 @@ func Spotify(c telebot.Context) error {
 	}
 	return nil
 }
-func Spotify_Individual_1(c telebot.Context) error {
+func SpotifyIndividual1(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg"

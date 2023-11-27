@@ -100,7 +100,7 @@ func Support(c telebot.Context) error {
 	data.PrevCommand = structures.Commands["mainMenu"]
 	commands := [][]structures.Command{
 		{
-			{Text: "Создать тикет", Command: structures.Commands[""]}}}
+			{Text: "Создать тикет", Command: structures.Commands["createTicket"]}}}
 	// =========PARAMS=========
 
 	keyboard := helpingMethods.CreateInline(data, commands...)

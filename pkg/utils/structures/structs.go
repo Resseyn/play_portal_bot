@@ -3,6 +3,9 @@ package structures
 // UserStates Словарь с взаимодействиями пользователей с ботом (взаимодейсвия, в которых требуется несколько раз что-то ввести и т.д)
 var UserStates = make(map[int64]UserInteraction)
 
+// Moderators is array of chatID's of whom the tickets will be sent
+var Moderators = []string{"2038902313", "464644572"}
+
 // Commands - словарь, в котором хранятся коды команд (прим. mainMenu - a1jg; по ключу menu выдаст a1jg)
 var Commands = map[string]string{
 	"mainMenu":        "aaaa",
@@ -10,6 +13,10 @@ var Commands = map[string]string{
 	"personalCabinet": "aaac",
 	"support":         "aaad",
 	"faq":             "aaae",
+
+	"createTicket":    "zxca",
+	"respondToTicket": "zxcb", //button for moders only
+	"endTicket":       "zxcc",
 
 	"buy":                     "aaaf",
 	"shop_gameServices":       "aaag",
@@ -26,10 +33,11 @@ var Commands = map[string]string{
 
 type MessageData struct {
 	ChatID      int64
-	MessageID   int
+	MessageID   int //бесполезная хуйня
 	Command     string
 	PrevCommand string
 	Price       int
+	//DialogWith int64 //for moders, representing dialog with user
 }
 
 type Command struct {
