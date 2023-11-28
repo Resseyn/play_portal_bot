@@ -79,7 +79,7 @@ func BotStart() error {
 func CallbackHandle(c telebot.Context) error {
 	fmt.Println(c.Callback().Data)
 	data := helpingMethods.ParseData(c.Callback().Data)
-	fmt.Println(structures.UserStates[data.ChatID])
+	fmt.Println(structures.UserStates[c.Chat().ID])
 	switch data.Command {
 	case structures.Commands["buy"]:
 		return helpingMethods.TopUpBalance(c)

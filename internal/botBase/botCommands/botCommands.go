@@ -13,11 +13,10 @@ func Start(c telebot.Context) error {
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
 	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
 	messageData := &structures.MessageData{
-		MessageID:   c.Message().ID,
-		ChatID:      c.Chat().ID,
 		Command:     structures.Commands["mainMenu"],
 		PrevCommand: "",
 		Price:       0,
+		Custom:      "",
 	}
 	commands := [][]structures.Command{
 		{
@@ -50,11 +49,10 @@ func CreateAdminPanel(c telebot.Context) error {
 	picPath := "pkg/utils/data/img/adminImages/ramzes.jpg"
 	messageContent := "админ менюшка"
 	messageData := &structures.MessageData{
-		MessageID:   c.Message().ID,
-		ChatID:      c.Chat().ID,
 		Command:     structures.Commands["adminPanel"],
 		PrevCommand: "",
 		Price:       0,
+		Custom:      "",
 	}
 	commands := [][]structures.Command{
 		{

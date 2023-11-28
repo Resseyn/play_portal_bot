@@ -16,11 +16,10 @@ func ShowAdminPanel(c telebot.Context) error {
 	picPath := "pkg/utils/data/img/adminImages/ramzes.jpg"
 	messageContent := fmt.Sprintf("админ менюшка (тест %.2f)", rand.Float32()*1.3)
 	messageData := &structures.MessageData{
-		MessageID:   c.Message().ID,
-		ChatID:      c.Chat().ID,
 		Command:     structures.Commands["adminPanel"],
 		PrevCommand: "",
 		Price:       0,
+		Custom:      "",
 	}
 	commands := [][]structures.Command{
 		{
@@ -46,11 +45,10 @@ func ShowReports(c telebot.Context) error {
 	picPath := "pkg/utils/data/img/adminImages/astronaut.jpg"
 	messageContent := "долбаебы понапишут вопросов через факью и они все сюда"
 	messageData := &structures.MessageData{
-		MessageID:   c.Message().ID,
-		ChatID:      c.Chat().ID,
 		Command:     structures.Commands["showReports"],
 		PrevCommand: structures.Commands["showAdminPanel"],
 		Price:       0,
+		Custom:      "",
 	}
 	commands := [][]structures.Command{{}}
 	// =========PARAMS=========

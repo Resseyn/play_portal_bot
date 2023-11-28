@@ -5,6 +5,7 @@ import (
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
+	"strconv"
 )
 
 func Menu(c telebot.Context) error {
@@ -24,7 +25,7 @@ func Menu(c telebot.Context) error {
 	data.PrevCommand = ""
 	// =========PARAMS=========
 
-	delete(structures.UserStates, data.ChatID)
+	delete(structures.UserStates, c.Chat().ID)
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
@@ -103,6 +104,7 @@ func Support(c telebot.Context) error {
 	commands := [][]structures.Command{
 		{
 			{Text: "Создать тикет", Command: structures.Commands["createTicket"]}}}
+	data.Custom = strconv.Itoa(int(c.Chat().ID))
 	// =========PARAMS=========
 
 	keyboard := helpingMethods.CreateInline(data, commands...)

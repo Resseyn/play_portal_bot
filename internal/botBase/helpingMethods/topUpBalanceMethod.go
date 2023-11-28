@@ -11,7 +11,7 @@ func TopUpBalance(c telebot.Context) error {
 
 	// =========PARAMS=========
 	data := ParseData(c.Callback().Data)
-	structures.UserStates[data.ChatID] = &structures.UserInteraction{
+	structures.UserStates[c.Chat().ID] = &structures.UserInteraction{
 		IsInteracting: true,
 		Type:          "awaitingForPrice",
 		Step:          0,

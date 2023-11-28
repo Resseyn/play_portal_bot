@@ -15,7 +15,7 @@ func CreateTicket(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	data := helpingMethods.ParseData(c.Callback().Data)
-	messageContent := fmt.Sprintf("%v не понравилось чето гандону", data.ChatID)
+	messageContent := fmt.Sprintf("%v не понравилось чето гандону", data.Custom)
 	commands := [][]structures.Command{
 		{
 			{Text: "Ответить", Command: structures.Commands["respondToTicket"]}},
@@ -45,6 +45,7 @@ func RespondToTicket(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	data := helpingMethods.ParseData(c.Callback().Data)
+	fmt.Println(data, "У МОДЕРА")
 	commands := [][]structures.Command{
 		{
 			{Text: "Закончить диалог с хуйланом", Command: structures.Commands["endTicket"]}},
@@ -52,7 +53,9 @@ func RespondToTicket(c telebot.Context) error {
 	data.PrevCommand = ""
 	// =========PARAMS=========
 
-	if structures.UserStates[data.ChatID].IsInteracting {
+	interactionChatID, _ := strconv.Atoi(data.Custom)
+
+	if state, ok := structures.UserStates[int64(interactionChatID)]; ok && state.Type == "moderatorDialog" {
 		c.Send("Другой модер пиздит с гандоном")
 		return nil
 	}
@@ -62,12 +65,12 @@ func RespondToTicket(c telebot.Context) error {
 		Type:          "moderatorDialog",
 		DataCase:      []string{strconv.FormatInt(c.Chat().ID, 10)}, //representing moder
 	}
-	structures.UserStates[data.ChatID] = currentInteraction
+	structures.UserStates[int64(interactionChatID)] = currentInteraction
 
 	currentModerInteraction := &structures.UserInteraction{
 		IsInteracting: true,
 		Type:          "moderatorDialog",
-		DataCase:      []string{strconv.FormatInt(data.ChatID, 10)}, //representing user
+		DataCase:      []string{strconv.FormatInt(int64(interactionChatID), 10)}, //representing user
 	}
 	structures.UserStates[c.Chat().ID] = currentModerInteraction
 	fmt.Println(currentInteraction)
@@ -83,7 +86,7 @@ func RespondToTicket(c telebot.Context) error {
 		return err
 	}
 	msg.Caption = "С вами начали диалог, пропишите /end для окончания или нажмите на кнопку"
-	_, err = c.Bot().Send(telebot.ChatID(data.ChatID), msg, keyboard)
+	_, err = c.Bot().Send(telebot.ChatID(int64(interactionChatID)), msg, keyboard)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
@@ -98,18 +101,16 @@ func EndTicket(c telebot.Context) error {
 	if c.Callback() == nil {
 		convFrom, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
 		messageData1 := &structures.MessageData{
-			MessageID:   c.Message().ID, //бесполезная хуйня
-			ChatID:      c.Chat().ID,
 			Command:     structures.Commands["mainMenu"],
 			PrevCommand: "",
 			Price:       0,
+			Custom:      "",
 		}
 		messageData2 := &structures.MessageData{
-			MessageID:   c.Message().ID, //бесполезная хуйня
-			ChatID:      int64(convFrom),
 			Command:     structures.Commands["mainMenu"],
 			PrevCommand: "",
 			Price:       0,
+			Custom:      "",
 		}
 		picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 		commands := [][]structures.Command{
@@ -142,18 +143,20 @@ func EndTicket(c telebot.Context) error {
 	data.PrevCommand = ""
 	// =========PARAMS=========
 
+	interactionChatID, _ := strconv.Atoi(data.Custom)
+
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: "Вы прекратили диалог",
 	}
-	convFrom, _ := strconv.Atoi(structures.UserStates[data.ChatID].DataCase[0])
+	convFrom, _ := strconv.Atoi(structures.UserStates[int64(interactionChatID)].DataCase[0])
 
 	delete(structures.UserStates, c.Chat().ID)
 	delete(structures.UserStates, int64(convFrom))
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
 
-	c.Bot().Send(telebot.ChatID(data.ChatID), msg, keyboard)
+	c.Bot().Send(telebot.ChatID(int64(interactionChatID)), msg, keyboard)
 
 	msg.Caption = "С вами прекратили диалог"
 	c.Bot().Send(telebot.ChatID(convFrom), msg, keyboard)

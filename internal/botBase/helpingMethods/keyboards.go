@@ -19,7 +19,7 @@ func CreateInline(data *structures.MessageData, commands ...[]structures.Command
 
 		for _, cmd := range cmdRow {
 
-			dataFormat := fmt.Sprintf("%v,%v,%v,%v,%v", data.ChatID, data.MessageID, cmd.Command, data.Command, data.Price)
+			dataFormat := fmt.Sprintf("%v,%v,%v,%v", cmd.Command, data.Command, data.Price, data.Custom)
 			button := telebot.InlineButton{
 				Data: dataFormat,
 				Text: cmd.Text,
@@ -30,7 +30,7 @@ func CreateInline(data *structures.MessageData, commands ...[]structures.Command
 	}
 	fmt.Println(data)
 	if data.PrevCommand != "" {
-		backFormat := fmt.Sprintf("%v,%v,%v,%v,%v", data.ChatID, data.MessageID, data.PrevCommand, "", 0)
+		backFormat := fmt.Sprintf("%v,%v,%v,%v", data.PrevCommand, "", 0, "")
 
 		backButton := telebot.InlineButton{
 			Data: backFormat,

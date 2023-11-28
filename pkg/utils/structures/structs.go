@@ -39,11 +39,10 @@ var Commands = map[string]string{
 }
 
 type MessageData struct {
-	ChatID      int64
-	MessageID   int //бесполезная хуйня
 	Command     string
 	PrevCommand string
 	Price       int
+	Custom      string
 	//DialogWith int64 //for moders, representing dialog with user
 }
 

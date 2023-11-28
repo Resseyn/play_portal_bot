@@ -10,15 +10,12 @@ import (
 func ParseData(callbackData string) *structures.MessageData {
 	callbackData = strings.Trim(callbackData, "\n")
 	data := strings.Split(callbackData, ",") //0 - chatID 1- messageID 2 - command 3 - prevCommand
-	data0, _ := strconv.Atoi(data[0])
-	data1, _ := strconv.Atoi(data[1])
-	data4, _ := strconv.Atoi(data[4])
+	data2, _ := strconv.Atoi(data[2])
 	messageData := &structures.MessageData{
-		ChatID:      int64(data0),
-		MessageID:   data1,
-		Command:     data[2],
-		PrevCommand: data[3],
-		Price:       data4,
+		Command:     data[0],
+		PrevCommand: data[1],
+		Price:       data2,
+		Custom:      data[3],
 	}
 	return messageData
 }

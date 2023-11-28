@@ -20,10 +20,10 @@ func CreateCheck(c telebot.Context) error {
 		}
 	} else {
 		data = &structures.MessageData{
-			ChatID:      c.Chat().ID,
 			Command:     structures.UserStates[c.Chat().ID].Type,
 			PrevCommand: "",
 			Price:       structures.UserStates[c.Chat().ID].Price,
+			Custom:      "",
 		}
 	}
 
@@ -43,10 +43,10 @@ func CreateCheck(c telebot.Context) error {
 	data.PrevCommand = ""
 	// =========PARAMS=========
 
-	if currentState, ok := structures.UserStates[data.ChatID]; ok {
+	if currentState, ok := structures.UserStates[c.Chat().ID]; ok {
 		currentState.Type = currentState.DataCase[0]
 	}
-	fmt.Println(structures.UserStates[data.ChatID], "ИЗМЕНЕННАЯ")
+	fmt.Println(structures.UserStates[c.Chat().ID], "ИЗМЕНЕННАЯ")
 
 	keyboard := CreateInline(data, commands...)
 	err := c.Send(&telebot.Photo{
