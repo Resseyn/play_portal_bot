@@ -48,7 +48,7 @@ func SpotifyIndividual1(c telebot.Context) error {
 	messageContent := "Выберите товар:"
 	commands := [][]structures.Command{
 		{
-			{Text: "Купить", Command: structures.Commands["buy"]}},
+			{Text: "Купить", Command: structures.Commands["topUpBalance"]}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.Command = structures.Commands["spotifySuccess"]
@@ -68,6 +68,39 @@ func SpotifyIndividual1(c telebot.Context) error {
 	return nil
 }
 
+// SpotifySuccessPayment аквивируется после успешной оплаты юзера, у которого в чеке заказа кастом указан как spotifySuccess
 func SpotifySuccessPayment(c telebot.Context) error {
-	return nil
+
+	// =========PARAMS=========
+	picPath := "pkg/utils/data/img/shopImages/servicesImages/spotify/spotifySuccess.jpeg"
+	var messageContent string
+	commands := [][]structures.Command{
+		{{Text: "Отмена", Command: structures.Commands["mainMenu"]}}}
+	var data *structures.MessageData
+	if c.Callback() != nil {
+		data = helpingMethods.ParseData(c.Callback().Data)
+	} else {
+		data = &structures.MessageData{}
+	}
+	data.PrevCommand = "" //TODO: а нужна ли тут дата ваще?Ж???????
+	// =========PARAMS=========
+
+	switch structures.UserStates[c.Chat().ID].Step {
+	case 0:
+		messageContent = "Введите логин от Spotify"
+		c.Delete()
+	case 1:
+		messageContent = "Введите пароль от Spotify"
+	}
+
+	msg := &telebot.Photo{
+		File:    telebot.FromDisk(picPath),
+		Caption: messageContent,
+	}
+	keyboard := helpingMethods.CreateInline(data, commands...)
+	err := c.Send(msg, &telebot.SendOptions{
+		ParseMode:   telebot.ModeHTML,
+		ReplyMarkup: keyboard,
+	})
+	return err
 }

@@ -45,7 +45,6 @@ func RespondToTicket(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	data := helpingMethods.ParseData(c.Callback().Data)
-	fmt.Println(data, "У МОДЕРА")
 	commands := [][]structures.Command{
 		{
 			{Text: "Закончить диалог с хуйланом", Command: structures.Commands["endTicket"]}},
@@ -73,8 +72,6 @@ func RespondToTicket(c telebot.Context) error {
 		DataCase:      []string{strconv.FormatInt(int64(interactionChatID), 10)}, //representing user
 	}
 	structures.UserStates[c.Chat().ID] = currentModerInteraction
-	fmt.Println(currentInteraction)
-	fmt.Println(currentModerInteraction)
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: "Вы начали диалог, пропишите /end для окончания или нажмите на кнопку",

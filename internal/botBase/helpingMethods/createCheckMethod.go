@@ -8,6 +8,9 @@ import (
 )
 
 func CreateCheck(c telebot.Context) error {
+	if currentState, ok := structures.UserStates[c.Chat().ID]; ok {
+		currentState.Type = currentState.DataCase[0]
+	}
 
 	// =========PARAMS=========
 	var data *structures.MessageData
@@ -23,11 +26,10 @@ func CreateCheck(c telebot.Context) error {
 			Command:     structures.UserStates[c.Chat().ID].Type,
 			PrevCommand: "",
 			Price:       structures.UserStates[c.Chat().ID].Price,
-			Custom:      "",
+			Custom:      structures.UserStates[c.Chat().ID].Type,
 		}
 	}
 
-	fmt.Println(data, "НУЖНАЯ ДАТА")
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
 	messageContent := fmt.Sprintf("Счёт на %v рублей создан, жмите по кнопке ниже, чтобы оплатить удобным вам способом.\n\nДоговор оферты ссылочку ага", data.Price)
 
@@ -43,11 +45,7 @@ func CreateCheck(c telebot.Context) error {
 	data.PrevCommand = ""
 	// =========PARAMS=========
 
-	if currentState, ok := structures.UserStates[c.Chat().ID]; ok {
-		currentState.Type = currentState.DataCase[0]
-	}
-	fmt.Println(structures.UserStates[c.Chat().ID], "ИЗМЕНЕННАЯ")
-
+	delete(structures.UserStates, c.Chat().ID)
 	keyboard := CreateInline(data, commands...)
 	err := c.Send(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),

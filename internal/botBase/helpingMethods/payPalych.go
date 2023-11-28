@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gopkg.in/telebot.v3"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -53,11 +54,12 @@ type BillCreateResponse struct {
 	BillId      string `json:"bill_id"`       //5QWlqB2kKJ
 }
 
+// CreatePayPalychBill Создание счета на PayPalych
 func CreatePayPalychBill(c telebot.Context) error {
 	// Создание счета на PayPalych
+	//TODO: создать счет в бд, где будет связь orderID и accountID, а так же услуга и ее цена
 	msgData := ParseData(c.Callback().Data)
-	fmt.Println(msgData, "msgData")
-	fmt.Println(structures.UserStates[c.Chat().ID], "userState")
+	fmt.Println(msgData)
 	data := &Bill{
 		Amount:              float64(msgData.Price),
 		OrderId:             "123",
@@ -65,13 +67,13 @@ func CreatePayPalychBill(c telebot.Context) error {
 		Type:                "normal",
 		ShopId:              "G1vrEyX0LR",
 		CurrencyIn:          "RUB",
-		Custom:              structures.UserStates[c.Chat().ID].Type,
+		Custom:              msgData.Custom, //TODO: мб в кастом запихнуть ChatID, тогда в 100 раз меньше взаимодействий с бд
 		PayerPaysCommission: 1,
 		Name:                "Платёж",
 		SuccessUrl:          "https://t.me/play_portal_bot",
 	}
-	fmt.Println(data, "data")
 	jsonData, _ := json.Marshal(*data)
+	fmt.Println(string(jsonData), "CREATED BILL")
 
 	req, _ := http.NewRequest("POST", "https://paypalych.com/api/v1/bill/create", bytes.NewBuffer(jsonData))
 	req.Header.Set("Authorization", "Bearer 123|q4uNcWNKMNZoSFSY1XTxp36nsM0kUMSu0otSA95")
@@ -85,8 +87,7 @@ func CreatePayPalychBill(c telebot.Context) error {
 	}
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(body))
+	body, _ := io.ReadAll(resp.Body)
 
 	var billCreateResponse BillCreateResponse
 	err = json.Unmarshal(body, &billCreateResponse)
@@ -138,7 +139,6 @@ func PayoutStatus(c telebot.Context) error {
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(body))
 
 	var billCreateResponse Payout
 	err = json.Unmarshal(body, &billCreateResponse)
@@ -155,6 +155,7 @@ func PayoutStatus(c telebot.Context) error {
 	return nil
 }
 
+// PayPalychPaymentHandle метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
 func PayPalychPaymentHandle(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	//var payment Payment
@@ -167,27 +168,27 @@ func PayPalychPaymentHandle(w http.ResponseWriter, r *http.Request) {
 	//	return
 	//}
 	//if payment.Status == "SUCCESS"
-	AccountID := r.Form.Get("Custom")
-	//TODO:db search AccountID and return via chatID and UserStates to bot the TOVAR
-	//TODO:db get from ChatID from AccountID
-	fmt.Println(AccountID)
+	OrderID := r.Form.Get("InvId")
+	//TODO:db search OrderID and return order (orderID и accountID, а так же услуга и ее цена), а так же считать заказ выполненным
+	//TODO:db search если пополненная сумма больше или равна нужной для оплаты услуги, продолжить код, иначе чет другое типо иди нахуй
+	fmt.Println(OrderID)
 	GOTTENFROMDBCHATID := 2038902313
 	chatID := strconv.Itoa(GOTTENFROMDBCHATID)
+	order := structures.Commands[r.Form.Get("custom")]
 	url2 := fmt.Sprintf("https://api.telegram.org/bot%s/%s", keys.BotKey, "sendMessage")
 	msgData := &structures.MessageData{
-		Command:     structures.UserStates[int64(GOTTENFROMDBCHATID)].Type,
+		Command:     "", //wtf
 		PrevCommand: "",
 	}
 	commands := [][]structures.Command{{
-		{Text: "Вернуться к услуге", Command: msgData.Command},
-	}}
+		{Text: "Вернуться к услуге", Command: order}}}
 	keyboard := CreateInline(msgData, commands...)
 	jsonKeyboard, err := json.Marshal(keyboard)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return
 	}
-	data := map[string]string{"chat_id": chatID, "text": "hallo frend i got ya maney", "reply_markup": string(jsonKeyboard)}
+	data := map[string]string{"chat_id": chatID, "text": fmt.Sprintf("hallo frend i got ya maney for %v", order), "reply_markup": string(jsonKeyboard)}
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
@@ -208,8 +209,12 @@ func PayPalychPaymentHandle(w http.ResponseWriter, r *http.Request) {
 	defer answer.Body.Close()
 	var str []byte
 	answer.Body.Read(str)
-	fmt.Println(answer.Status)
-	fmt.Println(string(str))
+	structures.UserStates[int64(GOTTENFROMDBCHATID)] = &structures.UserInteraction{
+		IsInteracting: true,
+		Type:          order,
+		Step:          0,
+		DataCase:      make([]string, 2),
+	}
 	//TODO:send to admin db payment status from PayoutStatus func like "order_id" , "account_id", "chat_id"(opt, get from связывания таблиц), "status"
 	//TODO: create func to return all payments with SUCCESS status (for admin)
 }

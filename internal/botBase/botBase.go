@@ -37,6 +37,7 @@ func BotStart() error {
 
 	b.Handle(telebot.OnText, func(c telebot.Context) error {
 		if state, ok := structures.UserStates[c.Chat().ID]; ok {
+			fmt.Println("STATE:", structures.UserStates[c.Chat().ID])
 			if structures.UserStates[c.Chat().ID].IsInteracting {
 				switch structures.UserStates[c.Chat().ID].Type {
 				case "moderatorDialog":
@@ -49,6 +50,15 @@ func BotStart() error {
 					}
 					state.Price = newPrice
 					return helpingMethods.CreateCheck(c)
+				case structures.Commands["spotifySuccess"]:
+					state.DataCase[state.Step] = c.Message().Text
+					if state.Step == 1 {
+						return helpingMethods.CreateOrder(c)
+					} else {
+						state.Step++
+						return servicesButtons.SpotifySuccessPayment(c)
+					}
+
 				default:
 					return botCommands.Start(c)
 				}
@@ -77,11 +87,11 @@ func BotStart() error {
 
 // CallbackHandle handles all the existing callbacks
 func CallbackHandle(c telebot.Context) error {
-	fmt.Println(c.Callback().Data)
 	data := helpingMethods.ParseData(c.Callback().Data)
-	fmt.Println(structures.UserStates[c.Chat().ID])
+	fmt.Println("STATE:", structures.UserStates[c.Chat().ID])
+	fmt.Println("CALLBACK DATA:", data)
 	switch data.Command {
-	case structures.Commands["buy"]:
+	case structures.Commands["topUpBalance"]:
 		return helpingMethods.TopUpBalance(c)
 	case structures.Commands["createCheck"]:
 		return helpingMethods.CreateCheck(c)
@@ -101,10 +111,13 @@ func CallbackHandle(c telebot.Context) error {
 		return mainMenuButtons.Services(c)
 	case structures.Commands["shop_gameServices_steam"]:
 		return shopButtons.Steam(c)
+
 	case structures.Commands["spotify"]:
 		return servicesButtons.Spotify(c)
 	case structures.Commands["spotify_individual_1"]:
 		return servicesButtons.SpotifyIndividual1(c)
+	case structures.Commands["spotifySuccess"]:
+		return servicesButtons.SpotifySuccessPayment(c)
 	case structures.Commands["steam_topUpBalance"]:
 		return steamButtons.SteamTopUpBalance(c)
 	//============================================
