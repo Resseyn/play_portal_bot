@@ -11,6 +11,13 @@ func TopUpBalance(c telebot.Context) error {
 
 	// =========PARAMS=========
 	data := ParseData(c.Callback().Data)
+	structures.UserStates[data.ChatID] = &structures.UserInteraction{
+		IsInteracting: true,
+		Type:          "awaitingForPrice",
+		Step:          0,
+		Price:         data.Price,
+		DataCase:      []string{"spotifySuccess"},
+	}
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
 	messageContent := fmt.Sprintf("Вам не хватает %v на балансе\n\nВведите сумму для пополнения от 20₽ и до 20000₽", data.Price)
 	commands := [][]structures.Command{
@@ -31,5 +38,8 @@ func TopUpBalance(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
+	return nil
+}
+func UpdateTopUpBalance(c telebot.Context) error {
 	return nil
 }

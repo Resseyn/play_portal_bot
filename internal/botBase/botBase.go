@@ -36,12 +36,21 @@ func BotStart() error {
 	b.Handle(telebot.OnCallback, CallbackHandle)
 
 	b.Handle(telebot.OnText, func(c telebot.Context) error {
-		if _, ok := structures.UserStates[c.Chat().ID]; ok {
+		if state, ok := structures.UserStates[c.Chat().ID]; ok {
 			if structures.UserStates[c.Chat().ID].IsInteracting {
 				switch structures.UserStates[c.Chat().ID].Type {
 				case "moderatorDialog":
 					convWith, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
 					c.Bot().Send(telebot.ChatID(convWith), c.Message().Text)
+				case "awaitingForPrice":
+					newPrice, err := strconv.Atoi(c.Message().Text)
+					if err != nil {
+						c.Send("Пожалуйста, введите цифру")
+					}
+					state.Price = newPrice
+					return helpingMethods.CreateCheck(c)
+				default:
+					return botCommands.Start(c)
 				}
 			} else {
 				return botCommands.Start(c)
@@ -70,29 +79,22 @@ func BotStart() error {
 func CallbackHandle(c telebot.Context) error {
 	fmt.Println(c.Callback().Data)
 	data := helpingMethods.ParseData(c.Callback().Data)
+	fmt.Println(structures.UserStates[data.ChatID])
 	switch data.Command {
 	case structures.Commands["buy"]:
 		return helpingMethods.TopUpBalance(c)
 	case structures.Commands["createCheck"]:
-		return helpingMethods.CreateBill(c)
+		return helpingMethods.CreateCheck(c)
+	case structures.Commands["createPayPalychBill"]:
+		return helpingMethods.CreatePayPalychBill(c)
+
+	//from mainMenu==============================
 	case structures.Commands["mainMenu"]:
 		return botLogic.Menu(c)
 	case structures.Commands["shop"]:
 		return botLogic.Shop(c)
-	case structures.Commands["personalCabinet"]:
-		return botLogic.PersonalCabinet(c)
-	case structures.Commands["support"]:
-		return botLogic.Support(c)
 
-	case structures.Commands["createTicket"]:
-		return supportMethods.CreateTicket(c)
-	case structures.Commands["respondToTicket"]:
-		return supportMethods.RespondToTicket(c)
-	case structures.Commands["endTicket"]:
-		return supportMethods.EndTicket(c)
-
-	case structures.Commands["faq"]:
-		return botLogic.FAQ(c)
+	//from menu_shop===============================
 	case structures.Commands["shop_gameServices"]: //TODO: change to shop_gameServices
 		return mainMenuButtons.GameServices(c)
 	case structures.Commands["shop_services"]:
@@ -105,6 +107,26 @@ func CallbackHandle(c telebot.Context) error {
 		return servicesButtons.SpotifyIndividual1(c)
 	case structures.Commands["steam_topUpBalance"]:
 		return steamButtons.SteamTopUpBalance(c)
+	//============================================
+
+	case structures.Commands["personalCabinet"]:
+		return botLogic.PersonalCabinet(c)
+	case structures.Commands["support"]:
+		return botLogic.Support(c)
+
+	//from menu_support===========================
+	case structures.Commands["createTicket"]:
+		return supportMethods.CreateTicket(c)
+	case structures.Commands["respondToTicket"]:
+		return supportMethods.RespondToTicket(c)
+	case structures.Commands["endTicket"]:
+		return supportMethods.EndTicket(c)
+	//============================================
+
+	case structures.Commands["faq"]:
+		return botLogic.FAQ(c)
+
+	//from adminPanel=============================
 	case structures.Commands["showAdminPanel"]:
 		return botLogic.ShowAdminPanel(c)
 	case structures.Commands["showReports"]:

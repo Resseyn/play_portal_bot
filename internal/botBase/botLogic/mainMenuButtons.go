@@ -24,6 +24,8 @@ func Menu(c telebot.Context) error {
 	data.PrevCommand = ""
 	// =========PARAMS=========
 
+	delete(structures.UserStates, data.ChatID)
+
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),

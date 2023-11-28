@@ -22,6 +22,7 @@ func CreateTicket(c telebot.Context) error {
 	}
 	data.PrevCommand = ""
 	// =========PARAMS=========
+
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
@@ -38,6 +39,7 @@ func CreateTicket(c telebot.Context) error {
 	c.Send("Билет создан, ожидайте модератора")
 	return nil
 }
+
 func RespondToTicket(c telebot.Context) error {
 
 	// =========PARAMS=========
@@ -60,19 +62,19 @@ func RespondToTicket(c telebot.Context) error {
 		Type:          "moderatorDialog",
 		DataCase:      []string{strconv.FormatInt(c.Chat().ID, 10)}, //representing moder
 	}
-	structures.UserStates[data.ChatID] = *currentInteraction
+	structures.UserStates[data.ChatID] = currentInteraction
 
 	currentModerInteraction := &structures.UserInteraction{
 		IsInteracting: true,
 		Type:          "moderatorDialog",
 		DataCase:      []string{strconv.FormatInt(data.ChatID, 10)}, //representing user
 	}
-	structures.UserStates[c.Chat().ID] = *currentModerInteraction
+	structures.UserStates[c.Chat().ID] = currentModerInteraction
 	fmt.Println(currentInteraction)
 	fmt.Println(currentModerInteraction)
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
-		Caption: "Вы начали диалог",
+		Caption: "Вы начали диалог, пропишите /end для окончания или нажмите на кнопку",
 	}
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	_, err := c.Bot().Send(telebot.ChatID(c.Chat().ID), msg, keyboard)
@@ -80,7 +82,7 @@ func RespondToTicket(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
-	msg.Caption = "С вами начали диалог"
+	msg.Caption = "С вами начали диалог, пропишите /end для окончания или нажмите на кнопку"
 	_, err = c.Bot().Send(telebot.ChatID(data.ChatID), msg, keyboard)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
@@ -115,8 +117,8 @@ func EndTicket(c telebot.Context) error {
 				{Text: "Назад в главное меню", Command: structures.Commands["mainMenu"]},
 			}}
 
-		structures.UserStates[c.Chat().ID] = structures.UserInteraction{}
-		structures.UserStates[int64(convFrom)] = structures.UserInteraction{}
+		delete(structures.UserStates, c.Chat().ID)
+		delete(structures.UserStates, int64(convFrom))
 
 		msg := &telebot.Photo{
 			File:    telebot.FromDisk(picPath),
@@ -146,8 +148,8 @@ func EndTicket(c telebot.Context) error {
 	}
 	convFrom, _ := strconv.Atoi(structures.UserStates[data.ChatID].DataCase[0])
 
-	structures.UserStates[data.ChatID] = structures.UserInteraction{}
-	structures.UserStates[int64(convFrom)] = structures.UserInteraction{}
+	delete(structures.UserStates, c.Chat().ID)
+	delete(structures.UserStates, int64(convFrom))
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
 

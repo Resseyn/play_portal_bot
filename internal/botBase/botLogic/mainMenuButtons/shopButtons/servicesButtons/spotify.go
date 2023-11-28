@@ -51,18 +51,11 @@ func SpotifyIndividual1(c telebot.Context) error {
 			{Text: "Купить", Command: structures.Commands["buy"]}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
+	data.Command = structures.Commands["spotifySuccess"]
 	data.PrevCommand = structures.Commands["shop_services"]
 	data.Price = 332
 	// =========PARAMS=========
-	//currentInteraction := &structures.UserInteraction{
-	//	IsInteracting: true,
-	//	Type:          "steam_topUpBalance",
-	//	Step:          0,
-	//	Price:         332,
-	//	DataCase:      make([]string, 2),
-	//}
-	//structures.UserStates[c.Chat().ID] = currentInteraction
-	//fmt.Println(*structures.UserStates[c.Chat().ID])
+
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
@@ -72,5 +65,9 @@ func SpotifyIndividual1(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
+	return nil
+}
+
+func SpotifySuccessPayment(c telebot.Context) error {
 	return nil
 }

@@ -1,7 +1,7 @@
 package structures
 
 // UserStates Словарь с взаимодействиями пользователей с ботом (взаимодейсвия, в которых требуется несколько раз что-то ввести и т.д)
-var UserStates = make(map[int64]UserInteraction)
+var UserStates = make(map[int64]*UserInteraction)
 
 // Moderators is array of chatID's of whom the tickets will be sent
 var Moderators = []string{"2038902313", "464644572"}
@@ -18,13 +18,20 @@ var Commands = map[string]string{
 	"respondToTicket": "zxcb", //button for moders only
 	"endTicket":       "zxcc",
 
-	"buy":                     "aaaf",
+	"buy":                 "aaaf",
+	"createCheck":         "aaba",
+	"createPayPalychBill": "aabc",
+
 	"shop_gameServices":       "aaag",
 	"shop_services":           "aaah",
 	"shop_gameServices_steam": "aaai",
-	"spotify":                 "aaaj",
-	"spotify_individual_1":    "aaak",
-	"steam_topUpBalance":      "aaal",
+
+	"spotify":              "aaaj",
+	"spotify_individual_1": "aaak",
+
+	"spotifySuccess": "aabb",
+
+	"steam_topUpBalance": "aaal",
 
 	"adminPanel":     "aaam",
 	"showAdminPanel": "aaao",
