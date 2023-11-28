@@ -23,6 +23,9 @@ var Commands = map[string]string{
 	"createCheck":         "aaba",
 	"createPayPalychBill": "aabc",
 
+	"respondToOrder": "abaa",
+	"endOrder":       "abab",
+
 	"shop_gameServices":       "aaag",
 	"shop_services":           "aaah",
 	"shop_gameServices_steam": "aaai",

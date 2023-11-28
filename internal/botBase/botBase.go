@@ -97,7 +97,10 @@ func CallbackHandle(c telebot.Context) error {
 		return helpingMethods.CreateCheck(c)
 	case structures.Commands["createPayPalychBill"]:
 		return helpingMethods.CreatePayPalychBill(c)
-
+	case structures.Commands["respondToOrder"]:
+		return helpingMethods.RespondToOrder(c)
+	case structures.Commands["endOrder"]:
+		return helpingMethods.EndOrder(c)
 	//from mainMenu==============================
 	case structures.Commands["mainMenu"]:
 		return botLogic.Menu(c)
