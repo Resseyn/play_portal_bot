@@ -30,3 +30,10 @@ ffsdfsdfdsfsd2023/11/20 14:27:21 bad file type
 2023/11/28 20:33:24 telebot: context does not contain message
 2023/11/28 21:50:05 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
 2023/11/28 23:29:32 telegram: chat not found (400)
+2023/11/30 19:25:25 1 error(s) decoding:
+
+* 'InvId' expected type 'string', got unconvertible type '[]string', value: '[123]'
+2023/11/30 19:26:29 2 error(s) decoding:
+
+* 'InvId' expected type 'string', got unconvertible type '[]string', value: '[123]'
+* 'OutSum' expected type 'float64', got unconvertible type '[]string', value: '[123.123]'
