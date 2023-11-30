@@ -46,7 +46,12 @@ func BotStart() error {
 				case "awaitingForPrice":
 					newPrice, err := strconv.Atoi(c.Message().Text)
 					if err != nil {
-						c.Send("Пожалуйста, введите цифру")
+						commands := [][]structures.Command{
+							{{Text: "Отмена", Command: structures.Commands["mainMenu"]}},
+						}
+						keyboard := helpingMethods.CreateInline(&structures.MessageData{}, commands...)
+						c.Send("Пожалуйста, введите цифру", keyboard)
+						return err
 					}
 					state.Price = newPrice
 					return helpingMethods.CreateCheck(c)

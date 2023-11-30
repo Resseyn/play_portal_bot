@@ -9,7 +9,9 @@ import (
 
 func CreateCheck(c telebot.Context) error {
 	if currentState, ok := structures.UserStates[c.Chat().ID]; ok {
-		currentState.Type = currentState.DataCase[0]
+		if len(currentState.DataCase) != 0 {
+			currentState.Type = currentState.DataCase[0]
+		}
 	}
 
 	// =========PARAMS=========

@@ -54,6 +54,7 @@ func SpotifyIndividual1(c telebot.Context) error {
 	data.Command = structures.Commands["spotifySuccess"]
 	data.PrevCommand = structures.Commands["shop_services"]
 	data.Price = 332
+	//data.Custom = "spotifySuccess" ОШИБКА, В ТОП АП БАЛАНСЕ УЖЕ ВСЕ УЛАЖЕНО
 	// =========PARAMS=========
 
 	keyboard := helpingMethods.CreateInline(data, commands...)

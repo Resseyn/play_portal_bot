@@ -26,7 +26,7 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 		//TODO:db search если пополненная сумма больше или равна нужной для оплаты услуги, продолжить код, иначе чет другое типо иди нахуй
 		GOTTENFROMDBCHATID := 2038902313
 		chatID := strconv.Itoa(GOTTENFROMDBCHATID)
-		order := structures.Commands[r.Form.Get("custom")]
+		order := r.Form.Get("custom") //в кастом уже заложенная команда будет
 		url2 := fmt.Sprintf("https://api.telegram.org/bot%s/%s", keys.BotKey, "sendMessage")
 		msgData := &structures.MessageData{
 			Command:     "", //wtf

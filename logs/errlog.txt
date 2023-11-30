@@ -37,3 +37,4 @@ ffsdfsdfdsfsd2023/11/20 14:27:21 bad file type
 
 * 'InvId' expected type 'string', got unconvertible type '[]string', value: '[123]'
 * 'OutSum' expected type 'float64', got unconvertible type '[]string', value: '[123.123]'
+2023/11/30 20:00:39 telegram: Bad Request: there is no media in the message to edit (400)

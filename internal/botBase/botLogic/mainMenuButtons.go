@@ -1,6 +1,7 @@
 package botLogic
 
 import (
+	"fmt"
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/loggers"
@@ -70,12 +71,12 @@ func PersonalCabinet(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/mainMenuImages/lcImage.jpeg"
-	messageContent := "Общие нары"
+	messageContent := fmt.Sprintf("Общие нары, твое погоняло - %v", c.Chat().ID)
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["mainMenu"]
 	commands := [][]structures.Command{
 		{
-			{Text: "Пополнить баланс💘", Command: structures.Commands[""]}},
+			{Text: "Пополнить баланс💘", Command: structures.Commands["topUpBalance"]}},
 		{
 			{Text: "Использовать промокод❌", Command: structures.Commands[""]}},
 		{
