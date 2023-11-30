@@ -8,6 +8,7 @@ import (
 	"strconv"
 )
 
+// CreateOrder создает обработку заказа после подтверждения оплаты и снятия средств короче шоб все ок было
 func CreateOrder(c telebot.Context) error {
 
 	// =========PARAMS=========
@@ -40,6 +41,7 @@ func CreateOrder(c telebot.Context) error {
 	return nil
 }
 
+// RespondToOrder функция для вступления модера в диалог с пользователем
 func RespondToOrder(c telebot.Context) error {
 
 	// =========PARAMS=========
@@ -91,6 +93,7 @@ func RespondToOrder(c telebot.Context) error {
 	return nil
 }
 
+// EndOrder модер выполнил работу и нажимает эту кнопку
 func EndOrder(c telebot.Context) error { //TODO: заказ должен будет удаляться из бд, деньги списываться с юзера и т.д
 	if c.Callback() == nil {
 		convFrom, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])

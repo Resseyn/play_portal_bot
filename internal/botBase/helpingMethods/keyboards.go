@@ -6,8 +6,6 @@ import (
 	"play_portal_bot/pkg/utils/structures"
 )
 
-// TODO: ПАДРАЧИТЬ ХУЙ
-
 // CreateInline создает инлайн-клавиатуру с кнопками и кнопкой возврата.
 // Каждый вложенный массив команд создает новую строку кнопок.
 func CreateInline(data *structures.MessageData, commands ...[]structures.Command) *telebot.ReplyMarkup {

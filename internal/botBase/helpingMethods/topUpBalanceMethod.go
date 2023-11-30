@@ -39,7 +39,6 @@ func TopUpBalance(c telebot.Context) error {
 	}
 	data.PrevCommand = ""
 	// =========PARAMS=========
-	//TODO:прописать метод пополнения по тексту
 	keyboard := CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),

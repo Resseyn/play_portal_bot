@@ -115,7 +115,7 @@ func CallbackHandle(c telebot.Context) error {
 		return botLogic.Shop(c)
 
 	//from menu_shop===============================
-	case structures.Commands["shop_gameServices"]: //TODO: change to shop_gameServices
+	case structures.Commands["shop_gameServices"]:
 		return mainMenuButtons.GameServices(c)
 	case structures.Commands["shop_services"]:
 		return mainMenuButtons.Services(c)
