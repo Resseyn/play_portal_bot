@@ -13,6 +13,7 @@ import (
 	"strconv"
 )
 
+// PayPalychPaymentHandler метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
 func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "wrong method", http.StatusMethodNotAllowed)

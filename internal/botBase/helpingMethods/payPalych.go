@@ -9,10 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"play_portal_bot/internal/botBase/keys"
 	"play_portal_bot/internal/loggers"
-	"play_portal_bot/pkg/utils/structures"
-	"strconv"
 )
 
 type Bill struct {
@@ -153,68 +150,4 @@ func PayoutStatus(c telebot.Context) error {
 		return err
 	}
 	return nil
-}
-
-// PayPalychPaymentHandle метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
-func PayPalychPaymentHandle(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	//var payment Payment
-	//defer r.Body.Close()
-	//body, _ := io.ReadAll(r.Body)
-	//
-	//err := json.Unmarshal(body, &payment)
-	//if err != nil {
-	//	loggers.ErrorLogger.Println(err)
-	//	return
-	//}
-	//if payment.Status == "SUCCESS"
-	OrderID := r.Form.Get("InvId")
-	//TODO:db search OrderID and return order (orderID и accountID, а так же услуга и ее цена), а так же считать заказ выполненным
-	//TODO:db search если пополненная сумма больше или равна нужной для оплаты услуги, продолжить код, иначе чет другое типо иди нахуй
-	fmt.Println(OrderID)
-	GOTTENFROMDBCHATID := 2038902313
-	chatID := strconv.Itoa(GOTTENFROMDBCHATID)
-	order := structures.Commands[r.Form.Get("custom")]
-	url2 := fmt.Sprintf("https://api.telegram.org/bot%s/%s", keys.BotKey, "sendMessage")
-	msgData := &structures.MessageData{
-		Command:     "", //wtf
-		PrevCommand: "",
-	}
-	commands := [][]structures.Command{{
-		{Text: "Вернуться к услуге", Command: order}}}
-	keyboard := CreateInline(msgData, commands...)
-	jsonKeyboard, err := json.Marshal(keyboard)
-	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		return
-	}
-	data := map[string]string{"chat_id": chatID, "text": fmt.Sprintf("hallo frend i got ya maney for %v", order), "reply_markup": string(jsonKeyboard)}
-	jsonData, err := json.Marshal(data)
-	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		return
-	}
-	//params := url.Values{}
-	//params.Add("chat_id", chatID)
-	//params.Add("text", "hallo frend i got ya maney")
-	//st := params.Encode()
-	req, err := http.NewRequest("POST", url2, bytes.NewBuffer(jsonData))
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{}
-	answer, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	defer answer.Body.Close()
-	var str []byte
-	answer.Body.Read(str)
-	structures.UserStates[int64(GOTTENFROMDBCHATID)] = &structures.UserInteraction{
-		IsInteracting: true,
-		Type:          order,
-		Step:          0,
-		DataCase:      make([]string, 2),
-	}
-	//TODO:send to admin db payment status from PayoutStatus func like "order_id" , "account_id", "chat_id"(opt, get from связывания таблиц), "status"
-	//TODO: create func to return all payments with SUCCESS status (for admin)
 }

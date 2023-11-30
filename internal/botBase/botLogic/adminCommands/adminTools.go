@@ -1,4 +1,4 @@
-package botLogic
+package adminCommands
 
 import (
 	"fmt"

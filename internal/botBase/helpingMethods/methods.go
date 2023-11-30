@@ -1,6 +1,8 @@
 package helpingMethods
 
 import (
+	"gopkg.in/telebot.v3"
+	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 	"strconv"
 	"strings"
@@ -18,4 +20,15 @@ func ParseData(callbackData string) *structures.MessageData {
 		Custom:      data[3],
 	}
 	return messageData
+}
+func SendToModers(c telebot.Context, what interface{}, opts ...interface{}) error {
+	for _, moderator := range structures.Moderators {
+		moderChat, _ := strconv.Atoi(moderator)
+		_, err := c.Bot().Send(telebot.ChatID(moderChat), what, opts)
+		if err != nil {
+			loggers.ErrorLogger.Println(err)
+			return err
+		}
+	}
+	return nil
 }

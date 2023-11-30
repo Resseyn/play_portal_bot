@@ -7,11 +7,16 @@ import (
 	"play_portal_bot/pkg/utils/structures"
 )
 
+// CreateCheck второй метод пополнения, который уже создает чек, когда пользователь определился с суммой пополнения,
+// от него идут все платежки
 func CreateCheck(c telebot.Context) error {
 	if currentState, ok := structures.UserStates[c.Chat().ID]; ok {
 		if len(currentState.DataCase) != 0 {
 			currentState.Type = currentState.DataCase[0]
 		}
+	} else {
+		c.Send("Произошла ошибка")
+		return nil
 	}
 
 	// =========PARAMS=========

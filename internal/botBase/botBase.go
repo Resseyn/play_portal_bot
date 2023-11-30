@@ -5,11 +5,13 @@ import (
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/botCommands"
 	"play_portal_bot/internal/botBase/botLogic"
+	"play_portal_bot/internal/botBase/botLogic/adminCommands"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons/servicesButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons/steamButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/supportMethods"
+	"play_portal_bot/internal/botBase/botLogic/successfulPayments"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/botBase/keys"
 	"play_portal_bot/internal/loggers"
@@ -61,7 +63,7 @@ func BotStart() error {
 						return helpingMethods.CreateOrder(c)
 					} else {
 						state.Step++
-						return servicesButtons.SpotifySuccessPayment(c)
+						return sucessfulPayments.SpotifySuccessPayment(c)
 					}
 
 				default:
@@ -125,7 +127,7 @@ func CallbackHandle(c telebot.Context) error {
 	case structures.Commands["spotify_individual_1"]:
 		return servicesButtons.SpotifyIndividual1(c)
 	case structures.Commands["spotifySuccess"]:
-		return servicesButtons.SpotifySuccessPayment(c)
+		return sucessfulPayments.SpotifySuccessPayment(c)
 	case structures.Commands["steam_topUpBalance"]:
 		return steamButtons.SteamTopUpBalance(c)
 	//============================================
@@ -149,9 +151,9 @@ func CallbackHandle(c telebot.Context) error {
 
 	//from adminPanel=============================
 	case structures.Commands["showAdminPanel"]:
-		return botLogic.ShowAdminPanel(c)
+		return adminCommands.ShowAdminPanel(c)
 	case structures.Commands["showReports"]:
-		return botLogic.ShowReports(c)
+		return adminCommands.ShowReports(c)
 	}
 	return nil
 }

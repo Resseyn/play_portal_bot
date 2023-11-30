@@ -7,12 +7,18 @@ import (
 	"play_portal_bot/pkg/utils/structures"
 )
 
+// TopUpBalance первый метод пополнения баланса, на него ссылаются все методы из магазинов
 func TopUpBalance(c telebot.Context) error {
 
 	// =========PARAMS=========
 	data := ParseData(c.Callback().Data)
-	data.Custom = data.PrevCommand
-	NewInteraction("awaitingForPrice", c.Chat().ID, data.Price, []string{data.Custom})
+	data.Custom = data.PrevCommand //тк command в дате, откуда поступил запрос на пополнение, превращается в превКоманд в следующем сообщении
+
+	NewInteraction("awaitingForPrice",
+		c.Chat().ID,
+		data.Price,
+		[]string{data.Custom})
+
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
 	var messageContent string
 	var commands [][]structures.Command

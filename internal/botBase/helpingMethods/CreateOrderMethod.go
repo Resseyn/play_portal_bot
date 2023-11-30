@@ -31,14 +31,11 @@ func CreateOrder(c telebot.Context) error {
 	keyboard := CreateInline(data, commands...)
 	c.Send(msg)
 	msg.Caption = data.Custom + structures.UserStates[c.Chat().ID].Type + structures.UserStates[c.Chat().ID].DataCase[0] + structures.UserStates[c.Chat().ID].DataCase[1]
-
-	for _, moderator := range structures.Moderators {
-		moderChat, _ := strconv.Atoi(moderator)
-		_, err := c.Bot().Send(telebot.ChatID(moderChat), msg, keyboard)
-		if err != nil {
-			loggers.ErrorLogger.Println(err)
-			return err
-		}
+	//TODO: убирать юзерстейты блять там где они не нужны, использовать бд в будущем, юзерстейт онли для долгого взаимодействия
+	err := SendToModers(c, msg, keyboard)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
 	}
 	return nil
 }

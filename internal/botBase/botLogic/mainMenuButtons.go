@@ -22,8 +22,9 @@ func Menu(c telebot.Context) error {
 			{Text: "Поддержка", Command: structures.Commands["support"]},
 			{Text: "FAQ", Command: structures.Commands["faq"]}},
 	}
-	data := helpingMethods.ParseData(c.Callback().Data)
-	data.PrevCommand = ""
+	data := &structures.MessageData{
+		Command: structures.Commands["mainMenu"],
+	}
 	// =========PARAMS=========
 
 	delete(structures.UserStates, c.Chat().ID)
