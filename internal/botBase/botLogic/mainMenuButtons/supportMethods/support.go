@@ -3,7 +3,6 @@ package supportMethods
 import (
 	"fmt"
 	"gopkg.in/telebot.v3"
-	"play_portal_bot/internal/botBase/botCommands"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
@@ -29,10 +28,13 @@ func CreateTicket(c telebot.Context) error {
 	}
 	keyboard := helpingMethods.CreateInline(data, commands...)
 
-	err := helpingMethods.SendToModers(c, msg, keyboard)
-	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		return err
+	for _, moderator := range structures.Moderators {
+		moderChat, _ := strconv.Atoi(moderator)
+		_, err := c.Bot().Send(telebot.ChatID(moderChat), msg, keyboard)
+		if err != nil {
+			loggers.ErrorLogger.Println(err)
+			return err
+		}
 	}
 
 	c.Send("Билет создан, ожидайте модератора")
@@ -40,6 +42,7 @@ func CreateTicket(c telebot.Context) error {
 }
 
 func RespondToTicket(c telebot.Context) error {
+	helpingMethods.CheckIfIsInteracting(c.Chat().ID)
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
@@ -91,9 +94,7 @@ func RespondToTicket(c telebot.Context) error {
 }
 
 func EndTicket(c telebot.Context) error {
-	if _, ok := structures.UserStates[c.Chat().ID]; !ok {
-		return botCommands.Start(c)
-	}
+	helpingMethods.CheckIfIsInteracting(c.Chat().ID)
 	if c.Callback() == nil {
 		convFrom, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
 		messageData1 := &structures.MessageData{

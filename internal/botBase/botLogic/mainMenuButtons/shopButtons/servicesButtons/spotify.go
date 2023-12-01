@@ -51,7 +51,7 @@ func SpotifyIndividual1(c telebot.Context) error {
 			{Text: "Купить", Command: structures.Commands["topUpBalance"]}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
-	data.Command = structures.Commands["spotifySuccess"]
+	data.Command = structures.Commands["spotifySuccessIND1"]
 	data.PrevCommand = structures.Commands["shop_services"]
 	data.Price = 332
 	//data.Custom = "spotifySuccess" ОШИБКА, В ТОП АП БАЛАНСЕ УЖЕ ВСЕ УЛАЖЕНО

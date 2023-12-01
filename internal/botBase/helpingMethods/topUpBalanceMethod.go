@@ -3,20 +3,35 @@ package helpingMethods
 import (
 	"fmt"
 	"gopkg.in/telebot.v3"
+	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 )
 
 // TopUpBalance первый метод пополнения баланса, на него ссылаются все методы из магазинов
 func TopUpBalance(c telebot.Context) error {
-
+	CheckIfIsInteracting(c.Chat().ID)
 	// =========PARAMS=========
 	data := ParseData(c.Callback().Data)
+	fmt.Println(data)
 	data.Custom = data.PrevCommand //тк command в дате, откуда поступил запрос на пополнение, превращается в превКоманд в следующем сообщении
+	data.PrevCommand = ""
+	var user *databaseModels.UserInfo
+	if data.Price != 0 {
+		user, _ = databaseModels.Users.GetUser(c.Chat().ID)
+		if user.Balance-float64(data.Price) >= 0 {
+			commands := [][]structures.Command{{
+				{Text: "Вернуться к услуге", Command: data.Custom}}}
+			keyboard := CreateInline(data, commands...)
+			c.Send("Вам хватает денег на услугу", keyboard)
+			return nil
+		}
+
+	}
 
 	NewInteraction("awaitingForPrice",
 		c.Chat().ID,
-		data.Price,
+		float64(data.Price),
 		[]string{data.Custom})
 
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
@@ -29,6 +44,7 @@ func TopUpBalance(c telebot.Context) error {
 				{Text: "Вернуться в главное меню", Command: structures.Commands["mainMenu"]}},
 		}
 	} else {
+		data.Price = data.Price - int(user.Balance)
 		messageContent = fmt.Sprintf("Вам не хватает %v на балансе\n\nВведите сумму для пополнения от 20₽ и до 20000₽", data.Price)
 		commands = [][]structures.Command{
 			{
@@ -37,7 +53,6 @@ func TopUpBalance(c telebot.Context) error {
 				{Text: "Вернуться в главное меню", Command: structures.Commands["mainMenu"]}},
 		}
 	}
-	data.PrevCommand = ""
 	// =========PARAMS=========
 	keyboard := CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{

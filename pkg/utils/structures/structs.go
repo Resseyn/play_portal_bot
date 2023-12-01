@@ -33,13 +33,22 @@ var Commands = map[string]string{
 	"spotify":              "aaaj",
 	"spotify_individual_1": "aaak",
 
-	"spotifySuccess": "aabb",
+	"spotifySuccessIND1":  "spoa",
+	"spotifySuccessIND3":  "spob",
+	"spotifySuccessIND6":  "spoc",
+	"spotifySuccessIND12": "spod",
+	"spotifySuccessDUO1":  "spoe",
+	"spotifySuccessFAM1":  "spof",
 
 	"steam_topUpBalance": "aaal",
 
 	"adminPanel":     "aaam",
 	"showAdminPanel": "aaao",
 	"showReports":    "aaan",
+}
+
+var Prices = map[string]float64{
+	Commands["spotifySuccessIND1"]: 332.0,
 }
 
 type MessageData struct {
@@ -58,7 +67,7 @@ type UserInteraction struct {
 	IsInteracting bool   //optional probably
 	Type          string //shop_gameServices_steam_topUpBalance, etc.
 	Step          int
-	Price         int
+	Price         float64
 	DataCase      []string
 }
 

@@ -3,6 +3,7 @@ package sucessfulPayments
 import (
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/helpingMethods"
+	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/pkg/utils/structures"
 )
 
@@ -10,6 +11,29 @@ import (
 func SpotifySuccessPayment(c telebot.Context) error {
 
 	// =========PARAMS=========
+	var data *structures.MessageData
+	if c.Callback() != nil {
+		data = helpingMethods.ParseData(c.Callback().Data)
+	} else {
+		data = &structures.MessageData{}
+	}
+	if _, ok := structures.UserStates[c.Chat().ID]; !ok {
+		user, _ := databaseModels.Users.GetUser(c.Chat().ID)
+		balance := user.Balance
+		if balance-structures.Prices[data.Command] >= 0 {
+			structures.UserStates[c.Chat().ID] = &structures.UserInteraction{
+				IsInteracting: true,
+				Type:          "spotifyHandler",
+				Step:          0,
+				DataCase:      make([]string, 2),
+				Price:         structures.Prices[data.Command],
+			}
+		} else {
+			c.Send("Вам не хватает баланса на услугу")
+			return nil
+		}
+	}
+
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/spotify/spotifySuccess.jpeg"
 
 	var messageContent string
@@ -24,12 +48,6 @@ func SpotifySuccessPayment(c telebot.Context) error {
 	commands := [][]structures.Command{
 		{{Text: "Отмена", Command: structures.Commands["mainMenu"]}}}
 
-	var data *structures.MessageData
-	if c.Callback() != nil {
-		data = helpingMethods.ParseData(c.Callback().Data)
-	} else {
-		data = &structures.MessageData{}
-	}
 	data.PrevCommand = "" //TODO: а нужна ли тут дата ваще?Ж???????
 	// =========PARAMS=========
 

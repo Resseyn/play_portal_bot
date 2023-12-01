@@ -32,7 +32,7 @@ func CreateCheck(c telebot.Context) error {
 		data = &structures.MessageData{
 			Command:     structures.UserStates[c.Chat().ID].Type,
 			PrevCommand: "",
-			Price:       structures.UserStates[c.Chat().ID].Price,
+			Price:       int(structures.UserStates[c.Chat().ID].Price),
 			Custom:      structures.UserStates[c.Chat().ID].Type,
 		}
 	}

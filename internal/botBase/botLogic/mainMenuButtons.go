@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/helpingMethods"
+	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 	"strconv"
@@ -71,8 +72,9 @@ func Shop(c telebot.Context) error {
 func PersonalCabinet(c telebot.Context) error {
 
 	// =========PARAMS=========
+	user, _ := databaseModels.Users.GetUser(c.Chat().ID)
 	picPath := "pkg/utils/data/img/mainMenuImages/lcImage.jpeg"
-	messageContent := fmt.Sprintf("Общие нары, твое погоняло - %v", c.Chat().ID)
+	messageContent := fmt.Sprintf("Общие нары, твое погоняло - %v\n\nБаланс - %v рублей", c.Chat().ID, user.Balance)
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["mainMenu"]
 	commands := [][]structures.Command{

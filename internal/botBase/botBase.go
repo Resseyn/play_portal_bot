@@ -46,7 +46,7 @@ func BotStart() error {
 					convWith, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
 					c.Bot().Send(telebot.ChatID(convWith), c.Message().Text)
 				case "awaitingForPrice":
-					newPrice, err := strconv.Atoi(c.Message().Text)
+					newPrice, err := strconv.ParseFloat(c.Message().Text, 64)
 					if err != nil {
 						commands := [][]structures.Command{
 							{{Text: "Отмена", Command: structures.Commands["mainMenu"]}},
@@ -57,7 +57,7 @@ func BotStart() error {
 					}
 					state.Price = newPrice
 					return helpingMethods.CreateCheck(c)
-				case structures.Commands["spotifySuccess"]:
+				case "spotifyHandler":
 					state.DataCase[state.Step] = c.Message().Text
 					if state.Step == 1 {
 						return helpingMethods.CreateOrder(c)
@@ -126,8 +126,20 @@ func CallbackHandle(c telebot.Context) error {
 		return servicesButtons.Spotify(c)
 	case structures.Commands["spotify_individual_1"]:
 		return servicesButtons.SpotifyIndividual1(c)
-	case structures.Commands["spotifySuccess"]:
+
+	case structures.Commands["spotifySuccessIND1"]:
 		return sucessfulPayments.SpotifySuccessPayment(c)
+	case structures.Commands["spotifySuccessIND3"]:
+		return sucessfulPayments.SpotifySuccessPayment(c)
+	case structures.Commands["spotifySuccessIND6"]:
+		return sucessfulPayments.SpotifySuccessPayment(c)
+	case structures.Commands["spotifySuccessIND12"]:
+		return sucessfulPayments.SpotifySuccessPayment(c)
+	case structures.Commands["spotifySuccessDUO1"]:
+		return sucessfulPayments.SpotifySuccessPayment(c)
+	case structures.Commands["spotifySuccessFAM1"]:
+		return sucessfulPayments.SpotifySuccessPayment(c)
+
 	case structures.Commands["steam_topUpBalance"]:
 		return steamButtons.SteamTopUpBalance(c)
 	//============================================

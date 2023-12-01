@@ -14,12 +14,12 @@ func Steam(c telebot.Context) error {
 	messageContent := "• Аккаунты: купить новый аккаунт Steam.\n\n• Пополнить баланс: автоматическая система пополнения Steam баланса для России, Казахстана, Украины.\n\n жирный шрифт добавить"
 	commands := [][]structures.Command{
 		{
-			{Text: "Пополнить баланс", Command: "steam_topUpBalance"}},
+			{Text: "Пополнить баланс", Command: ""}},
 		{
-			{Text: "Аккаунты", Command: "steam_accounts"}},
+			{Text: "Аккаунты", Command: ""}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
-	data.PrevCommand = "shop_gameServices"
+	data.PrevCommand = structures.Commands["shop_gameServices"]
 	// =========PARAMS=========
 
 	keyboard := helpingMethods.CreateInline(data, commands...)

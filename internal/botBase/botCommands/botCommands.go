@@ -3,11 +3,13 @@ package botCommands
 import (
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/helpingMethods"
+	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/pkg/utils/structures"
 )
 
 // Start КОМАНДА СТАРТА, ПО СОВМЕСТИТЕЛЬСТВУ ВЫВОД ГЛАВНОГО МЕНЮ
 func Start(c telebot.Context) error {
+	databaseModels.Users.CreateUser(c.Chat().ID)
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"

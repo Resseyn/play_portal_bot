@@ -3,12 +3,14 @@ package helpingMethods
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"gopkg.in/telebot.v3"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/internal/loggers"
 )
 
@@ -54,20 +56,31 @@ type BillCreateResponse struct {
 // CreatePayPalychBill Создание счета на PayPalych
 func CreatePayPalychBill(c telebot.Context) error {
 	// Создание счета на PayPalych
-	//TODO: создать счет в бд, где будет связь orderID и accountID, а так же услуга и ее цена
 	msgData := ParseData(c.Callback().Data)
 	fmt.Println(msgData)
+
+	err := errors.ErrUnsupported
+	var newOrderID string
+	for err != nil {
+		newOrderID = RandStringRunes(16)
+		_, err = databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, float64(msgData.Price), msgData.Custom)
+		if err != nil {
+			loggers.ErrorLogger.Println(err)
+			return err
+		}
+	} //ну а вдруг 16 символов когда-либо совпадут аааа???
+
 	data := &Bill{
 		Amount:              float64(msgData.Price),
-		OrderId:             "123",
-		Description:         "Описание ссылки",
+		OrderId:             newOrderID,
+		Description:         "Ваш заказ",
 		Type:                "normal",
-		ShopId:              "G1vrEyX0LR",
+		ShopId:              "G1vrEyX0LR", //TODO: изменить когда дадут модерк
 		CurrencyIn:          "RUB",
 		Custom:              msgData.Custom, //TODO: мб в кастом запихнуть ChatID, тогда в 100 раз меньше взаимодействий с бд
 		PayerPaysCommission: 1,
 		Name:                "Платёж",
-		SuccessUrl:          "https://t.me/play_portal_bot",
+		SuccessUrl:          "https://t.me/play_portal_bot", //TODO: изменить когда дадут модерку
 	}
 	jsonData, _ := json.Marshal(*data)
 	fmt.Println(string(jsonData), "CREATED BILL")
@@ -92,7 +105,7 @@ func CreatePayPalychBill(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
-
+	c.Delete()
 	// Отправка ссылки на оплату пользователю
 	_, err = c.Bot().Send(telebot.ChatID(c.Chat().ID), "Пожалуйста, оплатите счет по этой ссылке: "+billCreateResponse.LinkPageUrl)
 	if err != nil {
