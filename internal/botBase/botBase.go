@@ -42,12 +42,21 @@ func BotStart() error {
 
 	b.Handle(telebot.OnText, func(c telebot.Context) error {
 		if state, ok := structures.UserStates[c.Chat().ID]; ok {
-			fmt.Println("STATE:", structures.UserStates[c.Chat().ID])
-			if structures.UserStates[c.Chat().ID].IsInteracting {
+			fmt.Println("STATE:", state)
+			if state.IsInteracting {
 				switch structures.UserStates[c.Chat().ID].Type {
 
 				case "moderatorDialog":
-					convWith, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
+					convWith, _ := strconv.Atoi(state.DataCase[0])
+					// if в случае если юзер вышел нахуй из диалога с модером а модер не договорил
+					if _, ok := structures.UserStates[int64(convWith)]; !ok {
+						structures.UserStates[int64(convWith)] = &structures.UserInteraction{
+							IsInteracting: true,
+							Type:          "moderatorDialog",
+							DataCase:      []string{strconv.FormatInt(c.Chat().ID, 10)},
+						}
+					}
+					// if в случае если юзер вышел нахуй из диалога с модером а модер не договорил
 					c.Bot().Send(telebot.ChatID(convWith), c.Message().Text)
 
 				case "awaitingForPrice":
@@ -83,17 +92,6 @@ func BotStart() error {
 		}
 		return nil
 	})
-	//b.Handle(telebot.OnCheckout, func(c telebot.Context) error {
-	//	ans := answer{Id: c.Update().PreCheckoutQuery.ID, Ok: true, ErrorMessage: ""}
-	//	resp, err := ans.Send(c.Bot(), telebot.ChatID(1), &telebot.SendOptions{})
-	//	fmt.Println(resp.Payment)
-	//	if err != nil {
-	//		loggers.ErrorLogger.Println(err)
-	//		return err
-	//	}
-	//	c.Send("аххаха заскамлен)))")
-	//	return nil
-	//})
 	b.Start()
 	return nil
 }
@@ -172,6 +170,9 @@ func CallbackHandle(c telebot.Context) error {
 		return adminCommands.ShowAdminPanel(c)
 	case structures.Commands["showReports"]:
 		return adminCommands.ShowReports(c)
+
+	case structures.Commands["pingModer"]:
+		return orderMethods.PingModer(c)
 	}
 	return nil
 }

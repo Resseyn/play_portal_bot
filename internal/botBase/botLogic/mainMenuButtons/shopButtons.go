@@ -51,7 +51,7 @@ func Services(c telebot.Context) error {
 			{Text: "Adobe", Command: ""}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
-	data.PrevCommand = "shop"
+	data.PrevCommand = structures.Commands["shop"]
 	// =========PARAMS=========
 
 	keyboard := helpingMethods.CreateInline(data, commands...)

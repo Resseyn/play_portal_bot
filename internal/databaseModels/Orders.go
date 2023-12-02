@@ -47,7 +47,7 @@ func (m *OrdersDB) CreateOrder(chatID int64, orderID string, amount float64, cus
 // OrderIsDone creates check in DB for ToppingUpBalance
 func (m *OrdersDB) OrderIsDone(orderID string) (*DBOrder, error) {
 	order, _ := m.GetOrder(orderID)
-	_, err := m.DB.Exec("UPDATE orders SET status = $1 WHERE order_id = $1", "SUCCESS")
+	_, err := m.DB.Exec("UPDATE orders SET status = $1 WHERE order_id = $2", "SUCCESS", orderID)
 	if err != nil {
 		return nil, err
 	}

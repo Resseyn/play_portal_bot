@@ -41,12 +41,13 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	orderID := r.Form.Get("InvId")
 
-	truePayment, err := onlineCasses.PayoutStatus(orderID)
-	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		http.Error(w, "wrong method", http.StatusBadRequest)
-		return
-	}
+	//truePayment, err := onlineCasses.PayoutStatus(orderID) TODO: posle moderki aga
+	//if err != nil {
+	//	loggers.ErrorLogger.Println(err)
+	//	http.Error(w, "wrong method", http.StatusBadRequest)
+	//	return
+	//}
+	truePayment := onlineCasses.Payment{Status: "SUCCESS"}
 
 	status := r.Form.Get("Status")
 	outSum, _ := strconv.ParseFloat(r.Form.Get("OutSum"), 64)
@@ -120,6 +121,10 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 
 // PayPalychSuccessPaymentHandler метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
 func PayPalychSuccessPaymentHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO: просто редирект на страницу с подписью что оплата прошла все ок ващеее
+}
+
+func PayPalychFailPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	//r.ParseForm()
 	//defer r.Body.Close()
 	//
@@ -143,7 +148,7 @@ func PayPalychSuccessPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	//	loggers.ErrorLogger.Println(err)
 	//	return
 	//}
-	//data := map[string]string{"chat_id": chatID, "text": fmt.Sprintf("hallo frend i got ya maney, chill"), "reply_markup": string(jsonKeyboard)}
+	//data := map[string]string{"chat_id": chatID, "text": fmt.Sprintf("hallo suka i didnt get ya maney, trai agen mthf"), "reply_markup": string(jsonKeyboard)}
 	//jsonData, err := json.Marshal(data)
 	//if err != nil {
 	//	loggers.ErrorLogger.Println(err)
@@ -161,49 +166,5 @@ func PayPalychSuccessPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	//var str []byte
 	//answer.Body.Read(str)
 	//w.Write(str)
-	//TODO: просто редирект на страницу с подписью что оплата прошла все ок ващеее
-}
-
-func PayPalychFailPaymentHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	defer r.Body.Close()
-
-	OrderID := r.Form.Get("InvId")
-	//TODO:db search OrderID and return order (orderID и accountID, а так же услуга и ее цена), а так же считать заказ выполненным
-	//TODO:db search если пополненная сумма больше или равна нужной для оплаты услуги, продолжить код, иначе чет другое типо иди нахуй
-	fmt.Println(OrderID)
-	GOTTENFROMDBCHATID := 2038902313
-	chatID := strconv.Itoa(GOTTENFROMDBCHATID)
-	command := structures.Commands[r.Form.Get("mainMenu")]
-	url2 := fmt.Sprintf("https://api.telegram.org/bot%s/%s", keys.BotKey, "sendMessage")
-	msgData := &structures.MessageData{
-		Command:     "", //wtf
-		PrevCommand: "",
-	}
-	commands := [][]structures.Command{{
-		{Text: "Главное меню", Command: command}}}
-	keyboard := helpingMethods.CreateInline(msgData, commands...)
-	jsonKeyboard, err := json.Marshal(keyboard)
-	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		return
-	}
-	data := map[string]string{"chat_id": chatID, "text": fmt.Sprintf("hallo suka i didnt get ya maney, trai agen mthf"), "reply_markup": string(jsonKeyboard)}
-	jsonData, err := json.Marshal(data)
-	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		return
-	}
-	req, err := http.NewRequest("POST", url2, bytes.NewBuffer(jsonData))
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{}
-	answer, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	defer answer.Body.Close()
-	var str []byte
-	answer.Body.Read(str)
-	w.Write(str)
+	//TODO: просто редирект на страницу с подписью что оплата не прошла все хуево ващеее
 }

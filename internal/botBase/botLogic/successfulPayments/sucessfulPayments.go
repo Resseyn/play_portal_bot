@@ -11,20 +11,23 @@ import (
 func SpotifySuccessPayment(c telebot.Context) error {
 
 	// =========PARAMS=========
-	data := helpingMethods.ParseData(c.Callback().Data)
-	user, _ := databaseModels.Users.GetUser(c.Chat().ID)
-	balance := user.Balance
-	if balance-float64(data.Price) >= 0 {
-		helpingMethods.NewInteraction(
-			"spotifyHandler",
-			c.Chat().ID,
-			float64(data.Price),
-			make([]string, 2))
-	} else {
-		c.Send("Вам не хватает баланса на услугу")
-		return nil
-	}
+	if c.Callback() != nil { //когда короче первое сообщение там чета
+		data := helpingMethods.ParseData(c.Callback().Data)
+		user, _ := databaseModels.Users.GetUser(c.Chat().ID)
+		balance := user.Balance
+		if balance-float64(data.Price) >= 0 {
+			helpingMethods.NewInteraction(
+				"spotifyHandler",
+				c.Chat().ID,
+				float64(data.Price),
+				data.Custom,
+				make([]string, 2))
+		} else {
+			c.Send("Вам не хватает баланса на услугу")
+			return nil
+		}
 
+	}
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/spotify/spotifySuccess.jpeg"
 
 	var messageContent string
@@ -39,14 +42,13 @@ func SpotifySuccessPayment(c telebot.Context) error {
 	commands := [][]structures.Command{
 		{{Text: "Отмена", Command: structures.Commands["mainMenu"]}}}
 
-	data.PrevCommand = "" //TODO: а нужна ли тут дата ваще?Ж???????
 	// =========PARAMS=========
 
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
 	}
-	keyboard := helpingMethods.CreateInline(data, commands...)
+	keyboard := helpingMethods.CreateInline(&structures.MessageData{}, commands...)
 	err := c.Send(msg, &telebot.SendOptions{
 		ParseMode:   telebot.ModeHTML,
 		ReplyMarkup: keyboard,

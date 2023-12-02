@@ -11,9 +11,7 @@ import (
 
 // TopUpBalance первый метод пополнения баланса, на него ссылаются все методы из магазинов
 func TopUpBalance(c telebot.Context) error {
-	if !helpingMethods.CheckIfIsInteracting(c.Chat().ID) {
-		return nil
-	}
+
 	// =========PARAMS=========
 	data := helpingMethods.ParseData(c.Callback().Data)
 	fmt.Println(data)
@@ -36,6 +34,7 @@ func TopUpBalance(c telebot.Context) error {
 	helpingMethods.NewInteraction("awaitingForPrice",
 		c.Chat().ID,
 		float64(data.Price),
+		"",
 		[]string{data.Custom})
 
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"

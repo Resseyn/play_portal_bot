@@ -45,6 +45,8 @@ var Commands = map[string]string{
 	"adminPanel":     "aaam",
 	"showAdminPanel": "aaao",
 	"showReports":    "aaan",
+
+	"pingModer": "ping",
 }
 
 var Prices = map[string]float64{
@@ -68,6 +70,7 @@ type UserInteraction struct {
 	Type          string //shop_gameServices_steam_topUpBalance, etc.
 	Step          int
 	Price         float64
+	Order         string
 	DataCase      []string
 }
 

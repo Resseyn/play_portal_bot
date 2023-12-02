@@ -22,13 +22,14 @@ func ParseData(callbackData string) *structures.MessageData {
 }
 
 // NewInteraction creates new interaciton for user, optPrice and optData is optional
-func NewInteraction(interactionType string, chatID int64, optPrice float64, optData []string) {
+func NewInteraction(interactionType string, chatID int64, optPrice float64, optOrder string, optData []string) {
 	delete(structures.UserStates, chatID)
 	structures.UserStates[chatID] = &structures.UserInteraction{
 		IsInteracting: true,
 		Type:          interactionType,
 		Step:          0,
 		Price:         optPrice,
+		Order:         optOrder,
 		DataCase:      optData,
 	}
 }
