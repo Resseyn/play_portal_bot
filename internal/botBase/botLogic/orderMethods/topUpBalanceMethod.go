@@ -1,8 +1,9 @@
-package helpingMethods
+package orderMethods
 
 import (
 	"fmt"
 	"gopkg.in/telebot.v3"
+	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
@@ -10,9 +11,11 @@ import (
 
 // TopUpBalance первый метод пополнения баланса, на него ссылаются все методы из магазинов
 func TopUpBalance(c telebot.Context) error {
-	CheckIfIsInteracting(c.Chat().ID)
+	if !helpingMethods.CheckIfIsInteracting(c.Chat().ID) {
+		return nil
+	}
 	// =========PARAMS=========
-	data := ParseData(c.Callback().Data)
+	data := helpingMethods.ParseData(c.Callback().Data)
 	fmt.Println(data)
 	data.Custom = data.PrevCommand //тк command в дате, откуда поступил запрос на пополнение, превращается в превКоманд в следующем сообщении
 	data.PrevCommand = ""
@@ -22,14 +25,15 @@ func TopUpBalance(c telebot.Context) error {
 		if user.Balance-float64(data.Price) >= 0 {
 			commands := [][]structures.Command{{
 				{Text: "Вернуться к услуге", Command: data.Custom}}}
-			keyboard := CreateInline(data, commands...)
+			keyboard := helpingMethods.CreateInline(data, commands...)
 			c.Send("Вам хватает денег на услугу", keyboard)
+			delete(structures.UserStates, c.Chat().ID)
 			return nil
 		}
 
 	}
 
-	NewInteraction("awaitingForPrice",
+	helpingMethods.NewInteraction("awaitingForPrice",
 		c.Chat().ID,
 		float64(data.Price),
 		[]string{data.Custom})
@@ -54,7 +58,7 @@ func TopUpBalance(c telebot.Context) error {
 		}
 	}
 	// =========PARAMS=========
-	keyboard := CreateInline(data, commands...)
+	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,

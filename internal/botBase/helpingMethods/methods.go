@@ -1,6 +1,7 @@
 package helpingMethods
 
 import (
+	"math/rand"
 	"play_portal_bot/pkg/utils/structures"
 	"strconv"
 	"strings"
@@ -18,4 +19,27 @@ func ParseData(callbackData string) *structures.MessageData {
 		Custom:      data[3],
 	}
 	return messageData
+}
+
+// NewInteraction creates new interaciton for user, optPrice and optData is optional
+func NewInteraction(interactionType string, chatID int64, optPrice float64, optData []string) {
+	delete(structures.UserStates, chatID)
+	structures.UserStates[chatID] = &structures.UserInteraction{
+		IsInteracting: true,
+		Type:          interactionType,
+		Step:          0,
+		Price:         optPrice,
+		DataCase:      optData,
+	}
+}
+
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+// RandStringRunes создает рандомный OrderID
+func RandStringRunes(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
 }

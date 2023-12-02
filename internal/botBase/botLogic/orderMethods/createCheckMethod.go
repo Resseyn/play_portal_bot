@@ -1,8 +1,9 @@
-package helpingMethods
+package orderMethods
 
 import (
 	"fmt"
 	"gopkg.in/telebot.v3"
+	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 )
@@ -22,7 +23,7 @@ func CreateCheck(c telebot.Context) error {
 	// =========PARAMS=========
 	var data *structures.MessageData
 	if c.Callback() != nil {
-		data = ParseData(c.Callback().Data)
+		data = helpingMethods.ParseData(c.Callback().Data)
 		err := c.Delete()
 		if err != nil {
 			loggers.ErrorLogger.Println(err)
@@ -40,7 +41,7 @@ func CreateCheck(c telebot.Context) error {
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
 	messageContent := fmt.Sprintf("Счёт на %v рублей создан, жмите по кнопке ниже, чтобы оплатить удобным вам способом.\n\nДоговор оферты ссылочку ага", data.Price)
 
-	commands := [][]structures.Command{ //TODO:клавиши должны быть с ссылками тут, подумать че делать
+	commands := [][]structures.Command{
 		{
 			{Text: "PayPalych", Command: structures.Commands["createPayPalychBill"]}},
 		{
@@ -53,7 +54,7 @@ func CreateCheck(c telebot.Context) error {
 	// =========PARAMS=========
 
 	delete(structures.UserStates, c.Chat().ID)
-	keyboard := CreateInline(data, commands...)
+	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Send(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,

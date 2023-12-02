@@ -1,7 +1,8 @@
-package helpingMethods
+package orderMethods
 
 import (
 	"gopkg.in/telebot.v3"
+	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
@@ -10,7 +11,7 @@ import (
 
 // CreateOrder создает обработку заказа после подтверждения оплаты и снятия средств короче шоб все ок было
 func CreateOrder(c telebot.Context) error {
-	if !CheckIfIsInteracting(c.Chat().ID) {
+	if !helpingMethods.CheckIfIsInteracting(c.Chat().ID) {
 		return nil
 	}
 
@@ -32,10 +33,12 @@ func CreateOrder(c telebot.Context) error {
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
 	}
-	keyboard := CreateInline(data, commands...)
+	keyboard := helpingMethods.CreateInline(data, commands...)
 	c.Send(msg)
 	msg.Caption = data.Custom + structures.UserStates[c.Chat().ID].Type + structures.UserStates[c.Chat().ID].DataCase[0] + structures.UserStates[c.Chat().ID].DataCase[1]
-	//TODO: убирать юзерстейты блять там где они не нужны, использовать бд в будущем, юзерстейт онли для долгого взаимодействия
+
+	delete(structures.UserStates, c.Chat().ID)
+
 	for _, moderator := range structures.Moderators {
 		moderChat, _ := strconv.Atoi(moderator)
 		_, err := c.Bot().Send(telebot.ChatID(moderChat), msg, keyboard)
@@ -49,13 +52,13 @@ func CreateOrder(c telebot.Context) error {
 
 // RespondToOrder функция для вступления модера в диалог с пользователем
 func RespondToOrder(c telebot.Context) error {
-	if !CheckIfIsInteracting(c.Chat().ID) {
+	if !helpingMethods.CheckIfIsInteracting(c.Chat().ID) {
 		return nil
 	}
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
-	data := ParseData(c.Callback().Data)
+	data := helpingMethods.ParseData(c.Callback().Data)
 	commands := [][]structures.Command{
 		{
 			{Text: "Закончить заказ с хуйланом", Command: structures.Commands["endOrder"]}},
@@ -63,9 +66,9 @@ func RespondToOrder(c telebot.Context) error {
 	data.PrevCommand = ""
 	// =========PARAMS=========
 
-	interactionChatID, _ := strconv.Atoi(data.Custom)
+	clientChatID, _ := strconv.Atoi(data.Custom)
 
-	if state, ok := structures.UserStates[int64(interactionChatID)]; ok && state.Type == "moderatorDialog" {
+	if state, ok := structures.UserStates[int64(clientChatID)]; ok && state.Type == "moderatorDialog" {
 		c.Send("Другой модер занят гандоном")
 		return nil
 	}
@@ -75,27 +78,28 @@ func RespondToOrder(c telebot.Context) error {
 		Type:          "moderatorDialog",
 		DataCase:      []string{strconv.FormatInt(c.Chat().ID, 10)}, //representing user
 	}
-	structures.UserStates[int64(interactionChatID)] = currentInteraction
+	structures.UserStates[int64(clientChatID)] = currentInteraction
 
 	currentModerInteraction := &structures.UserInteraction{
 		IsInteracting: true,
 		Type:          "moderatorDialog",
-		DataCase:      []string{strconv.FormatInt(int64(interactionChatID), 10)}, //representing moder
+		DataCase:      []string{strconv.FormatInt(int64(clientChatID), 10)}, //representing moder
 		Price:         float64(data.Price),
 	}
 	structures.UserStates[c.Chat().ID] = currentModerInteraction
+
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: "Вы начали обрботку заказа, пропишите /endOrder для окончания или нажмите на кнопку",
 	}
-	keyboard := CreateInline(data, commands...)
+	keyboard := helpingMethods.CreateInline(data, commands...)
 	_, err := c.Bot().Send(telebot.ChatID(c.Chat().ID), msg, keyboard)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
 	msg.Caption = "Оператор подключился"
-	_, err = c.Bot().Send(telebot.ChatID(int64(interactionChatID)), msg)
+	_, err = c.Bot().Send(telebot.ChatID(int64(clientChatID)), msg)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
@@ -104,30 +108,26 @@ func RespondToOrder(c telebot.Context) error {
 }
 
 // EndOrder модер выполнил работу и нажимает эту кнопку
-func EndOrder(c telebot.Context) error { //TODO: заказ должен будет удаляться из бд, деньги списываться с юзера и т.д
-	if !CheckIfIsInteracting(c.Chat().ID) {
+func EndOrder(c telebot.Context) error {
+	if !helpingMethods.CheckIfIsInteracting(c.Chat().ID) {
 		return nil
 	}
-	convFrom, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
+	clientChatID, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
 
 	_, err := databaseModels.Users.ConsumeBalance(c.Chat().ID, float64(structures.UserStates[c.Chat().ID].Price))
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
-		c.Bot().Send(telebot.ChatID(convFrom), "произошла ошибка в бд")
+		c.Bot().Send(telebot.ChatID(c.Chat().ID), "произошла ошибка в бд")
 		return err
 	}
+	//databaseModels.Orders.CreateCheck(int64(clientChatID), float64(structures.UserStates[c.Chat().ID].Price), )TODO: понять как сделать чек
+	//======IF VIA /endOrder PART===========
 	if c.Callback() == nil {
 		messageData1 := &structures.MessageData{
-			Command:     structures.Commands["mainMenu"],
-			PrevCommand: "",
-			Price:       0,
-			Custom:      "",
+			Command: structures.Commands["mainMenu"],
 		}
 		messageData2 := &structures.MessageData{
-			Command:     structures.Commands["mainMenu"],
-			PrevCommand: "",
-			Price:       0,
-			Custom:      "",
+			Command: structures.Commands["mainMenu"],
 		}
 		picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 		commands := [][]structures.Command{
@@ -136,23 +136,25 @@ func EndOrder(c telebot.Context) error { //TODO: заказ должен буд�
 			}}
 
 		delete(structures.UserStates, c.Chat().ID)
-		delete(structures.UserStates, int64(convFrom))
+		delete(structures.UserStates, int64(clientChatID))
 
 		msg := &telebot.Photo{
 			File:    telebot.FromDisk(picPath),
-			Caption: "Вы прекратили диалог",
+			Caption: "Вы закончили заказ",
 		}
-		keyboard1 := CreateInline(messageData1, commands...)
-		c.Bot().Send(telebot.ChatID(c.Chat().ID), msg, keyboard1)
+		keyboard1 := helpingMethods.CreateInline(messageData1, commands...)
+		c.Send(msg, keyboard1)
 
-		msg.Caption = "С вами прекратили диалог"
-		keyboard2 := CreateInline(messageData2, commands...)
-		c.Bot().Send(telebot.ChatID(convFrom), msg, keyboard2)
+		msg.Caption = "Ваш заказ выполнен!!!!!"
+		keyboard2 := helpingMethods.CreateInline(messageData2, commands...)
+		c.Bot().Send(telebot.ChatID(clientChatID), msg, keyboard2)
 		return nil
 	}
+	//======IF VIA /endOrder PART===========
+
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
-	data := ParseData(c.Callback().Data)
+	data := helpingMethods.ParseData(c.Callback().Data) //nil basically
 	commands := [][]structures.Command{
 		{
 			{Text: "Назад в главное меню", Command: structures.Commands["mainMenu"]}},
@@ -160,22 +162,19 @@ func EndOrder(c telebot.Context) error { //TODO: заказ должен буд�
 	data.PrevCommand = ""
 	// =========PARAMS=========
 
-	//interactionChatID, _ := strconv.Atoi(data.Custom)
-
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
-		Caption: "Вы прекратили диалог",
+		Caption: "Вы закончили заказ",
 	}
-	//convFrom, _ := strconv.Atoi(structures.UserStates[int64(interactionChatID)].DataCase[0])
 
 	delete(structures.UserStates, c.Chat().ID)
-	delete(structures.UserStates, int64(convFrom))
+	delete(structures.UserStates, int64(clientChatID))
 
-	keyboard := CreateInline(data, commands...)
+	keyboard := helpingMethods.CreateInline(data, commands...)
 
-	c.Bot().Send(telebot.ChatID(int64(convFrom)), msg, keyboard)
+	c.Send(msg, keyboard)
 
 	msg.Caption = "Ваш заказ выполнен!!!!!"
-	c.Bot().Send(telebot.ChatID(convFrom), msg, keyboard)
+	c.Bot().Send(telebot.ChatID(clientChatID), msg, keyboard)
 	return nil
 }

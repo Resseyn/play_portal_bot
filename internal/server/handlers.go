@@ -4,15 +4,33 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/botBase/keys"
+	"play_portal_bot/internal/botBase/onlineCasses"
 	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 	"strconv"
 )
+
+func HomePage(w http.ResponseWriter, r *http.Request) {
+	ts, err := template.ParseFiles("web/html/home.page.tmpl.html")
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		http.Error(w, "Internal Server Error", 500)
+
+		return
+	}
+	err = ts.Execute(w, nil)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+}
 
 // PayPalychPaymentHandler метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
 func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,9 +39,16 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	//TODO: check PayoutStatus from PayPalych API
-	status := r.Form.Get("Status")
 	orderID := r.Form.Get("InvId")
+
+	truePayment, err := onlineCasses.PayoutStatus(orderID)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		http.Error(w, "wrong method", http.StatusBadRequest)
+		return
+	}
+
+	status := r.Form.Get("Status")
 	outSum, _ := strconv.ParseFloat(r.Form.Get("OutSum"), 64)
 	commision, _ := strconv.ParseFloat(r.Form.Get("Commission"), 64)
 	amount := outSum - commision
@@ -33,18 +58,28 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "OrderNotFound", 404)
 		return
 	}
-	if status == "SUCCESS" {
-		//TODO:поменять статус в дб
+	if status == "SUCCESS" && status == truePayment.Status && order.Status != status {
+
+		_, err = databaseModels.Orders.OrderIsDone(orderID)
+		if err != nil {
+			loggers.ErrorLogger.Println(err)
+			http.Error(w, "OrderNotFound", http.StatusBadRequest)
+			return
+		}
+
 		_, err = databaseModels.Users.TopUpBalance(order.ChatID, amount)
 		if err != nil {
 			loggers.ErrorLogger.Println(err)
-			http.Error(w, "UserNotFound", 404)
+			http.Error(w, "UserNotFound, how?", 404)
 			return
 		}
+
 		url2 := fmt.Sprintf("https://api.telegram.org/bot%s/%s", keys.BotKey, "sendMessage")
 		msgData := &structures.MessageData{
 			Command:     "",
 			PrevCommand: "",
+			Custom:      order.Custom,
+			Price:       int(structures.Prices[order.Custom]),
 		}
 		var commands [][]structures.Command
 		if order.Custom == "aaac" {

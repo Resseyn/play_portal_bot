@@ -11,27 +11,18 @@ import (
 func SpotifySuccessPayment(c telebot.Context) error {
 
 	// =========PARAMS=========
-	var data *structures.MessageData
-	if c.Callback() != nil {
-		data = helpingMethods.ParseData(c.Callback().Data)
+	data := helpingMethods.ParseData(c.Callback().Data)
+	user, _ := databaseModels.Users.GetUser(c.Chat().ID)
+	balance := user.Balance
+	if balance-float64(data.Price) >= 0 {
+		helpingMethods.NewInteraction(
+			"spotifyHandler",
+			c.Chat().ID,
+			float64(data.Price),
+			make([]string, 2))
 	} else {
-		data = &structures.MessageData{}
-	}
-	if _, ok := structures.UserStates[c.Chat().ID]; !ok {
-		user, _ := databaseModels.Users.GetUser(c.Chat().ID)
-		balance := user.Balance
-		if balance-structures.Prices[data.Command] >= 0 {
-			structures.UserStates[c.Chat().ID] = &structures.UserInteraction{
-				IsInteracting: true,
-				Type:          "spotifyHandler",
-				Step:          0,
-				DataCase:      make([]string, 2),
-				Price:         structures.Prices[data.Command],
-			}
-		} else {
-			c.Send("Вам не хватает баланса на услугу")
-			return nil
-		}
+		c.Send("Вам не хватает баланса на услугу")
+		return nil
 	}
 
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/spotify/spotifySuccess.jpeg"

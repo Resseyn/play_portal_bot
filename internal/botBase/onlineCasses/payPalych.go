@@ -1,4 +1,4 @@
-package helpingMethods
+package onlineCasses
 
 import (
 	"bytes"
@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/internal/loggers"
 )
@@ -56,13 +57,13 @@ type BillCreateResponse struct {
 // CreatePayPalychBill Создание счета на PayPalych
 func CreatePayPalychBill(c telebot.Context) error {
 	// Создание счета на PayPalych
-	msgData := ParseData(c.Callback().Data)
+	msgData := helpingMethods.ParseData(c.Callback().Data)
 	fmt.Println(msgData)
 
 	err := errors.ErrUnsupported
 	var newOrderID string
 	for err != nil {
-		newOrderID = RandStringRunes(16)
+		newOrderID = helpingMethods.RandStringRunes(16)
 		_, err = databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, float64(msgData.Price), msgData.Custom)
 		if err != nil {
 			loggers.ErrorLogger.Println(err)
@@ -133,9 +134,10 @@ type StatusParams struct {
 	OrderId string `json:"order_id"`
 }
 
-func PayoutStatus(c telebot.Context) error {
+// PayoutStatus checks real payments status via PayPalych API
+func PayoutStatus(orderID string) (*Payout, error) {
 	data := &StatusParams{
-		OrderId: "123",
+		OrderId: orderID,
 	}
 	jsonData, _ := json.Marshal(*data)
 	req, _ := http.NewRequest("POST", "https://paypalych.com/api/v1/payout/status", bytes.NewBuffer(jsonData))
@@ -145,7 +147,7 @@ func PayoutStatus(c telebot.Context) error {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
@@ -153,14 +155,8 @@ func PayoutStatus(c telebot.Context) error {
 	var billCreateResponse Payout
 	err = json.Unmarshal(body, &billCreateResponse)
 	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		return err
+		return nil, err
 	}
 
-	_, err = c.Bot().Send(telebot.ChatID(c.Chat().ID), "status: "+billCreateResponse.Status)
-	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		return err
-	}
-	return nil
+	return &billCreateResponse, nil
 }

@@ -11,9 +11,11 @@ import (
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons/servicesButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/shopButtons/steamButtons"
 	"play_portal_bot/internal/botBase/botLogic/mainMenuButtons/supportMethods"
+	"play_portal_bot/internal/botBase/botLogic/orderMethods"
 	"play_portal_bot/internal/botBase/botLogic/successfulPayments"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/botBase/keys"
+	"play_portal_bot/internal/botBase/onlineCasses"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 	"strconv"
@@ -33,6 +35,7 @@ func BotStart() error {
 
 	b.Handle("/start", botCommands.Start)
 	b.Handle("/end", supportMethods.EndTicket)
+	b.Handle("/endOrder", orderMethods.EndOrder)
 	b.Handle(fmt.Sprintf("/tool%v", keys.ToolKey), botCommands.CreateAdminPanel)
 
 	b.Handle(telebot.OnCallback, CallbackHandle)
@@ -42,9 +45,11 @@ func BotStart() error {
 			fmt.Println("STATE:", structures.UserStates[c.Chat().ID])
 			if structures.UserStates[c.Chat().ID].IsInteracting {
 				switch structures.UserStates[c.Chat().ID].Type {
+
 				case "moderatorDialog":
 					convWith, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
 					c.Bot().Send(telebot.ChatID(convWith), c.Message().Text)
+
 				case "awaitingForPrice":
 					newPrice, err := strconv.ParseFloat(c.Message().Text, 64)
 					if err != nil {
@@ -56,11 +61,12 @@ func BotStart() error {
 						return err
 					}
 					state.Price = newPrice
-					return helpingMethods.CreateCheck(c)
+					return orderMethods.CreateCheck(c)
+
 				case "spotifyHandler":
 					state.DataCase[state.Step] = c.Message().Text
 					if state.Step == 1 {
-						return helpingMethods.CreateOrder(c)
+						return orderMethods.CreateOrder(c)
 					} else {
 						state.Step++
 						return sucessfulPayments.SpotifySuccessPayment(c)
@@ -99,15 +105,15 @@ func CallbackHandle(c telebot.Context) error {
 	fmt.Println("CALLBACK DATA:", data)
 	switch data.Command {
 	case structures.Commands["topUpBalance"]:
-		return helpingMethods.TopUpBalance(c)
+		return orderMethods.TopUpBalance(c)
 	case structures.Commands["createCheck"]:
-		return helpingMethods.CreateCheck(c)
+		return orderMethods.CreateCheck(c)
 	case structures.Commands["createPayPalychBill"]:
-		return helpingMethods.CreatePayPalychBill(c)
+		return onlineCasses.CreatePayPalychBill(c)
 	case structures.Commands["respondToOrder"]:
-		return helpingMethods.RespondToOrder(c)
+		return orderMethods.RespondToOrder(c)
 	case structures.Commands["endOrder"]:
-		return helpingMethods.EndOrder(c)
+		return orderMethods.EndOrder(c)
 	//from mainMenu==============================
 	case structures.Commands["mainMenu"]:
 		return botLogic.Menu(c)
