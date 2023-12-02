@@ -27,9 +27,8 @@ func CreateOrder(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	data := &structures.MessageData{
-		Command: newOrderID,
-		Custom:  strconv.Itoa(int(c.Chat().ID)),
-		Price:   int(structures.UserStates[c.Chat().ID].Price),
+		Custom: newOrderID,
+		Price:  int(structures.UserStates[c.Chat().ID].Price),
 	}
 	messageContent := fmt.Sprintf("Заказ %v принят в обработку!\n\n📝 Ваш заказ выполняется вручную, возможно оператору понадобится с вами связаться. Поэтому пожалуйста не отключайте уведомления в чате.\n\nНажмите на кнопку ниже, чтобы дать понять оператору, что находитесь в сети и ожидаете заказ! Выполнение заказа не всегда начинается мгновенно из-за возможных очередей, поэтому придётся немного подождать.\n\nСпасибо за терпение ❤️", newOrderID)
 	commands := [][]structures.Command{
@@ -50,7 +49,8 @@ func CreateOrder(c telebot.Context) error {
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	keyboardForUser := helpingMethods.CreateInline(data, userCommands...)
 	c.Send(msg, keyboardForUser)
-	msg.Caption = data.Command + structures.UserStates[c.Chat().ID].Type + structures.UserStates[c.Chat().ID].DataCase[0] + structures.UserStates[c.Chat().ID].DataCase[1]
+	price := strconv.Itoa(int(structures.UserStates[c.Chat().ID].Price))
+	msg.Caption = data.Command + structures.UserStates[c.Chat().ID].Type + structures.UserStates[c.Chat().ID].DataCase[0] + price
 
 	delete(structures.UserStates, c.Chat().ID)
 
@@ -75,11 +75,16 @@ func RespondToOrder(c telebot.Context) error {
 		{
 			{Text: "Закончить заказ с хуйланом", Command: structures.Commands["endOrder"]}},
 	}
+	data.PrevCommand = ""
 	// =========PARAMS=========
 
-	clientChatID, _ := strconv.Atoi(data.Custom)
+	clientOrder, err := databaseModels.Orders.GetOrder(data.Custom)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
 
-	if state, ok := structures.UserStates[int64(clientChatID)]; ok && state.Type == "moderatorDialog" {
+	if state, ok := structures.UserStates[clientOrder.ChatID]; ok && state.Type == "moderatorDialog" {
 		c.Send("Другой модер занят гандоном")
 		return nil
 	}
@@ -90,29 +95,28 @@ func RespondToOrder(c telebot.Context) error {
 		Type:          "moderatorDialog",
 		DataCase:      []string{strconv.FormatInt(c.Chat().ID, 10)}, //representing user
 	}
-	structures.UserStates[int64(clientChatID)] = currentInteraction
+	structures.UserStates[clientOrder.ChatID] = currentInteraction
 
 	currentModerInteraction := &structures.UserInteraction{
 		IsInteracting: true,
 		Type:          "moderatorDialog",
-		DataCase:      []string{strconv.FormatInt(int64(clientChatID), 10), data.PrevCommand}, //representing moder (user and his order)
-		Price:         float64(data.Price),
+		DataCase:      []string{strconv.FormatInt(clientOrder.ChatID, 10), clientOrder.OrderID}, //representing moder (userOrder)
+		//Price:         float64(data.Price),
 	}
 	structures.UserStates[c.Chat().ID] = currentModerInteraction
-	data.PrevCommand = "" //TODO: КОСТЫЛИ АААААААа
 
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: "Вы начали обрботку заказа, пропишите /endOrder для окончания или нажмите на кнопку",
 	}
 	keyboard := helpingMethods.CreateInline(data, commands...)
-	_, err := c.Bot().Send(telebot.ChatID(c.Chat().ID), msg, keyboard)
+	_, err = c.Bot().Send(telebot.ChatID(c.Chat().ID), msg, keyboard)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
 	msg.Caption = "Оператор подключился"
-	_, err = c.Bot().Send(telebot.ChatID(int64(clientChatID)), msg)
+	_, err = c.Bot().Send(telebot.ChatID(clientOrder.ChatID), msg)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
@@ -125,24 +129,25 @@ func EndOrder(c telebot.Context) error {
 	if !helpingMethods.CheckIfIsInteracting(c.Chat().ID) {
 		return nil
 	}
-	clientChatID, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
-	userOrder, err := databaseModels.Orders.GetOrder(structures.UserStates[int64(clientChatID)].DataCase[1])
+	clientOrder, err := databaseModels.Orders.GetOrder(structures.UserStates[c.Chat().ID].DataCase[1])
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
+		c.Send("ошибка в бд")
 		return err
 	}
-	_, err = databaseModels.Users.ConsumeBalance(c.Chat().ID, float64(structures.UserStates[c.Chat().ID].Price))
+
+	_, err = databaseModels.Users.ConsumeBalance(clientOrder.ChatID, clientOrder.Amount)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		c.Bot().Send(telebot.ChatID(c.Chat().ID), "произошла ошибка в бд")
 		return err
 	}
-	_, err = databaseModels.Orders.OrderIsDone(userOrder.OrderID)
+	_, err = databaseModels.Orders.OrderIsDone(clientOrder.OrderID)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
-	_, err = databaseModels.Orders.CreateCheck(int64(clientChatID), float64(structures.UserStates[c.Chat().ID].Price), userOrder.Custom)
+	_, err = databaseModels.Orders.CreateCheck(clientOrder.ChatID, clientOrder.Amount, clientOrder.Custom)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
@@ -162,7 +167,7 @@ func EndOrder(c telebot.Context) error {
 			}}
 
 		delete(structures.UserStates, c.Chat().ID)
-		delete(structures.UserStates, int64(clientChatID))
+		delete(structures.UserStates, clientOrder.ChatID)
 
 		msg := &telebot.Photo{
 			File:    telebot.FromDisk(picPath),
@@ -173,7 +178,7 @@ func EndOrder(c telebot.Context) error {
 
 		msg.Caption = "Ваш заказ выполнен!!!!!"
 		keyboard2 := helpingMethods.CreateInline(messageData2, commands...)
-		c.Bot().Send(telebot.ChatID(clientChatID), msg, keyboard2)
+		c.Bot().Send(telebot.ChatID(clientOrder.ChatID), msg, keyboard2)
 		return nil
 	}
 	//======IF VIA /endOrder PART===========
@@ -194,14 +199,15 @@ func EndOrder(c telebot.Context) error {
 	}
 
 	delete(structures.UserStates, c.Chat().ID)
-	delete(structures.UserStates, int64(clientChatID))
+	delete(structures.UserStates, clientOrder.ChatID)
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
 
 	c.Send("Вы закончили заказ")
 
 	msg.Caption = "Ваш заказ выполнен!!!!!"
-	c.Bot().Send(telebot.ChatID(clientChatID), msg, keyboard)
+	c.Bot().Send(telebot.ChatID(clientOrder.ChatID), msg, keyboard)
+	c.Delete()
 	return nil
 }
 
