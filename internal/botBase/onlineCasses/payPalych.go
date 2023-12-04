@@ -64,6 +64,9 @@ func CreatePayPalychBill(c telebot.Context) error {
 	var newOrderID string
 	for err != nil {
 		newOrderID = helpingMethods.RandStringRunes(16)
+		databaseModels.Orders.DeletePrevOrderIfPresent(c.Chat().ID)
+		//TODO: закрыть счет на пэйпалыче епта
+
 		_, err = databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, float64(msgData.Price), "aaac")
 		if err != nil {
 			loggers.ErrorLogger.Println(err)

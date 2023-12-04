@@ -2,7 +2,9 @@ package databaseModels
 
 import (
 	"database/sql"
+	"fmt"
 	"play_portal_bot/internal/botBase/helpingMethods"
+	"play_portal_bot/pkg/utils/structures"
 	"time"
 )
 
@@ -63,12 +65,51 @@ func (m *OrdersDB) OrderIsDone(orderID string) (*DBOrder, error) {
 }
 
 // CreateCheck
-func (m *OrdersDB) CreateCheck(chatID int64, amount float64, custom string, data string) (*DBOrder, error) {
+func (m *OrdersDB) CreateCheck(chatID int64, amount float64, custom string) (*DBOrder, error) {
 	orderID := helpingMethods.RandStringRunes(16)
+	data := time.Now().Format("02.01.2006 15:04")
 	_, err := m.DB.Exec("INSERT INTO checks (chat_id, order_id, amount, custom, data) VALUES ($1, $2, $3, $4, $5)",
 		chatID, orderID, amount, custom, data)
 	if err != nil {
 		return nil, err
 	}
 	return nil, nil //TODO: ну эт хуйня хд
+}
+
+func (m *OrdersDB) DeletePrevOrderIfPresent(chatID int64) {
+	found := &DBOrder{}
+	m.DB.QueryRow("SELECT * FROM orders WHERE chat_id = $1", chatID).Scan(&found.ChatID, &found.OrderID, &found.Amount, &found.Custom, &found.Status, &found.Data)
+	if found.Status == "NEW" && found.Custom == "aaac" {
+		m.DB.Exec("DELETE FROM orders WHERE chat_id = $1 AND custom = 'aaac' AND status = 'NEW'", chatID)
+	}
+}
+
+// ShowOrdersHistory выводит пользователю историю пополнений и покупок. false, если вывести историю пополнений, true, если историю покупок
+func (m *OrdersDB) ShowOrdersHistory(chatID int64, orderHistory bool) string {
+	var amount float64
+	var orders string
+	if !orderHistory {
+		orders = "Ваша история пополнений:\n\n"
+		rows, _ := m.DB.Query("SELECT (amount) FROM checks WHERE chat_id = $1 AND custom = 'aaac'", chatID)
+		if !rows.Next() {
+			return "У вас еще не было пополнений!"
+		}
+		for rows.Next() {
+			rows.Scan(&amount)
+			orders += fmt.Sprintf("Пополнение на %v рублей\n", amount)
+		}
+	} else {
+		orders = "Ваша история покупок:\n\n"
+		var custom string
+		rows, _ := m.DB.Query("SELECT (custom, amount) FROM checks WHERE chat_id = $1 AND custom <> 'aaac'", chatID)
+		if !rows.Next() {
+			return "У вас еще не было покупок!"
+		}
+		for rows.Next() {
+			rows.Scan(&custom, &amount)
+			nameOfOrder, _ := helpingMethods.FindKeyByValue(structures.Commands, custom)
+			orders += fmt.Sprintf("Покупка %s за %v рублей\n", nameOfOrder, amount)
+		}
+	}
+	return orders
 }

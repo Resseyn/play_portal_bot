@@ -21,7 +21,6 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		http.Error(w, "Internal Server Error", 500)
-
 		return
 	}
 	err = ts.Execute(w, nil)
@@ -32,7 +31,6 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// 1003231540
 // PayPalychPaymentHandler метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
 func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -47,10 +45,11 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	//	loggers.ErrorLogger.Println(err)
 	//	http.Error(w, "wrong method", http.StatusBadRequest)
 	//	return
-	//}
+	//}//TODO: вообще все онли с пэйпалыча брать
 	truePayment := onlineCasses.Payment{Status: "SUCCESS"} //TODO: сравнивать еще и сумму
 
 	status := r.Form.Get("Status")
+	//signature := r.Form.Get("SignatureValue")
 	outSum, _ := strconv.ParseFloat(r.Form.Get("OutSum"), 64)
 	commision, _ := strconv.ParseFloat(r.Form.Get("Commission"), 64)
 	amount := outSum - commision
@@ -75,7 +74,40 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "UserNotFound, how?", 404)
 			return
 		}
+		_, err = databaseModels.Orders.CreateCheck(order.ChatID, amount, "aaac")
 
+		//TODO: create func to return all payments with SUCCESS status (for admin)
+	} else {
+		//TODO:иди нахуй черт
+	}
+}
+
+// PayPalychSuccessPaymentHandler метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
+func PayPalychSuccessPaymentHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "wrong method", http.StatusMethodNotAllowed)
+		return
+	}
+	r.ParseForm()
+	orderID := r.Form.Get("InvId")
+
+	//truePayment, err := onlineCasses.PayoutStatus(orderID) TODO: posle moderki aga
+	//if err != nil {
+	//	loggers.ErrorLogger.Println(err)
+	//	http.Error(w, "wrong method", http.StatusBadRequest)
+	//	return
+	//}//TODO: вообще все онли с пэйпалыча брать
+	truePayment := onlineCasses.Payment{Status: "SUCCESS"} //TODO: сравнивать еще и сумму и signatureValue
+
+	status := r.Form.Get("Status")
+	//signature := r.Form.Get("SignatureValue")
+	order, err := databaseModels.Orders.GetOrder(orderID)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		http.Error(w, "OrderNotFound", 404)
+		return
+	}
+	if status == truePayment.Status && order.Status != status {
 		url2 := fmt.Sprintf("https://api.telegram.org/bot%s/%s", keys.BotKey, "sendMessage")
 		msgData := &structures.MessageData{
 			Command:     "",
@@ -113,58 +145,51 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer answer.Body.Close()
-		//TODO: create func to return all payments with SUCCESS status (for admin)
-	} else {
-		//TODO:иди нахуй черт
 	}
-}
-
-// PayPalychSuccessPaymentHandler метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
-func PayPalychSuccessPaymentHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO: просто редирект на страницу с подписью что оплата прошла все ок ващеее потмом редирект на телеграмм бота(t.me)
+	http.Redirect(w, r, "https://t.me/play_portal_bot", 200)
 }
 
 func PayPalychFailPaymentHandler(w http.ResponseWriter, r *http.Request) {
-	//r.ParseForm()
-	//defer r.Body.Close()
-	//
-	//OrderID := r.Form.Get("InvId")
-	////TODO:db search OrderID and return order (orderID и accountID, а так же услуга и ее цена), а так же считать заказ выполненным
-	////TODO:db search если пополненная сумма больше или равна нужной для оплаты услуги, продолжить код, иначе чет другое типо иди нахуй
-	//fmt.Println(OrderID)
-	//GOTTENFROMDBCHATID := 2038902313
-	//chatID := strconv.Itoa(GOTTENFROMDBCHATID)
-	//command := structures.Commands[r.Form.Get("mainMenu")]
-	//url2 := fmt.Sprintf("https://api.telegram.org/bot%s/%s", keys.BotKey, "sendMessage")
-	//msgData := &structures.MessageData{
-	//	Command:     "", //wtf
-	//	PrevCommand: "",
-	//}
-	//commands := [][]structures.Command{{
-	//	{Text: "Главное меню", Command: command}}}
-	//keyboard := helpingMethods.CreateInline(msgData, commands...)
-	//jsonKeyboard, err := json.Marshal(keyboard)
+	if r.Method != http.MethodPost {
+		http.Error(w, "wrong method", http.StatusMethodNotAllowed)
+		return
+	}
+	r.ParseForm()
+	orderID := r.Form.Get("InvId")
+
+	//truePayment, err := onlineCasses.PayoutStatus(orderID) TODO: posle moderki aga
 	//if err != nil {
 	//	loggers.ErrorLogger.Println(err)
+	//	http.Error(w, "wrong method", http.StatusBadRequest)
 	//	return
-	//}
-	//data := map[string]string{"chat_id": chatID, "text": fmt.Sprintf("hallo suka i didnt get ya maney, trai agen mthf"), "reply_markup": string(jsonKeyboard)}
-	//jsonData, err := json.Marshal(data)
-	//if err != nil {
-	//	loggers.ErrorLogger.Println(err)
-	//	return
-	//}
-	//req, err := http.NewRequest("POST", url2, bytes.NewBuffer(jsonData))
-	//req.Header.Add("Content-Type", "application/json")
-	//client := &http.Client{}
-	//answer, err := client.Do(req)
-	//if err != nil {
-	//	log.Fatal(err)
-	//	return
-	//}
-	//defer answer.Body.Close()
-	//var str []byte
-	//answer.Body.Read(str)
-	//w.Write(str)
-	//TODO: просто редирект на страницу с подписью что оплата не прошла все хуево ващеее
+	//}//TODO: вообще все онли с пэйпалыча брать
+	truePayment := onlineCasses.Payment{Status: "FAIL"} //TODO: сравнивать еще и сумму и signatureValue
+
+	status := r.Form.Get("Status")
+	//signature := r.Form.Get("SignatureValue")
+	order, err := databaseModels.Orders.GetOrder(orderID)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		http.Error(w, "OrderNotFound", 404)
+		return
+	}
+	if status == truePayment.Status && order.Status != status {
+		url2 := fmt.Sprintf("https://api.telegram.org/bot%s/%s", keys.BotKey, "sendMessage")
+		data := map[string]string{"chat_id": strconv.FormatInt(order.ChatID, 10), "text": fmt.Sprintf("Оплата по заказу %v не прошла. Пожалуйста, попробуйте ещё раз или обратитесь в службу поддержки платежа", orderID)}
+		jsonData, err := json.Marshal(data)
+		if err != nil {
+			loggers.ErrorLogger.Println(err)
+			return
+		}
+		req, err := http.NewRequest("POST", url2, bytes.NewBuffer(jsonData))
+		req.Header.Add("Content-Type", "application/json")
+		client := &http.Client{}
+		answer, err := client.Do(req)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		defer answer.Body.Close()
+	}
+	http.Redirect(w, r, "https://t.me/play_portal_bot", 200)
 }

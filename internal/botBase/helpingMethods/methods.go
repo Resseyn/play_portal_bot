@@ -44,3 +44,11 @@ func RandStringRunes(n int) string {
 	}
 	return string(b)
 }
+func FindKeyByValue(m map[string]string, value string) (key string, ok bool) {
+	for k, v := range m {
+		if v == value {
+			return k, true
+		}
+	}
+	return "", false
+}

@@ -13,7 +13,7 @@ func Start(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
-	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
+	messageContent := "МАГАЗИН ИГР 'ЗМЕЙ ГЕРОИНЫЧ'"
 	messageData := &structures.MessageData{
 		Command:     structures.Commands["mainMenu"],
 		PrevCommand: "",

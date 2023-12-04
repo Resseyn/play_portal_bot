@@ -130,6 +130,22 @@ func CallbackHandle(c telebot.Context) error {
 		return servicesButtons.Spotify(c)
 	case structures.Commands["spotify_individual_1"]:
 		return servicesButtons.SpotifyIndividual1(c)
+	case structures.Commands["spotify_individual_3"]:
+		return servicesButtons.SpotifyIndividual3(c)
+	case structures.Commands["spotify_individual_6"]:
+		return servicesButtons.SpotifyIndividual6(c)
+	case structures.Commands["spotify_individual_12"]:
+		return servicesButtons.SpotifyIndividual12(c)
+	case structures.Commands["spotify_duo_1"]:
+		return servicesButtons.SpotifyDUO1(c)
+	case structures.Commands["spotify_family_1"]:
+		return servicesButtons.SpotifyFAM1(c)
+		//"spotify_individual_1":  "aa1k",
+	//	"spotify_individual_3":  "aa3k",
+	//	"spotify_individual_6":  "aa6k",
+	//	"spotify_individual_12": "a12k",
+	//	"spotify_duo_1":         "duo1",
+	//	"spotify_family_1":      "fam1",
 
 	case structures.Commands["spotifySuccessIND1"]:
 		return sucessfulPayments.SpotifySuccessPayment(c)
@@ -161,6 +177,13 @@ func CallbackHandle(c telebot.Context) error {
 	case structures.Commands["endTicket"]:
 		return supportMethods.EndTicket(c)
 	//============================================
+
+	case structures.Commands["history"]:
+		return botLogic.ShowHistory(c)
+	case structures.Commands["historyTOP"]:
+		return botLogic.ShowHistoryTOP(c)
+	case structures.Commands["historyBUY"]:
+		return botLogic.ShowHistoryBUY(c)
 
 	case structures.Commands["faq"]:
 		return botLogic.FAQ(c)

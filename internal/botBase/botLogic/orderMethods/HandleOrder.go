@@ -17,8 +17,10 @@ func CreateOrder(c telebot.Context) error {
 	if !helpingMethods.IfIsInteracting(c.Chat().ID) {
 		return nil
 	}
-	//TODO:ОТКЛЮЧАТЬ СТАРЫЙ ЗАКАЗ ЕСЛИ СОЗДАН НОВЫЙ через пэйпалыч
 	newOrderID := helpingMethods.RandStringRunes(16)
+
+	databaseModels.Orders.DeletePrevOrderIfPresent(c.Chat().ID)
+
 	_, err := databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, structures.UserStates[c.Chat().ID].Price, structures.UserStates[c.Chat().ID].Order)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
@@ -170,7 +172,7 @@ func EndOrder(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
-	_, err = databaseModels.Orders.CreateCheck(clientOrder.ChatID, clientOrder.Amount, clientOrder.Custom, clientOrder.Data)
+	_, err = databaseModels.Orders.CreateCheck(clientOrder.ChatID, clientOrder.Amount, clientOrder.Custom)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err

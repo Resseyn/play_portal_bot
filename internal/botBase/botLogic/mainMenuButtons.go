@@ -14,7 +14,7 @@ func Menu(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"
-	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
+	messageContent := "МАГАЗИН ИГР 'ЗМЕЙ ГЕРОИНЫЧ'"
 	commands := [][]structures.Command{
 		{
 			{Text: "Магазин", Command: structures.Commands["shop"]},
@@ -51,7 +51,7 @@ func Shop(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/mainMenuImages/gettyimages-1067956982.jpg"
-	messageContent := "МАГАЗИН ИГР 'ГИДРА'"
+	messageContent := "МАГАЗИН ИГР 'ЗМЕЙ ГЕРОИНЫЧ'"
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["mainMenu"]
 	commands := [][]structures.Command{
@@ -88,7 +88,7 @@ func PersonalCabinet(c telebot.Context) error {
 		{
 			{Text: "Использовать промокод❌", Command: structures.Commands[""]}},
 		{
-			{Text: "История покупок⚜️", Command: structures.Commands[""]}},
+			{Text: "История покупок⚜️", Command: structures.Commands["history"]}},
 	}
 	// =========PARAMS=========
 
@@ -138,6 +138,74 @@ func FAQ(c telebot.Context) error {
 		{}}
 	// =========PARAMS=========
 
+	keyboard := helpingMethods.CreateInline(data, commands...)
+	err := c.Edit(&telebot.Photo{
+		File:    telebot.FromDisk(picPath),
+		Caption: messageContent,
+	}, keyboard)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+	return nil
+}
+
+func ShowHistory(c telebot.Context) error {
+	// =========PARAMS=========
+	picPath := "pkg/utils/data/img/mainMenuImages/faq.png"
+	messageContent := "Какую историю желаете посмотреть?"
+	data := helpingMethods.ParseData(c.Callback().Data)
+	data.PrevCommand = structures.Commands["personalCabinet"]
+	commands := [][]structures.Command{
+		{
+			{Text: "Историю пополнений", Command: structures.Commands["historyTOP"]}},
+		{
+			{Text: "Историю покупок", Command: structures.Commands["historyBUY"]},
+		}}
+	// =========PARAMS=========
+	keyboard := helpingMethods.CreateInline(data, commands...)
+	err := c.Edit(&telebot.Photo{
+		File:    telebot.FromDisk(picPath),
+		Caption: messageContent,
+	}, keyboard)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+	return nil
+}
+
+func ShowHistoryTOP(c telebot.Context) error {
+	// =========PARAMS=========
+	picPath := "pkg/utils/data/img/mainMenuImages/faq.png"
+	messageContent := databaseModels.Orders.ShowOrdersHistory(c.Chat().ID, false)
+	data := helpingMethods.ParseData(c.Callback().Data)
+	data.PrevCommand = structures.Commands["personalCabinet"]
+	commands := [][]structures.Command{
+		{{Text: "Историю покупок", Command: structures.Commands["historyBUY"]}}}
+	// =========PARAMS=========
+	keyboard := helpingMethods.CreateInline(data, commands...)
+	err := c.Edit(&telebot.Photo{
+		File:    telebot.FromDisk(picPath),
+		Caption: messageContent,
+	}, keyboard)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+	return nil
+}
+func ShowHistoryBUY(c telebot.Context) error {
+	// =========PARAMS=========
+	picPath := "pkg/utils/data/img/mainMenuImages/faq.png"
+	messageContent := databaseModels.Orders.ShowOrdersHistory(c.Chat().ID, true)
+	data := helpingMethods.ParseData(c.Callback().Data)
+	data.PrevCommand = structures.Commands["personalCabinet"]
+	commands := [][]structures.Command{
+		{
+			{Text: "Историю пополнений", Command: structures.Commands["historyTOP"]}},
+	}
+	// =========PARAMS=========
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
