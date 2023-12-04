@@ -32,6 +32,7 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// 1003231540
 // PayPalychPaymentHandler метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
 func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -47,7 +48,7 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	//	http.Error(w, "wrong method", http.StatusBadRequest)
 	//	return
 	//}
-	truePayment := onlineCasses.Payment{Status: "SUCCESS"}
+	truePayment := onlineCasses.Payment{Status: "SUCCESS"} //TODO: сравнивать еще и сумму
 
 	status := r.Form.Get("Status")
 	outSum, _ := strconv.ParseFloat(r.Form.Get("OutSum"), 64)
@@ -83,13 +84,13 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 			Price:       int(structures.Prices[order.Custom]),
 		}
 		var commands [][]structures.Command
-		if order.Custom == "aaac" {
+		if _, ok := structures.UserRedirects[order.ChatID]; !ok {
 			commands = [][]structures.Command{{
 				{Text: "Успешная оплата", Command: ""},
 			}}
 		} else {
 			commands = [][]structures.Command{{
-				{Text: "Вернуться к услуге", Command: order.Custom}}}
+				{Text: "Вернуться к услуге", Command: structures.UserRedirects[order.ChatID]}}}
 		}
 		keyboard := helpingMethods.CreateInline(msgData, commands...)
 		jsonKeyboard, err := json.Marshal(keyboard)
@@ -112,7 +113,6 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer answer.Body.Close()
-		//TODO:send to admin db payment status from PayoutStatus func like "order_id" , "account_id", "chat_id"(opt, get from связывания таблиц), "status"
 		//TODO: create func to return all payments with SUCCESS status (for admin)
 	} else {
 		//TODO:иди нахуй черт
@@ -121,7 +121,7 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 
 // PayPalychSuccessPaymentHandler метод для обработки постбек после успешной оплаты, смотря на кастом проводится услуга
 func PayPalychSuccessPaymentHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO: просто редирект на страницу с подписью что оплата прошла все ок ващеее
+	//TODO: просто редирект на страницу с подписью что оплата прошла все ок ващеее потмом редирект на телеграмм бота(t.me)
 }
 
 func PayPalychFailPaymentHandler(w http.ResponseWriter, r *http.Request) {

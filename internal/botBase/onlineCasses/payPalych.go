@@ -64,7 +64,7 @@ func CreatePayPalychBill(c telebot.Context) error {
 	var newOrderID string
 	for err != nil {
 		newOrderID = helpingMethods.RandStringRunes(16)
-		_, err = databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, float64(msgData.Price), msgData.Custom)
+		_, err = databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, float64(msgData.Price), "aaac")
 		if err != nil {
 			loggers.ErrorLogger.Println(err)
 			return err
@@ -78,7 +78,7 @@ func CreatePayPalychBill(c telebot.Context) error {
 		Type:                "normal",
 		ShopId:              "G1vrEyX0LR", //TODO: изменить когда дадут модерк
 		CurrencyIn:          "RUB",
-		Custom:              msgData.Custom, //TODO: мб в кастом запихнуть ChatID, тогда в 100 раз меньше взаимодействий с бд
+		Custom:              "aaac", //TODO: это типо пополение, раньше помещался msgData.Custom
 		PayerPaysCommission: 1,
 		Name:                "Платёж",
 		SuccessUrl:          "https://t.me/play_portal_bot", //TODO: изменить когда дадут модерку

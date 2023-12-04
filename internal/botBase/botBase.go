@@ -46,7 +46,7 @@ func BotStart() error {
 			if state.IsInteracting {
 				switch structures.UserStates[c.Chat().ID].Type {
 
-				case "moderatorDialog":
+				case "moderatorDialog": //TODO: когда модер общается, сделать так чтобы не приходили ему заказы
 					convWith, _ := strconv.Atoi(state.DataCase[0])
 					// if в случае если юзер вышел нахуй из диалога с модером а модер не договорил
 					if _, ok := structures.UserStates[int64(convWith)]; !ok {

@@ -42,7 +42,7 @@ func CreateTicket(c telebot.Context) error {
 }
 
 func RespondToTicket(c telebot.Context) error {
-	helpingMethods.CheckIfIsInteracting(c.Chat().ID)
+	helpingMethods.IfIsInteracting(c.Chat().ID)
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
@@ -94,7 +94,7 @@ func RespondToTicket(c telebot.Context) error {
 }
 
 func EndTicket(c telebot.Context) error {
-	helpingMethods.CheckIfIsInteracting(c.Chat().ID)
+	helpingMethods.IfIsInteracting(c.Chat().ID)
 	if c.Callback() == nil {
 		convFrom, _ := strconv.Atoi(structures.UserStates[c.Chat().ID].DataCase[0])
 		messageData1 := &structures.MessageData{

@@ -68,6 +68,3 @@ func TopUpBalance(c telebot.Context) error {
 	}
 	return nil
 }
-func UpdateTopUpBalance(c telebot.Context) error {
-	return nil
-}

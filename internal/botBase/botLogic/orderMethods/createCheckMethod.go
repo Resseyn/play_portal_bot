@@ -16,7 +16,6 @@ func CreateCheck(c telebot.Context) error {
 			currentState.Type = currentState.DataCase[0]
 		}
 	} else {
-		c.Send("Произошла ошибка")
 		return nil
 	}
 

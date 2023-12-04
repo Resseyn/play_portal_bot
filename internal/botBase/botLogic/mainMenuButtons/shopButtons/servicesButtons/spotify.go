@@ -41,6 +41,7 @@ func Spotify(c telebot.Context) error {
 	}
 	return nil
 }
+
 func SpotifyIndividual1(c telebot.Context) error {
 
 	// =========PARAMS=========
@@ -57,6 +58,7 @@ func SpotifyIndividual1(c telebot.Context) error {
 	//data.Custom = "spotifySuccess" ОШИБКА, В ТОП АП БАЛАНСЕ УЖЕ ВСЕ УЛАЖЕНО
 	// =========PARAMS=========
 
+	structures.UserRedirects[c.Chat().ID] = structures.Commands["spotifySuccessIND1"]
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),

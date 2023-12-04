@@ -27,8 +27,13 @@ func Menu(c telebot.Context) error {
 		Command: structures.Commands["mainMenu"],
 	}
 	// =========PARAMS=========
-
-	delete(structures.UserStates, c.Chat().ID)
+	if _, ok := structures.UserStates[c.Chat().ID]; ok {
+		if structures.UserStates[c.Chat().ID].Type == "moderDialog" {
+			c.Send("даун")
+			return nil
+		}
+	}
+	delete(structures.UserStates, c.Chat().ID) //TODO: clear userstate func
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{

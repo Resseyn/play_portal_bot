@@ -8,10 +8,12 @@ import (
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/internal/server"
 	"play_portal_bot/pkg/database"
+	"time"
 )
 
 func main() {
 	fmt.Println("hello world")
+	fmt.Println(time.Now().Format("02.01.2006 15:04"))
 	loggers.InitLogger()
 	database.InitDatabase()
 	databaseModels.InitModels()

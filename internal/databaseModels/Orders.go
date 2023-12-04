@@ -3,6 +3,7 @@ package databaseModels
 import (
 	"database/sql"
 	"play_portal_bot/internal/botBase/helpingMethods"
+	"time"
 )
 
 type OrdersDB struct {
@@ -17,11 +18,12 @@ type DBOrder struct {
 	Amount  float64
 	Custom  string
 	Status  string
+	Data    string
 }
 
 func (m *OrdersDB) GetOrder(orderID string) (*DBOrder, error) {
 	found := &DBOrder{}
-	err := m.DB.QueryRow("SELECT * FROM orders WHERE order_id = $1", orderID).Scan(&found.ChatID, &found.OrderID, &found.Amount, &found.Custom, &found.Status)
+	err := m.DB.QueryRow("SELECT * FROM orders WHERE order_id = $1", orderID).Scan(&found.ChatID, &found.OrderID, &found.Amount, &found.Custom, &found.Status, &found.Data)
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +37,10 @@ func (m *OrdersDB) CreateOrder(chatID int64, orderID string, amount float64, cus
 		Amount:  amount,
 		Custom:  custom,
 		Status:  "NEW",
+		Data:    time.Now().Format("02.01.2006 15:04"),
 	}
-	_, err := m.DB.Exec("INSERT INTO orders (chat_id, order_id, amount, custom, status) VALUES ($1, $2, $3, $4, $5)",
-		newOrder.ChatID, newOrder.OrderID, newOrder.Amount, newOrder.Custom, newOrder.Status)
+	_, err := m.DB.Exec("INSERT INTO orders (chat_id, order_id, amount, custom, status, data) VALUES ($1, $2, $3, $4, $5, $6)",
+		newOrder.ChatID, newOrder.OrderID, newOrder.Amount, newOrder.Custom, newOrder.Status, newOrder.Data)
 	if err != nil {
 		return nil, err
 	}
@@ -51,18 +54,19 @@ func (m *OrdersDB) OrderIsDone(orderID string) (*DBOrder, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, err = m.DB.Exec("INSERT INTO checks (chat_id, order_id, amount, custom) VALUES ($1, $2, $3, $4)",
-		order.ChatID, order.OrderID, order.Amount, "aaac")
+	_, err = m.DB.Exec("INSERT INTO checks (chat_id, order_id, amount, custom, data) VALUES ($1, $2, $3, $4, $5)",
+		order.ChatID, order.OrderID, order.Amount, "aaac", order.Data)
 	if err != nil {
 		return nil, err
 	}
 	return nil, nil //TODO: ну эт хуйня хд
 }
 
-func (m *OrdersDB) CreateCheck(chatID int64, amount float64, custom string) (*DBOrder, error) {
+// CreateCheck
+func (m *OrdersDB) CreateCheck(chatID int64, amount float64, custom string, data string) (*DBOrder, error) {
 	orderID := helpingMethods.RandStringRunes(16)
-	_, err := m.DB.Exec("INSERT INTO checks (chat_id, order_id, amount, custom) VALUES ($1, $2, $3, $4)",
-		chatID, orderID, amount, custom)
+	_, err := m.DB.Exec("INSERT INTO checks (chat_id, order_id, amount, custom, data) VALUES ($1, $2, $3, $4, $5)",
+		chatID, orderID, amount, custom, data)
 	if err != nil {
 		return nil, err
 	}

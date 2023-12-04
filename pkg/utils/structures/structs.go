@@ -7,6 +7,8 @@ var UserStates = make(map[int64]*UserInteraction)
 // Moderators is array of chatID's of whom the tickets will be sent
 var Moderators = []string{"2038902313", "464644572"}
 
+var UserRedirects = make(map[int64]string)
+
 // Commands - словарь, в котором хранятся коды команд (прим. mainMenu - a1jg; по ключу menu выдаст a1jg)
 var Commands = map[string]string{
 	"mainMenu":        "aaaa",

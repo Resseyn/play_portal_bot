@@ -7,16 +7,17 @@ import (
 	"play_portal_bot/internal/databaseModels"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
+	"slices"
 	"strconv"
 	"time"
 )
 
 // CreateOrder создает обработку заказа после подтверждения оплаты и снятия средств короче шоб все ок было
 func CreateOrder(c telebot.Context) error {
-	if !helpingMethods.CheckIfIsInteracting(c.Chat().ID) {
+	if !helpingMethods.IfIsInteracting(c.Chat().ID) {
 		return nil
 	}
-
+	//TODO:ОТКЛЮЧАТЬ СТАРЫЙ ЗАКАЗ ЕСЛИ СОЗДАН НОВЫЙ через пэйпалыч
 	newOrderID := helpingMethods.RandStringRunes(16)
 	_, err := databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, structures.UserStates[c.Chat().ID].Price, structures.UserStates[c.Chat().ID].Order)
 	if err != nil {
@@ -49,8 +50,9 @@ func CreateOrder(c telebot.Context) error {
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	keyboardForUser := helpingMethods.CreateInline(data, userCommands...)
 	c.Send(msg, keyboardForUser)
+
 	price := strconv.Itoa(int(structures.UserStates[c.Chat().ID].Price))
-	msg.Caption = data.Command + structures.UserStates[c.Chat().ID].Type + structures.UserStates[c.Chat().ID].DataCase[0] + price
+	msg.Caption = data.Command + structures.UserStates[c.Chat().ID].Type + structures.UserStates[c.Chat().ID].DataCase[0] + structures.UserStates[c.Chat().ID].DataCase[1] + price
 
 	delete(structures.UserStates, c.Chat().ID)
 
@@ -88,7 +90,28 @@ func RespondToOrder(c telebot.Context) error {
 		c.Send("Другой модер занят гандоном")
 		return nil
 	}
-	c.Delete()
+
+	//=======УБИРАЕТ ВОЗМОЖНОСТЬ ЕЩЕ РАЗ ОТВЕТИТЬ ПОЛЬЗОВАТЕЛЮ======
+	if c.Message().Photo != nil {
+		msg := &telebot.Photo{
+			File:    telebot.FromDisk(picPath),
+			Caption: c.Text(),
+		}
+		commandsForEdit := [][]structures.Command{
+			{
+				{Text: "Ты ответил", Command: ""}},
+		}
+		kb := helpingMethods.CreateInline(data, commandsForEdit...)
+		c.Edit(msg, kb)
+	} else {
+		commandsForEdit := [][]structures.Command{
+			{
+				{Text: "Ты ответил", Command: ""}},
+		}
+		kb := helpingMethods.CreateInline(data, commandsForEdit...)
+		c.Edit(c.Text(), kb)
+	}
+	//=======УБИРАЕТ ВОЗМОЖНОСТЬ ЕЩЕ РАЗ ОТВЕТИТЬ ПОЛЬЗОВАТЕЛЮ======
 
 	currentInteraction := &structures.UserInteraction{
 		IsInteracting: true,
@@ -126,7 +149,7 @@ func RespondToOrder(c telebot.Context) error {
 
 // EndOrder модер выполнил работу и нажимает эту кнопку
 func EndOrder(c telebot.Context) error {
-	if !helpingMethods.CheckIfIsInteracting(c.Chat().ID) {
+	if !helpingMethods.IfIsInteracting(c.Chat().ID) || !slices.Contains(structures.Moderators, strconv.FormatInt(c.Chat().ID, 10)) {
 		return nil
 	}
 	clientOrder, err := databaseModels.Orders.GetOrder(structures.UserStates[c.Chat().ID].DataCase[1])
@@ -147,11 +170,11 @@ func EndOrder(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
-	_, err = databaseModels.Orders.CreateCheck(clientOrder.ChatID, clientOrder.Amount, clientOrder.Custom)
+	_, err = databaseModels.Orders.CreateCheck(clientOrder.ChatID, clientOrder.Amount, clientOrder.Custom, clientOrder.Data)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
-	} //TODO: понять как сделать чек
+	}
 	//======IF VIA /endOrder PART===========
 	if c.Callback() == nil {
 		messageData1 := &structures.MessageData{
@@ -216,7 +239,7 @@ func PingModer(c telebot.Context) error {
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
 	data := helpingMethods.ParseData(c.Callback().Data)
-	messageContent := fmt.Sprintf("Заказ %v в сети", c.Chat().ID) //TODO: нормально насторить систему названий заказов
+	messageContent := fmt.Sprintf("Заказ %v в сети", c.Chat().ID)
 	commands := [][]structures.Command{
 		{
 			{Text: "Ответить", Command: structures.Commands["respondToOrder"]}},
