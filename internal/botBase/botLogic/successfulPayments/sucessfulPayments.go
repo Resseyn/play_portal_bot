@@ -9,6 +9,7 @@ import (
 
 // SpotifySuccessPayment аквивируется после успешной оплаты юзера, у которого в чеке заказа кастом указан как spotifySuccess
 func SpotifySuccessPayment(c telebot.Context) error {
+	delete(structures.UserRedirectsAndOrders, c.Chat().ID)
 
 	// =========PARAMS=========
 	if c.Callback() != nil { //когда короче первое сообщение там чета
@@ -54,4 +55,9 @@ func SpotifySuccessPayment(c telebot.Context) error {
 		ReplyMarkup: keyboard,
 	})
 	return err
+}
+
+func KeySuccess(c telebot.Context) error {
+	//TODO:
+	return nil
 }

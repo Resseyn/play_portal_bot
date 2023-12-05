@@ -91,24 +91,25 @@ func (m *OrdersDB) ShowOrdersHistory(chatID int64, orderHistory bool) string {
 	if !orderHistory {
 		orders = "Ваша история пополнений:\n\n"
 		rows, _ := m.DB.Query("SELECT (amount) FROM checks WHERE chat_id = $1 AND custom = 'aaac'", chatID)
-		if !rows.Next() {
-			return "У вас еще не было пополнений!"
-		}
+		defer rows.Close()
 		for rows.Next() {
 			rows.Scan(&amount)
 			orders += fmt.Sprintf("Пополнение на %v рублей\n", amount)
 		}
+		if orders == "Ваша история пополнений:\n\n" {
+			return "У вас еще не было пополнений!"
+		}
 	} else {
 		orders = "Ваша история покупок:\n\n"
 		var custom string
-		rows, _ := m.DB.Query("SELECT (custom, amount) FROM checks WHERE chat_id = $1 AND custom <> 'aaac'", chatID)
-		if !rows.Next() {
-			return "У вас еще не было покупок!"
-		}
+		rows, _ := m.DB.Query("SELECT custom, amount FROM checks WHERE chat_id = $1 AND custom <> 'aaac'", chatID)
+		defer rows.Close()
 		for rows.Next() {
 			rows.Scan(&custom, &amount)
-			nameOfOrder, _ := helpingMethods.FindKeyByValue(structures.Commands, custom)
-			orders += fmt.Sprintf("Покупка %s за %v рублей\n", nameOfOrder, amount)
+			orders += fmt.Sprintf("Покупка %v за %v рублей\n", structures.Codes[custom], amount)
+		}
+		if orders == "Ваша история покупок:\n\n" {
+			return "У вас еще не было покупок!"
 		}
 	}
 	return orders

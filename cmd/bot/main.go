@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	//TODO: func show codes - for key show value in codes
 	fmt.Println("hello world")
 	fmt.Println(time.Now().Format("02.01.2006 15:04"))
 	loggers.InitLogger()

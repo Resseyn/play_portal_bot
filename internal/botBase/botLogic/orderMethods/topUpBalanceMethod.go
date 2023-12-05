@@ -15,20 +15,18 @@ func TopUpBalance(c telebot.Context) error {
 	// =========PARAMS=========
 	data := helpingMethods.ParseData(c.Callback().Data)
 	fmt.Println(data)
-	data.Custom = data.PrevCommand //тк command в дате, откуда поступил запрос на пополнение, превращается в превКоманд в следующем сообщении
-	data.PrevCommand = ""
 	var user *databaseModels.UserInfo
+	data.PrevCommand = ""
 	if data.Price != 0 {
 		user, _ = databaseModels.Users.GetUser(c.Chat().ID)
 		if user.Balance-float64(data.Price) >= 0 {
 			commands := [][]structures.Command{{
-				{Text: "Вернуться к услуге", Command: data.Custom}}}
+				{Text: "Вернуться к услуге", Command: structures.UserRedirectsAndOrders[c.Chat().ID][0]}}}
 			keyboard := helpingMethods.CreateInline(data, commands...)
 			c.Send("Вам хватает денег на услугу", keyboard)
 			delete(structures.UserStates, c.Chat().ID)
 			return nil
 		}
-
 	}
 
 	helpingMethods.NewInteraction("awaitingForPrice",

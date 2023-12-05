@@ -54,7 +54,7 @@ func CreateOrder(c telebot.Context) error {
 	c.Send(msg, keyboardForUser)
 
 	price := strconv.Itoa(int(structures.UserStates[c.Chat().ID].Price))
-	msg.Caption = data.Command + structures.UserStates[c.Chat().ID].Type + structures.UserStates[c.Chat().ID].DataCase[0] + structures.UserStates[c.Chat().ID].DataCase[1] + price
+	msg.Caption = data.Command + structures.Codes[structures.UserStates[c.Chat().ID].Order] + structures.UserStates[c.Chat().ID].DataCase[0] + structures.UserStates[c.Chat().ID].DataCase[1] + price
 
 	delete(structures.UserStates, c.Chat().ID)
 
@@ -248,6 +248,11 @@ func PingModer(c telebot.Context) error {
 	}
 	data.PrevCommand = ""
 	// =========PARAMS=========
+	//проверка, если пингуется выполненный заказ
+	order, err := databaseModels.Orders.GetOrder(data.Custom)
+	if order.Status == "SUCCESS" || err != nil {
+		return nil
+	}
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
 
@@ -269,7 +274,7 @@ func PingModer(c telebot.Context) error {
 		File:    telebot.FromDisk(picPath),
 		Caption: c.Text(),
 	}
-	err := c.Edit(msg, keyboard)
+	err = c.Edit(msg, keyboard)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err

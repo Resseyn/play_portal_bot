@@ -46,7 +46,7 @@ func Services(c telebot.Context) error {
 			{Text: "Spotify", Command: structures.Commands["spotify"]}},
 		{
 			{Text: "Подписка 7TV", Command: ""},
-			{Text: "AppStore", Command: ""}},
+			{Text: "AppStore", Command: structures.Commands["appStore"]}},
 		{
 			{Text: "Adobe", Command: ""}},
 	}

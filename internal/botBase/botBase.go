@@ -140,25 +140,24 @@ func CallbackHandle(c telebot.Context) error {
 		return servicesButtons.SpotifyDUO1(c)
 	case structures.Commands["spotify_family_1"]:
 		return servicesButtons.SpotifyFAM1(c)
-		//"spotify_individual_1":  "aa1k",
-	//	"spotify_individual_3":  "aa3k",
-	//	"spotify_individual_6":  "aa6k",
-	//	"spotify_individual_12": "a12k",
-	//	"spotify_duo_1":         "duo1",
-	//	"spotify_family_1":      "fam1",
 
-	case structures.Commands["spotifySuccessIND1"]:
+	case structures.Commands["appStore"]:
+		return servicesButtons.AppStore(c)
+	case structures.Commands["appStore500"]:
+		return servicesButtons.AppStore500key(c)
+	case structures.Commands["appStore1000"]:
+		return servicesButtons.AppStore1000key(c)
+	case structures.Commands["appStore1500"]:
+		return servicesButtons.AppStore1500key(c)
+	case structures.Commands["appStore3000"]:
+		return servicesButtons.AppStore3000key(c)
+	case structures.Commands["appStore9000"]:
+		return servicesButtons.AppStore9000key(c)
+
+	case structures.Commands["spotifySuccess"]:
 		return sucessfulPayments.SpotifySuccessPayment(c)
-	case structures.Commands["spotifySuccessIND3"]:
-		return sucessfulPayments.SpotifySuccessPayment(c)
-	case structures.Commands["spotifySuccessIND6"]:
-		return sucessfulPayments.SpotifySuccessPayment(c)
-	case structures.Commands["spotifySuccessIND12"]:
-		return sucessfulPayments.SpotifySuccessPayment(c)
-	case structures.Commands["spotifySuccessDUO1"]:
-		return sucessfulPayments.SpotifySuccessPayment(c)
-	case structures.Commands["spotifySuccessFAM1"]:
-		return sucessfulPayments.SpotifySuccessPayment(c)
+	case structures.Commands["keySuccess"]:
+		return sucessfulPayments.KeySuccess(c)
 
 	case structures.Commands["steam_topUpBalance"]:
 		return steamButtons.SteamTopUpBalance(c)

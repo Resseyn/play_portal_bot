@@ -7,7 +7,9 @@ var UserStates = make(map[int64]*UserInteraction)
 // Moderators is array of chatID's of whom the tickets will be sent
 var Moderators = []string{"2038902313", "464644572"}
 
-var UserRedirects = make(map[int64]string)
+// UserRedirectsAndOrders - Словарь для редиректа у кнопки, появляющейся после пополнения счета. содержит нужный хендлер [0]
+// и собстевнно код заказа [1]
+var UserRedirectsAndOrders = make(map[int64][]string)
 
 // Commands - словарь, в котором хранятся коды команд (прим. mainMenu - a1jg; по ключу menu выдаст a1jg)
 var Commands = map[string]string{
@@ -44,13 +46,15 @@ var Commands = map[string]string{
 	"spotify_duo_1":         "duo1",
 	"spotify_family_1":      "fam1",
 
-	"spotifySuccessIND1":  "spoa",
-	"spotifySuccessIND3":  "spob",
-	"spotifySuccessIND6":  "spoc",
-	"spotifySuccessIND12": "spod",
-	"spotifySuccessDUO1":  "spoe",
-	"spotifySuccessFAM1":  "spof",
+	"appStore":     "apps",
+	"appStore500":  "appa",
+	"appStore1000": "appb",
+	"appStore1500": "appc",
+	"appStore3000": "appd",
+	"appStore9000": "appe",
 
+	"spotifySuccess": "spot",
+	//TODO: я изменял хуйню с миллиономами хэндлеров, теперь вся инфа - это код заказа, которой декодируется в название, и его цена
 	"steam_topUpBalance": "aaal",
 
 	"adminPanel":     "aaam",
@@ -61,12 +65,35 @@ var Commands = map[string]string{
 }
 
 var Prices = map[string]float64{
-	Commands["spotifySuccessIND1"]:  332.0,
-	Commands["spotifySuccessIND3"]:  663.0,
-	Commands["spotifySuccessIND6"]:  1243.0,
-	Commands["spotifySuccessIND12"]: 1999.0,
-	Commands["spotifySuccessDUO1"]:  349.0,
-	Commands["spotifySuccessFAM1"]:  402.0,
+
+	"spoa": 332.0,
+	"spob": 663.0,
+	"spoc": 1243.0,
+	"spod": 2017.0,
+	"spoe": 349.0,
+	"spof": 402.0,
+
+	"app1": 689.0,
+	"app2": 1379.0,
+	"app3": 2068.0,
+	"app4": 4136.0,
+	"app5": 12408.0,
+}
+
+var Codes = map[string]string{
+
+	"spoa": "Spotify Individual 1 месяц",
+	"spob": "Spotify Individual 3 месяца",
+	"spoc": "SpotifyIndividual6",
+	"spod": "SpotifyIndividual12",
+	"spoe": "SpotifyDUO1",
+	"spof": "SpotifyFAMILY1",
+
+	"app1": "Ключ AppStore 500 руб",
+	"app2": "Ключ AppStore 1000 руб",
+	"app3": "Ключ AppStore 1500 руб",
+	"app4": "Ключ AppStore 3000 руб",
+	"app5": "Ключ AppStore 9000 руб",
 }
 
 type MessageData struct {

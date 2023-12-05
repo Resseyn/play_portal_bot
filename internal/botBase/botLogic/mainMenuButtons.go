@@ -88,7 +88,7 @@ func PersonalCabinet(c telebot.Context) error {
 		{
 			{Text: "Использовать промокод❌", Command: structures.Commands[""]}},
 		{
-			{Text: "История покупок⚜️", Command: structures.Commands["history"]}},
+			{Text: "История⚜️", Command: structures.Commands["history"]}},
 	}
 	// =========PARAMS=========
 

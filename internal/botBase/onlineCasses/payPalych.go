@@ -70,7 +70,6 @@ func CreatePayPalychBill(c telebot.Context) error {
 		_, err = databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, float64(msgData.Price), "aaac")
 		if err != nil {
 			loggers.ErrorLogger.Println(err)
-			return err
 		}
 	} //ну а вдруг 16 символов когда-либо совпадут аааа???
 
