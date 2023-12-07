@@ -74,7 +74,7 @@ func BotStart() error {
 
 				case "spotifyHandler":
 					state.DataCase[state.Step] = c.Message().Text
-					if state.Step == 1 {
+					if state.Step == len(state.DataCase)-1 {
 						return orderMethods.CreateOrder(c)
 					} else {
 						state.Step++
