@@ -9,13 +9,8 @@ import (
 	"play_portal_bot/pkg/utils/structures"
 )
 
-//TODO: СДЕЛАТЬ ОГРОМНЫЙ ХЕНДЛЕР, КОТОРЫЙ БУДЕТ ОБРАБАТЫВАТЬ ВСЕ ЗАПРОСЫ С КЛАВЫ. ДЛЯ КАЖДОГО ХЕНДЛЕРА ("spotifyHandler",..)
-//БУДУТ ЗАДАВАТЬСЯ ПАРАМЕТРЫ, ТИПО СКОЛЬКО СООБЩЕНИЙ, КАКОЙ В НИХ ТЕКСТ, НА ОСНОВЕ ДАННЫХ ПАРАМЕТРОВ БУДЕТ ИДТИ ОБРАБОТКА
-//ВСЕ ЧЕРЕЗ ОДНО!!!!!
-
-// TODO: переименовать эту хуйню в OrderInfoHandler
-// SpotifySuccessPayment - глобальный хендлер для сбора необходимых данный для выполнения заказа юреза, если таких нет - обработка заказа
-func SpotifySuccessPayment(c telebot.Context) error {
+// OrderInfoHandler - глобальный хендлер для сбора необходимых данный для выполнения заказа юреза, если таких нет - обработка заказа
+func OrderInfoHandler(c telebot.Context) error {
 
 	delete(structures.UserOrders, c.Chat().ID)
 	var params []string

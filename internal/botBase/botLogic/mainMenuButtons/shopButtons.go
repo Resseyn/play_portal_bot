@@ -47,8 +47,6 @@ func Services(c telebot.Context) error {
 		{
 			{Text: "Подписка 7TV", Command: ""},
 			{Text: "AppStore", Command: structures.Commands["appStore"]}},
-		{
-			{Text: "Adobe", Command: ""}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)
 	data.PrevCommand = structures.Commands["shop"]

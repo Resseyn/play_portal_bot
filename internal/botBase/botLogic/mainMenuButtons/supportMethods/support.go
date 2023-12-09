@@ -30,11 +30,14 @@ func CreateTicket(c telebot.Context) error {
 
 	for _, moderator := range structures.Moderators {
 		moderChat, _ := strconv.Atoi(moderator)
-		_, err := c.Bot().Send(telebot.ChatID(moderChat), msg, keyboard)
-		if err != nil {
-			loggers.ErrorLogger.Println(err)
-			return err
+		if _, ok := structures.UserStates[int64(moderChat)]; !ok {
+			_, err := c.Bot().Send(telebot.ChatID(moderChat), msg, keyboard)
+			if err != nil {
+				loggers.ErrorLogger.Println(err)
+				return err
+			}
 		}
+
 	}
 
 	c.Send("Билет создан, ожидайте модератора")

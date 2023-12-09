@@ -46,7 +46,7 @@ func BotStart() error {
 			if state.IsInteracting {
 				switch structures.UserStates[c.Chat().ID].Type {
 
-				case "moderatorDialog": //TODO: когда модер общается, сделать так чтобы не приходили ему заказы
+				case "moderatorDialog":
 					convWith, _ := strconv.Atoi(state.DataCase[0])
 					// if в случае если юзер вышел нахуй из диалога с модером а модер не договорил
 					if _, ok := structures.UserStates[int64(convWith)]; !ok {
@@ -57,6 +57,7 @@ func BotStart() error {
 						}
 					}
 					// if в случае если юзер вышел нахуй из диалога с модером а модер не договорил
+
 					c.Bot().Send(telebot.ChatID(convWith), c.Message().Text)
 
 				case "awaitingForPrice":
@@ -78,7 +79,7 @@ func BotStart() error {
 						return orderMethods.CreateOrder(c)
 					} else {
 						state.Step++
-						return sucessfulPayments.SpotifySuccessPayment(c)
+						return sucessfulPayments.OrderInfoHandler(c)
 					}
 
 				default:
@@ -156,7 +157,7 @@ func CallbackHandle(c telebot.Context) error {
 		return servicesButtons.AppStore9000key(c)
 
 	case structures.Commands["spotifySuccess"]:
-		return sucessfulPayments.SpotifySuccessPayment(c)
+		return sucessfulPayments.OrderInfoHandler(c)
 	case structures.Commands["keySuccess"]:
 		return sucessfulPayments.KeySuccess(c)
 

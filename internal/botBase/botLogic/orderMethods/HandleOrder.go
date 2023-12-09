@@ -60,10 +60,12 @@ func CreateOrder(c telebot.Context) error {
 
 	for _, moderator := range structures.Moderators {
 		moderChat, _ := strconv.Atoi(moderator)
-		_, err := c.Bot().Send(telebot.ChatID(moderChat), msg, keyboard)
-		if err != nil {
-			loggers.ErrorLogger.Println(err)
-			return err
+		if _, ok := structures.UserStates[int64(moderChat)]; !ok {
+			_, err := c.Bot().Send(telebot.ChatID(moderChat), msg, keyboard)
+			if err != nil {
+				loggers.ErrorLogger.Println(err)
+				return err
+			}
 		}
 	}
 	return nil
@@ -253,10 +255,12 @@ func PingModer(c telebot.Context) error {
 
 	for _, moderator := range structures.Moderators {
 		moderChat, _ := strconv.Atoi(moderator)
-		_, err := c.Bot().Send(telebot.ChatID(moderChat), messageContent, keyboard)
-		if err != nil {
-			loggers.ErrorLogger.Println(err)
-			return err
+		if _, ok := structures.UserStates[int64(moderChat)]; !ok {
+			_, err := c.Bot().Send(telebot.ChatID(moderChat), messageContent, keyboard)
+			if err != nil {
+				loggers.ErrorLogger.Println(err)
+				return err
+			}
 		}
 	}
 	//======MEGA_TIMER_XXX========

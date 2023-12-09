@@ -60,7 +60,7 @@ func (m *OrdersDB) OrderIsDone(orderID string) (*DBOrder, error) {
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil //TODO: ну эт хуйня хд
+	return nil, nil
 }
 
 //// CreateCheck
@@ -71,7 +71,7 @@ func (m *OrdersDB) OrderIsDone(orderID string) (*DBOrder, error) {
 //	if err != nil {
 //		return nil, err
 //	}
-//	return nil, nil //TODO: ну эт хуйня хд
+//	return nil, nil
 //}
 
 func (m *OrdersDB) DeletePrevOrderIfPresent(chatID int64) {

@@ -80,7 +80,7 @@ func CreatePayPalychBill(c telebot.Context) error {
 		Type:                "normal",
 		ShopId:              "G1vrEyX0LR", //TODO: изменить когда дадут модерк
 		CurrencyIn:          "RUB",
-		Custom:              "aaac", //TODO: это типо пополение, раньше помещался msgData.Custom
+		Custom:              "aaac",
 		PayerPaysCommission: 1,
 		Name:                "Платёж",
 		SuccessUrl:          "https://t.me/play_portal_bot", //TODO: изменить когда дадут модерку
