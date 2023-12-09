@@ -172,11 +172,7 @@ func EndOrder(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
-	//_, err = databaseModels.Orders.CreateCheck(clientOrder.OrderID, clientOrder.ChatID, clientOrder.Amount, clientOrder.Custom)
-	//if err != nil {
-	//	loggers.ErrorLogger.Println(err)
-	//	return err
-	//}
+
 	//======IF VIA /endOrder PART===========
 	if c.Callback() == nil {
 		messageData1 := &structures.MessageData{
@@ -210,12 +206,11 @@ func EndOrder(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/gameServices.jpg"
-	data := helpingMethods.ParseData(c.Callback().Data) //nil basically
+	data := &structures.MessageData{}
 	commands := [][]structures.Command{
 		{
 			{Text: "Назад в главное меню", Command: structures.Commands["mainMenu"]}},
 	}
-	data.PrevCommand = ""
 	// =========PARAMS=========
 
 	msg := &telebot.Photo{

@@ -1,9 +1,11 @@
 package sucessfulPayments
 
 import (
+	"fmt"
 	"gopkg.in/telebot.v3"
 	"play_portal_bot/internal/botBase/helpingMethods"
 	"play_portal_bot/internal/databaseModels"
+	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 )
 
@@ -12,7 +14,7 @@ import (
 //ВСЕ ЧЕРЕЗ ОДНО!!!!!
 
 // TODO: переименовать эту хуйню в OrderInfoHandler
-// SpotifySuccessPayment аквивируется после успешной оплаты юзера, у которого в чеке заказа кастом указан как spotifySuccess
+// SpotifySuccessPayment - глобальный хендлер для сбора необходимых данный для выполнения заказа юреза, если таких нет - обработка заказа
 func SpotifySuccessPayment(c telebot.Context) error {
 
 	delete(structures.UserOrders, c.Chat().ID)
@@ -20,13 +22,18 @@ func SpotifySuccessPayment(c telebot.Context) error {
 
 	// =========PARAMS=========
 	if c.Callback() != nil { //когда короче первое сообщение там чета
+		c.Delete()
 		user, _ := databaseModels.Users.GetUser(c.Chat().ID)
 		balance := user.Balance
 		data := helpingMethods.ParseData(c.Callback().Data)
 		params = structures.Parameters[structures.Handlers[data.Custom]]
 		if balance-float64(structures.Prices[data.Custom]) >= 0 {
 			if len(params) == 0 {
-				//keySuccess
+				err := KeySuccess(c)
+				if err != nil {
+					return err
+				}
+				return nil
 			} else {
 				helpingMethods.NewInteraction(
 					structures.Handlers[data.Custom],
@@ -64,6 +71,32 @@ func SpotifySuccessPayment(c telebot.Context) error {
 }
 
 func KeySuccess(c telebot.Context) error {
-	//TODO:
+	data := helpingMethods.ParseData(c.Callback().Data)
+	key, _ := databaseModels.Keys.GetKey(data.Custom)
+	if key == nil || !key.Avaliable {
+		c.Send("На данный момент ключей нет, попробуйте позже")
+		return nil
+	}
+
+	newOrderID := helpingMethods.RandStringRunes(16)
+	_, err := databaseModels.Orders.CreateOrder(c.Chat().ID, newOrderID, structures.Prices[data.Custom], data.Custom)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+	_, err = databaseModels.Users.ConsumeBalance(c.Chat().ID, structures.Prices[data.Custom])
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		c.Bot().Send(telebot.ChatID(c.Chat().ID), "произошла ошибка в бд")
+		return err
+	}
+	_, err = databaseModels.Orders.OrderIsDone(newOrderID)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+
+	c.Send(fmt.Sprintf("Ваш ключ: `%v`", key.Key), telebot.ModeMarkdown)
+	//TODO: ну типо гайды условные как вводить ключ за тот или иной товар, тоже + словарь с гойдами
 	return nil
 }

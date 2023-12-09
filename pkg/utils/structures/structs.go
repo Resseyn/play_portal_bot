@@ -1,7 +1,11 @@
 package structures
 
+import "sync"
+
 // UserStates Словарь с взаимодействиями пользователей с ботом (взаимодейсвия, в которых требуется несколько раз что-то ввести и т.д)
 // НЕ ИСПОЛЬЗОВАТЬ ДЛЯ ВЗАИМОДЕЙСТВИЯ С ОПЛАТАМИ
+var GlobalMutex sync.Mutex
+
 var UserStates = make(map[int64]*UserInteraction)
 
 // Moderators is array of chatID's of whom the tickets will be sent
@@ -19,11 +23,18 @@ var Handlers = map[string]string{
 	"spod": "spotifyHandler",
 	"spoe": "spotifyHandler",
 	"spof": "spotifyHandler",
+
+	"app1": "keyHandler",
+	"app2": "keyHandler",
+	"app3": "keyHandler",
+	"app4": "keyHandler",
+	"app5": "keyHandler",
 }
 
 var Parameters = map[string][]string{
 
 	"spotifyHandler": {"Введите логин от Spotify", "Введите пароль от Spotify", "cкинь писю"},
+	"keyHandler":     {},
 }
 
 // Commands - словарь, в котором хранятся коды команд (прим. mainMenu - a1jg; по ключу menu выдаст a1jg)

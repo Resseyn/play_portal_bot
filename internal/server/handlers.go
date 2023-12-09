@@ -74,7 +74,6 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "UserNotFound, how?", 404)
 			return
 		}
-		//_, err = databaseModels.Orders.CreateCheck(order.OrderID, order.ChatID, amount, "aaac")
 
 		var commands [][]structures.Command
 		var msgData *structures.MessageData
