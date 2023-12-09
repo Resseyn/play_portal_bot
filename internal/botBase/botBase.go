@@ -101,6 +101,7 @@ func CallbackHandle(c telebot.Context) error {
 	data := helpingMethods.ParseData(c.Callback().Data)
 	fmt.Println("STATE:", structures.UserStates[c.Chat().ID])
 	fmt.Println("CALLBACK DATA:", data)
+	fmt.Println("USER REDIRECTS:", structures.UserOrders[c.Chat().ID])
 	switch data.Command {
 	case structures.Commands["topUpBalance"]:
 		return orderMethods.TopUpBalance(c)

@@ -10,6 +10,7 @@ import (
 // Start КОМАНДА СТАРТА, ПО СОВМЕСТИТЕЛЬСТВУ ВЫВОД ГЛАВНОГО МЕНЮ
 func Start(c telebot.Context) error {
 	databaseModels.Users.CreateUser(c.Chat().ID)
+	delete(structures.UserStates, c.Chat().ID)
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/mainMenuImages/Hydra.webp"

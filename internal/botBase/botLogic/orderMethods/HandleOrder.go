@@ -172,11 +172,11 @@ func EndOrder(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
-	_, err = databaseModels.Orders.CreateCheck(clientOrder.ChatID, clientOrder.Amount, clientOrder.Custom)
-	if err != nil {
-		loggers.ErrorLogger.Println(err)
-		return err
-	}
+	//_, err = databaseModels.Orders.CreateCheck(clientOrder.OrderID, clientOrder.ChatID, clientOrder.Amount, clientOrder.Custom)
+	//if err != nil {
+	//	loggers.ErrorLogger.Println(err)
+	//	return err
+	//}
 	//======IF VIA /endOrder PART===========
 	if c.Callback() == nil {
 		messageData1 := &structures.MessageData{

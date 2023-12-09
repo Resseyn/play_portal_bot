@@ -74,23 +74,24 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "UserNotFound, how?", 404)
 			return
 		}
-		_, err = databaseModels.Orders.CreateCheck(order.ChatID, amount, "aaac")
+		//_, err = databaseModels.Orders.CreateCheck(order.OrderID, order.ChatID, amount, "aaac")
 
 		var commands [][]structures.Command
 		var msgData *structures.MessageData
-		if _, ok := structures.UserRedirectsAndOrders[order.ChatID]; !ok {
+
+		if _, ok := structures.UserOrders[order.ChatID]; !ok {
 			commands = [][]structures.Command{{
 				{Text: "Успешная оплата", Command: structures.Commands["mainMenu"]},
 			}}
 			msgData = &structures.MessageData{}
 		} else {
 			commands = [][]structures.Command{{
-				{Text: "Вернуться к услуге", Command: structures.UserRedirectsAndOrders[order.ChatID][0]}}}
+				{Text: "Вернуться к услуге", Command: structures.Commands["spotifySuccess"]}}}
 			msgData = &structures.MessageData{
 				Command:     "",
 				PrevCommand: "",
-				Custom:      structures.UserRedirectsAndOrders[order.ChatID][1],
-				Price:       int(structures.Prices[structures.UserRedirectsAndOrders[order.ChatID][1]]),
+				Custom:      structures.UserOrders[order.ChatID],
+				Price:       int(structures.Prices[structures.UserOrders[order.ChatID]]),
 			}
 		}
 

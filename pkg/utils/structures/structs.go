@@ -7,9 +7,24 @@ var UserStates = make(map[int64]*UserInteraction)
 // Moderators is array of chatID's of whom the tickets will be sent
 var Moderators = []string{"2038902313", "464644572"}
 
-// UserRedirectsAndOrders - Словарь для редиректа у кнопки, появляющейся после пополнения счета. содержит нужный хендлер [0]
-// и собстевнно код заказа [1]
-var UserRedirectsAndOrders = make(map[int64][]string)
+// UserOrders - Словарь для редиректа у кнопки, появляющейся после пополнения счета. содержит код заказа
+var UserOrders = make(map[int64]string)
+
+// Handlers - словарь, который коду товара присуждает хэндлер для обработки его покупки
+var Handlers = map[string]string{
+
+	"spoa": "spotifyHandler",
+	"spob": "spotifyHandler",
+	"spoc": "spotifyHandler",
+	"spod": "spotifyHandler",
+	"spoe": "spotifyHandler",
+	"spof": "spotifyHandler",
+}
+
+var Parameters = map[string][]string{
+
+	"spotifyHandler": {"Введите логин от Spotify", "Введите пароль от Spotify", "cкинь писю"},
+}
 
 // Commands - словарь, в котором хранятся коды команд (прим. mainMenu - a1jg; по ключу menu выдаст a1jg)
 var Commands = map[string]string{
@@ -70,7 +85,7 @@ var Prices = map[string]float64{
 	"spob": 663.0,
 	"spoc": 1243.0,
 	"spod": 2017.0,
-	"spoe": 349.0,
+	"spoe": 354.0,
 	"spof": 402.0,
 
 	"app1": 689.0,

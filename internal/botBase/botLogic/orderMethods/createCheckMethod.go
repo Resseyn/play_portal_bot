@@ -50,6 +50,9 @@ func CreateCheck(c telebot.Context) error {
 			{Text: "Вернуться в главное меню", Command: structures.Commands["mainMenu"]}},
 	}
 	data.PrevCommand = ""
+	if data.Custom != "" {
+		structures.UserOrders[c.Chat().ID] = data.Custom
+	}
 	// =========PARAMS=========
 
 	delete(structures.UserStates, c.Chat().ID)

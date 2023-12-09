@@ -33,7 +33,7 @@ func Menu(c telebot.Context) error {
 			return nil
 		}
 	}
-	delete(structures.UserStates, c.Chat().ID) //TODO: clear userstate func
+	delete(structures.UserStates, c.Chat().ID) //TODO: clear userstates func
 
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{

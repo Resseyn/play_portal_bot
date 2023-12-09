@@ -57,7 +57,7 @@ func SpotifyIndividual1(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["spotifySuccess"], data.Custom}
+	//TODO: глобальный рефрактор, спотифайсаксес теперть просто саксес Инпутпэймент
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
@@ -84,7 +84,6 @@ func SpotifyIndividual3(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["spotifySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
@@ -111,7 +110,6 @@ func SpotifyIndividual6(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["spotifySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
@@ -138,7 +136,6 @@ func SpotifyIndividual12(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["spotifySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
@@ -165,7 +162,6 @@ func SpotifyDUO1(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["spotifySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
@@ -192,7 +188,6 @@ func SpotifyFAM1(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["spotifySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),

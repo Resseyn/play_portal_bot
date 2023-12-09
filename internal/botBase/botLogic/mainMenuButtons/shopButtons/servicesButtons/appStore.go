@@ -54,12 +54,15 @@ func AppStore500key(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["keySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
+	opts := make([]interface{}, 2)
+	opts[0] = keyboard
+	opts[1] = telebot.ModeHTML
+
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
-	}, keyboard, telebot.ParseMode("HTML")) //TODO: проверить как делать жирный шрифт нормально
+	}, opts...)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
@@ -70,7 +73,7 @@ func AppStore1000key(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/appStore/appStore1000.jpg"
-	messageContent := "Выберите товар:"
+	messageContent := "<b>Товар:</b> Ключ App Store 1000 руб\n<b>Цена:</b> 1379₽\n\n<b>Описание:</b> Подарочная карта оплаты AppStore/iTunes. \nС помощью баланса можно оплачивать подписки/покупать товары в играх и приложениях.\n\n⚠️Ключ можно активировать только на учетной записи РФ региона."
 	commands := [][]structures.Command{
 		{
 			{Text: "Купить", Command: structures.Commands["topUpBalance"]}},
@@ -81,12 +84,15 @@ func AppStore1000key(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["keySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
+	opts := make([]interface{}, 2)
+	opts[0] = keyboard
+	opts[1] = telebot.ModeHTML
+
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
-	}, keyboard)
+	}, opts...)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
@@ -97,7 +103,7 @@ func AppStore1500key(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/appStore/appStore1500.jpg"
-	messageContent := "Выберите товар:"
+	messageContent := "<b>Товар:</b> Ключ App Store 1500 руб\n<b>Цена:</b> 2068₽\n\n<b>Описание:</b> Подарочная карта оплаты AppStore/iTunes. \nС помощью баланса можно оплачивать подписки/покупать товары в играх и приложениях.\n\n⚠️Ключ можно активировать только на учетной записи РФ региона."
 	commands := [][]structures.Command{
 		{
 			{Text: "Купить", Command: structures.Commands["topUpBalance"]}},
@@ -108,12 +114,15 @@ func AppStore1500key(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["keySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
+	opts := make([]interface{}, 2)
+	opts[0] = keyboard
+	opts[1] = telebot.ModeHTML
+
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
-	}, keyboard)
+	}, opts...)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
@@ -124,7 +133,7 @@ func AppStore3000key(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/appStore/appStore3000.jpg"
-	messageContent := "Выберите товар:"
+	messageContent := "<b>Товар:</b> Ключ App Store 3000 руб\n<b>Цена:</b> 4136₽\n\n<b>Описание:</b> Подарочная карта оплаты AppStore/iTunes. \nС помощью баланса можно оплачивать подписки/покупать товары в играх и приложениях.\n\n⚠️Ключ можно активировать только на учетной записи РФ региона."
 	commands := [][]structures.Command{
 		{
 			{Text: "Купить", Command: structures.Commands["topUpBalance"]}},
@@ -135,12 +144,15 @@ func AppStore3000key(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["keySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
+	opts := make([]interface{}, 2)
+	opts[0] = keyboard
+	opts[1] = telebot.ModeHTML
+
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
-	}, keyboard)
+	}, opts...)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
@@ -151,7 +163,7 @@ func AppStore9000key(c telebot.Context) error {
 
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/appStore/appStore9000.jpg"
-	messageContent := "Выберите товар:"
+	messageContent := "<b>Товар:</b> Ключ App Store 9000 руб\n<b>Цена:</b> 12408₽\n\n<b>Описание:</b> Подарочная карта оплаты AppStore/iTunes. \nС помощью баланса можно оплачивать подписки/покупать товары в играх и приложениях.\n\n⚠️Ключ можно активировать только на учетной записи РФ региона."
 	commands := [][]structures.Command{
 		{
 			{Text: "Купить", Command: structures.Commands["topUpBalance"]}},
@@ -162,12 +174,15 @@ func AppStore9000key(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	structures.UserRedirectsAndOrders[c.Chat().ID] = []string{structures.Commands["keySuccess"], data.Custom}
 	keyboard := helpingMethods.CreateInline(data, commands...)
+	opts := make([]interface{}, 2)
+	opts[0] = keyboard
+	opts[1] = telebot.ModeHTML
+
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
-	}, keyboard)
+	}, opts...)
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
 		return err
