@@ -66,7 +66,7 @@ var (
 				Text:    "Выберите товар",
 				Custom:  "spoe",
 				Command: Commands["spotify_duo_1"]},
-			{URL: "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_spotify_family_1.jpg",
+			{URL: "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
 				Text:    "Выберите товар",
 				Custom:  "spof",
 				Command: Commands["spotify_family_1"]},

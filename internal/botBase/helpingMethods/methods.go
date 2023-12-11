@@ -1,12 +1,14 @@
 package helpingMethods
 
 import (
+	"fmt"
 	"gopkg.in/telebot.v3"
 	"math/rand"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // ParseData парсит строку с колбек кновпеи в структуру
@@ -57,6 +59,7 @@ func FindKeyByValue(m map[string]string, value string) (key string, ok bool) {
 }
 
 func SendTypicalPage(c telebot.Context) error {
+	fm := time.Now()
 	data := ParseData(c.Callback().Data)
 	params := structures.Pages[data.Command]
 	data.PrevCommand = params.PrevPage
@@ -84,6 +87,7 @@ func SendTypicalPage(c telebot.Context) error {
 						loggers.ErrorLogger.Println(err)
 						return err
 					}
+					fmt.Println(time.Now().Sub(fm).Seconds())
 					return nil
 				}
 			}
@@ -103,5 +107,6 @@ func SendTypicalPage(c telebot.Context) error {
 		loggers.ErrorLogger.Println(err)
 		return err
 	}
+	fmt.Println(time.Now().Sub(fm).Seconds())
 	return nil
 }

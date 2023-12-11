@@ -12,7 +12,6 @@ func GoodGenerator(goodName string) {
 }
 
 func AppStore(c telebot.Context) error {
-
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/appStore.jpg"
 	messageContent := "Выберите товар:"
@@ -44,7 +43,6 @@ func AppStore(c telebot.Context) error {
 	return nil
 }
 func AppStore500key(c telebot.Context) error {
-
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/shopImages/servicesImages/appStore/appStore500.jpg"
 	messageContent := "<b>Товар:</b> Ключ App Store 500 руб\n<b>Цена:</b> 689₽\n\n<b>Описание:</b> Подарочная карта оплаты AppStore/iTunes. \nС помощью баланса можно оплачивать подписки/покупать товары в играх и приложениях.\n\n⚠️Ключ можно активировать только на учетной записи РФ региона."
