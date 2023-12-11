@@ -42,7 +42,7 @@ func BotStart() error {
 
 	b.Handle(telebot.OnText, func(c telebot.Context) error {
 		if state, ok := structures.UserStates[c.Chat().ID]; ok {
-			fmt.Println("STATE:", state)
+			fmt.Println("STATE:", state, "asfasfasf")
 			if state.IsInteracting {
 				switch structures.UserStates[c.Chat().ID].Type {
 
@@ -73,7 +73,7 @@ func BotStart() error {
 					state.Price = newPrice
 					return orderMethods.CreateCheck(c)
 
-				case "spotifyHandler":
+				default:
 					state.DataCase[state.Step] = c.Message().Text
 					if state.Step == len(state.DataCase)-1 {
 						return orderMethods.CreateOrder(c)
@@ -81,10 +81,8 @@ func BotStart() error {
 						state.Step++
 						return sucessfulPayments.OrderInfoHandler(c)
 					}
-
-				default:
-					return botCommands.Start(c)
 				}
+
 			} else {
 				return botCommands.Start(c)
 			}

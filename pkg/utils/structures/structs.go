@@ -106,12 +106,15 @@ var Handlers = map[string]string{
 	"app3": "keyHandler",
 	"app4": "keyHandler",
 	"app5": "keyHandler",
+
+	"7tvC": "7tvHandler",
 }
 
 var Parameters = map[string][]string{
 
 	"spotifyHandler": {"Введите логин от Spotify", "Введите пароль от Spotify", "cкинь писю"},
 	"keyHandler":     {},
+	"7tvHandler":     {"Введите логин от 7TV"},
 }
 
 var Pages = map[string]*TypicalPage{
@@ -146,6 +149,7 @@ var Pages = map[string]*TypicalPage{
 		Commands: [][]Command{
 			{
 				//{Text: "Подписка Twitch", MainCommand: ""},
+				{Text: "Подписка 7TV", Command: Commands["7TV"]},
 				{Text: "Spotify", Command: Commands["spotify"]}},
 			{
 				{Text: "AppStore", Command: Commands["appStore"]}},
@@ -161,6 +165,16 @@ var Pages = map[string]*TypicalPage{
 	Commands["spotify_duo_1"]:         spotifyPages,
 	Commands["spotify_family_1"]:      spotifyPages,
 	//========SPOTIFY==========//========SPOTIFY==========//========SPOTIFY==========
+
+	Commands["7TV"]: &TypicalPage{
+		URL:  "pkg/utils/data/img/mainMenuImages/faq.png",
+		Text: "Купить подписку 7TV",
+		Commands: [][]Command{{
+			{Text: "Купить", Command: Commands["topUpBalance"]},
+		}},
+		Data:     &MessageData{Custom: "7tvC", Price: int(Prices["7tvC"])},
+		PrevPage: Commands["shop_services"],
+	},
 
 	Commands["faq"]: &TypicalPage{
 		URL:      "pkg/utils/data/img/mainMenuImages/faq.png",
@@ -223,6 +237,8 @@ var Commands = map[string]string{
 	"appStore3000": "appd",
 	"appStore9000": "appe",
 
+	"7TV": "7tvV",
+
 	"Success": "spot",
 	// я изменял хуйню с миллиономами хэндлеров, теперь вся инфа - это код заказа, которой декодируется в название, и его цена
 	"steam_topUpBalance": "aaal",
@@ -248,6 +264,8 @@ var Prices = map[string]float64{
 	"app3": 2068.0,
 	"app4": 4136.0,
 	"app5": 12408.0,
+
+	"7tvC": 5999.0,
 }
 
 var Codes = map[string]string{

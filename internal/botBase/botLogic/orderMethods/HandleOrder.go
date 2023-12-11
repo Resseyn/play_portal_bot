@@ -54,7 +54,10 @@ func CreateOrder(c telebot.Context) error {
 	c.Send(msg, keyboardForUser)
 
 	price := strconv.Itoa(int(structures.UserStates[c.Chat().ID].Price))
-	msg.Caption = data.Command + structures.Codes[structures.UserStates[c.Chat().ID].Order] + structures.UserStates[c.Chat().ID].DataCase[0] + structures.UserStates[c.Chat().ID].DataCase[1] + price
+	msg.Caption = data.Command + "\n" + structures.Codes[structures.UserStates[c.Chat().ID].Order] + "\n" + price
+	for _, content := range structures.UserStates[c.Chat().ID].DataCase {
+		msg.Caption += "\n" + content
+	}
 
 	delete(structures.UserStates, c.Chat().ID)
 

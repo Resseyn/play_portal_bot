@@ -95,6 +95,7 @@ func SendTypicalPage(c telebot.Context) error {
 	} else {
 		if params.Data != nil {
 			data = params.Data
+			data.PrevCommand = params.PrevPage
 		}
 	}
 	msg := &telebot.Photo{
