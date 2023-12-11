@@ -63,6 +63,8 @@ func SendTypicalPage(c telebot.Context) error {
 		data = params.Data
 	}
 	data.PrevCommand = params.PrevPage
+	data.Custom = params.Custom
+	data.Price = int(structures.Prices[data.Custom])
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(params.URL),
 		Caption: params.Text,
