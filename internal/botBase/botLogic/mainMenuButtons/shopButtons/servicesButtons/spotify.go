@@ -57,7 +57,7 @@ func SpotifyIndividual1(c telebot.Context) error {
 	data.Price = int(structures.Prices[data.Custom])
 	// =========PARAMS=========
 
-	//TODO: глобальный рефрактор, спотифайсаксес теперть просто саксес Инпутпэймент
+	//TODO: глобальный рефрактор, спотифайсаксес теперть просто саксес пэймент
 	keyboard := helpingMethods.CreateInline(data, commands...)
 	err := c.Edit(&telebot.Photo{
 		File:    telebot.FromDisk(picPath),

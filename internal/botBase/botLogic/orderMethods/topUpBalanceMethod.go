@@ -21,7 +21,7 @@ func TopUpBalance(c telebot.Context) error {
 		user, _ = databaseModels.Users.GetUser(c.Chat().ID)
 		if user.Balance-float64(data.Price) >= 0 {
 			commands := [][]structures.Command{{
-				{Text: "Вернуться к услуге", Command: structures.Commands["spotifySuccess"]}}}
+				{Text: "Вернуться к услуге", Command: structures.Commands["Success"]}}}
 			keyboard := helpingMethods.CreateInline(data, commands...)
 			c.Send("Вам хватает денег на услугу", keyboard)
 			delete(structures.UserStates, c.Chat().ID)

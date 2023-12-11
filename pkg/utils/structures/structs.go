@@ -79,7 +79,7 @@ var Commands = map[string]string{
 	"appStore3000": "appd",
 	"appStore9000": "appe",
 
-	"spotifySuccess": "spot",
+	"Success": "spot",
 	// я изменял хуйню с миллиономами хэндлеров, теперь вся инфа - это код заказа, которой декодируется в название, и его цена
 	"steam_topUpBalance": "aaal",
 

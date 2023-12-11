@@ -156,7 +156,7 @@ func CallbackHandle(c telebot.Context) error {
 	case structures.Commands["appStore9000"]:
 		return servicesButtons.AppStore9000key(c)
 
-	case structures.Commands["spotifySuccess"]:
+	case structures.Commands["Success"]:
 		return sucessfulPayments.OrderInfoHandler(c)
 	case structures.Commands["keySuccess"]:
 		return sucessfulPayments.KeySuccess(c)

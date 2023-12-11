@@ -45,7 +45,6 @@ func Services(c telebot.Context) error {
 			{Text: "Подписка Twitch", Command: ""},
 			{Text: "Spotify", Command: structures.Commands["spotify"]}},
 		{
-			{Text: "Подписка 7TV", Command: ""},
 			{Text: "AppStore", Command: structures.Commands["appStore"]}},
 	}
 	data := helpingMethods.ParseData(c.Callback().Data)

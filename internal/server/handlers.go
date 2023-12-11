@@ -85,7 +85,7 @@ func PayPalychPaymentHandler(w http.ResponseWriter, r *http.Request) {
 			msgData = &structures.MessageData{}
 		} else {
 			commands = [][]structures.Command{{
-				{Text: "Вернуться к услуге", Command: structures.Commands["spotifySuccess"]}}}
+				{Text: "Вернуться к услуге", Command: structures.Commands["Success"]}}}
 			msgData = &structures.MessageData{
 				Command:     "",
 				PrevCommand: "",
