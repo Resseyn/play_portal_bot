@@ -52,8 +52,8 @@ func AddNewPageToMongo(page *structures.TypicalPage, handlerName string, handler
 	handlerParams = []string{"Введите", "dssdfsd"}
 	prices = []float64{333.0, 666.0}
 	codesTexts = map[string]string{page.MainCommand: "Новый спотик"}
-	//TODO: codesTexts - словарь с кастомом товара и его названием, которое юзер должен ввести в хендлере до этой функции
-	//TODO: там где циклы создать заранее нормальный словарь, уже его потом добавлять в монгу
+	//codesTexts - словарь с кастомом товара и его названием, которое юзер должен ввести в хендлере до этой функции
+	//TODO: там где циклы создать заранее нормальный словарь, уже его потом добавлять в монгу, чтобы потом достать целый словарь и его юзать
 	for i, good := range page.Goods {
 		codesTexts[good.Custom] = goodsNames[i]
 	}
