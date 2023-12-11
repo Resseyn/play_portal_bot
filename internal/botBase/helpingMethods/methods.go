@@ -1,7 +1,9 @@
 package helpingMethods
 
 import (
+	"gopkg.in/telebot.v3"
 	"math/rand"
+	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 	"strconv"
 	"strings"
@@ -52,4 +54,24 @@ func FindKeyByValue(m map[string]string, value string) (key string, ok bool) {
 		}
 	}
 	return "", false
+}
+
+func SendTypicalPage(c telebot.Context) error {
+	data := ParseData(c.Callback().Data)
+	params := structures.Pages[data.Command]
+	if params.Data != nil {
+		data = params.Data
+	}
+	data.PrevCommand = params.PrevPage
+	msg := &telebot.Photo{
+		File:    telebot.FromDisk(params.URL),
+		Caption: params.Text,
+	}
+	keyboard := CreateInline(data, params.Commands...)
+	err := c.Edit(msg, keyboard)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+	return nil
 }

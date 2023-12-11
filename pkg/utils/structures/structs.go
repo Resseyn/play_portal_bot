@@ -18,6 +18,7 @@ type TypicalPage struct {
 	Text     string
 	Commands [][]Command
 	Data     *MessageData
+	PrevPage string
 	//code
 	//price
 
@@ -60,20 +61,34 @@ var Parameters = map[string][]string{
 }
 
 var Pages = map[string]*TypicalPage{
-	"aaaa": &TypicalPage{
-		URL:  "",
-		Text: "Ukfdyjt me.nu",
+	Commands["shop"]: &TypicalPage{
+		URL:  "pkg/utils/data/img/mainMenuImages/gettyimages-1067956982.jpg",
+		Text: "МАГАЗИН ИГР 'ЗМЕЙ ГЕРОИНЫЧ' через пэйдеж",
 		Commands: [][]Command{
 			{
-				{Text: "Магазин", Command: Commands["shop"]},
-				{Text: "Кабинет", Command: Commands["personalCabinet"]}},
+				{Text: "Игровые сервисы", Command: Commands["shop_gameServices"]},
+				{Text: "Сервисы", Command: Commands["shop_services"]}},
 			{
-				{Text: "Поддержка", Command: Commands["support"]},
-				{Text: "FAQ", Command: Commands["faq"]}},
-		},
-		Data: &MessageData{
-			Command: Commands["mainMenu"],
-		},
+				{Text: "Pepega(насвай не завезли)", Command: Commands[""]},
+			}},
+		PrevPage: Commands["mainMenu"],
+	},
+	Commands["faq"]: &TypicalPage{
+		URL:      "pkg/utils/data/img/mainMenuImages/faq.png",
+		Text:     "Здесь можно почитать ответы на Часто задаваемые вопросы. НУ И ТИПО ССЫЛОЧКУ СЮДА АГА",
+		Commands: [][]Command{{}},
+		PrevPage: Commands["mainMenu"],
+	},
+	Commands["history"]: &TypicalPage{
+		URL:  "pkg/utils/data/img/mainMenuImages/faq.png",
+		Text: "Какую историю желаете посмотреть?",
+		Commands: [][]Command{
+			{
+				{Text: "Историю пополнений", Command: Commands["historyTOP"]}},
+			{
+				{Text: "Историю покупок", Command: Commands["historyBUY"]},
+			}},
+		PrevPage: Commands["personalCabinet"],
 	},
 }
 
