@@ -14,12 +14,73 @@ var UserStates = make(map[int64]*UserInteraction)
 // название кнопки, [1] - код товара, [2] - url на картинку, [3] - текст внутри товара
 
 type TypicalPage struct {
-	URL      string
-	Text     string
-	Commands [][]Command
-	Data     *MessageData
-	PrevPage string
-	Custom   string
+	URL         string
+	Text        string
+	MainCommand string
+	Commands    [][]Command
+	Data        *MessageData
+	PrevPage    string
+	Custom      string
+	Goods       []Good
+}
+
+// ========GOOD_PAGES========//========GOOD_PAGES========//========GOOD_PAGES========
+var (
+	spotifyPages = &TypicalPage{
+		MainCommand: Commands["spotify"],
+		URL:         "pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
+		Text:        "Выберите товар:",
+		Commands: [][]Command{
+			{
+				{Text: "Spotify Individual 1 месяц", Command: Commands["spotify_individual_1"]}},
+			{
+				{Text: "Spotify Individual 3 месяца", Command: Commands["spotify_individual_3"]}},
+			{
+				{Text: "Spotify Individual 6 месяцев", Command: Commands["spotify_individual_6"]}},
+			{
+				{Text: "Spotify Individual 12 месяцев", Command: Commands["spotify_individual_12"]}},
+			{
+				{Text: "Spotify DUO 1 месяц", Command: Commands["spotify_duo_1"]}},
+			{
+				{Text: "Spotify Family 1 месяц", Command: Commands["spotify_family_1"]}},
+		},
+		PrevPage: Commands["shop_services"],
+		Goods: []Good{
+			{URL: "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
+				Text:    "Выберите товар",
+				Custom:  "spoa",
+				Command: Commands["spotify_individual_1"]},
+			{URL: "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
+				Text:    "Выберите товар",
+				Custom:  "spob",
+				Command: Commands["spotify_individual_3"]},
+			{URL: "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
+				Text:    "Выберите товар",
+				Custom:  "spoc",
+				Command: Commands["spotify_individual_6"]},
+			{URL: "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
+				Text:    "Выберите товар",
+				Custom:  "spod",
+				Command: Commands["spotify_individual_12"]},
+			{URL: "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_duo_1.jpg",
+				Text:    "Выберите товар",
+				Custom:  "spoe",
+				Command: Commands["spotify_duo_1"]},
+			{URL: "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_spotify_family_1.jpg",
+				Text:    "Выберите товар",
+				Custom:  "spof",
+				Command: Commands["spotify_family_1"]},
+		},
+	}
+)
+
+// ========GOOD_PAGES========//========GOOD_PAGES========//========GOOD_PAGES========
+
+type Good struct {
+	URL     string
+	Text    string
+	Custom  string
+	Command string
 }
 
 //nodeMap - node, {connectedNodes}   	nodeInfo - node - params(столбики всякие) ({connectedNodes})
@@ -84,7 +145,7 @@ var Pages = map[string]*TypicalPage{
 		Text: "Выберите категорию",
 		Commands: [][]Command{
 			{
-				//{Text: "Подписка Twitch", Command: ""},
+				//{Text: "Подписка Twitch", MainCommand: ""},
 				{Text: "Spotify", Command: Commands["spotify"]}},
 			{
 				{Text: "AppStore", Command: Commands["appStore"]}},
@@ -92,86 +153,13 @@ var Pages = map[string]*TypicalPage{
 		PrevPage: Commands["shop"],
 	},
 	//========SPOTIFY==========//========SPOTIFY==========//========SPOTIFY==========
-	Commands["spotify"]: &TypicalPage{
-		URL:  "pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
-		Text: "Выберите товар:",
-		Commands: [][]Command{
-			{
-				{Text: "Spotify Individual 1 месяц", Command: Commands["spotify_individual_1"]}},
-			{
-				{Text: "Spotify Individual 3 месяца", Command: Commands["spotify_individual_3"]}},
-			{
-				{Text: "Spotify Individual 6 месяцев", Command: Commands["spotify_individual_6"]}},
-			{
-				{Text: "Spotify Individual 12 месяцев", Command: Commands["spotify_individual_12"]}},
-			{
-				{Text: "Spotify DUO 1 месяц", Command: Commands["spotify_duo_1"]}},
-			{
-				{Text: "Spotify Family 1 месяц", Command: Commands["spotify_family_1"]}},
-		},
-		PrevPage: Commands["shop_services"],
-	},
-	//TODO: может можно вариации товара как-то объединить???
-	Commands["spotify_individual_1"]: &TypicalPage{
-		URL:  "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
-		Text: "Выберите товар", //TODO: описание добавить
-		Commands: [][]Command{
-			{
-				{Text: "Купить", Command: Commands["topUpBalance"]}},
-		},
-		PrevPage: Commands["spotify"],
-		Custom:   "spoa",
-	},
-	Commands["spotify_individual_3"]: &TypicalPage{
-		URL:  "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
-		Text: "Выберите товар", //TODO: описание добавить
-		Commands: [][]Command{
-			{
-				{Text: "Купить", Command: Commands["topUpBalance"]}},
-		},
-		PrevPage: Commands["spotify"],
-		Custom:   "spob",
-	},
-	Commands["spotify_individual_6"]: &TypicalPage{
-		URL:  "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
-		Text: "Выберите товар", //TODO: описание добавить
-		Commands: [][]Command{
-			{
-				{Text: "Купить", Command: Commands["topUpBalance"]}},
-		},
-		PrevPage: Commands["spotify"],
-		Custom:   "spoc",
-	},
-	Commands["spotify_individual_12"]: &TypicalPage{
-		URL:  "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
-		Text: "Выберите товар", //TODO: описание добавить
-		Commands: [][]Command{
-			{
-				{Text: "Купить", Command: Commands["topUpBalance"]}},
-		},
-		PrevPage: Commands["spotify"],
-		Custom:   "spod",
-	},
-	Commands["spotify_duo_1"]: &TypicalPage{
-		URL:  "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_DUO_1.jpg",
-		Text: "Выберите товар", //TODO: описание добавить
-		Commands: [][]Command{
-			{
-				{Text: "Купить", Command: Commands["topUpBalance"]}},
-		},
-		PrevPage: Commands["spotify"],
-		Custom:   "spoe",
-	},
-	Commands["spotify_family_1"]: &TypicalPage{
-		URL:  "pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
-		Text: "Выберите товар", //TODO: описание добавить
-		Commands: [][]Command{
-			{
-				{Text: "Купить", Command: Commands["topUpBalance"]}},
-		},
-		PrevPage: Commands["spotify"],
-		Custom:   "spof",
-	},
+	Commands["spotify"]:               spotifyPages,
+	Commands["spotify_individual_1"]:  spotifyPages,
+	Commands["spotify_individual_3"]:  spotifyPages,
+	Commands["spotify_individual_6"]:  spotifyPages,
+	Commands["spotify_individual_12"]: spotifyPages,
+	Commands["spotify_duo_1"]:         spotifyPages,
+	Commands["spotify_family_1"]:      spotifyPages,
 	//========SPOTIFY==========//========SPOTIFY==========//========SPOTIFY==========
 
 	Commands["faq"]: &TypicalPage{

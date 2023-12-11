@@ -42,7 +42,7 @@ func Services(c telebot.Context) error {
 	messageContent := "Выберите категорию"
 	commands := [][]structures.Command{
 		{
-			//{Text: "Подписка Twitch", Command: ""},
+			//{Text: "Подписка Twitch", MainCommand: ""},
 			{Text: "Spotify", Command: structures.Commands["spotify"]}},
 		{
 			{Text: "AppStore", Command: structures.Commands["appStore"]}},

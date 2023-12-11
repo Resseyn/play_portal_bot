@@ -59,12 +59,40 @@ func FindKeyByValue(m map[string]string, value string) (key string, ok bool) {
 func SendTypicalPage(c telebot.Context) error {
 	data := ParseData(c.Callback().Data)
 	params := structures.Pages[data.Command]
-	if params.Data != nil {
-		data = params.Data
-	}
 	data.PrevCommand = params.PrevPage
-	data.Custom = params.Custom
-	data.Price = int(structures.Prices[data.Custom])
+	if params.Goods != nil {
+		if params.MainCommand != data.Command {
+			if params.Data != nil {
+				data = params.Data
+			}
+			for _, good := range params.Goods {
+				if good.Command == data.Command {
+					data.Custom = good.Custom
+					data.Price = int(structures.Prices[good.Custom])
+					data.PrevCommand = params.MainCommand
+					msg := &telebot.Photo{
+						File:    telebot.FromDisk(good.URL),
+						Caption: good.Text,
+					}
+					commands := [][]structures.Command{
+						{
+							{Text: "Купить", Command: structures.Commands["topUpBalance"]}},
+					}
+					keyboard := CreateInline(data, commands...)
+					err := c.Edit(msg, keyboard)
+					if err != nil {
+						loggers.ErrorLogger.Println(err)
+						return err
+					}
+					return nil
+				}
+			}
+		}
+	} else {
+		if params.Data != nil {
+			data = params.Data
+		}
+	}
 	msg := &telebot.Photo{
 		File:    telebot.FromDisk(params.URL),
 		Caption: params.Text,

@@ -12,19 +12,19 @@ package servicesButtons
 //	// =========PARAMS=========
 //	picPath := "pkg/utils/data/img/shopImages/servicesImages/twitch.jpg"
 //	messageContent := "Выберите товар:"
-//	commands := [][]structures.Command{
+//	commands := [][]structures.MainCommand{
 //		{
-//			{Text: "Spotify Individual 1 месяц", Command: structures.Commands["spotify_individual_1"]}},
+//			{Text: "Spotify Individual 1 месяц", MainCommand: structures.Commands["spotify_individual_1"]}},
 //		{
-//			{Text: "Spotify Individual 3 месяца", Command: structures.Commands["spotify_individual_3"]}},
+//			{Text: "Spotify Individual 3 месяца", MainCommand: structures.Commands["spotify_individual_3"]}},
 //		{
-//			{Text: "Spotify Individual 6 месяцев", Command: structures.Commands["spotify_individual_6"]}},
+//			{Text: "Spotify Individual 6 месяцев", MainCommand: structures.Commands["spotify_individual_6"]}},
 //		{
-//			{Text: "Spotify Individual 12 месяцев", Command: structures.Commands["spotify_individual_12"]}},
+//			{Text: "Spotify Individual 12 месяцев", MainCommand: structures.Commands["spotify_individual_12"]}},
 //		{
-//			{Text: "Spotify DUO 1 месяц", Command: structures.Commands["spotify_duo_1"]}},
+//			{Text: "Spotify DUO 1 месяц", MainCommand: structures.Commands["spotify_duo_1"]}},
 //		{
-//			{Text: "Spotify Family 1 месяц", Command: structures.Commands["spotify_family_1"]}},
+//			{Text: "Spotify Family 1 месяц", MainCommand: structures.Commands["spotify_family_1"]}},
 //	}
 //	data := helpingMethods.ParseData(c.Callback().Data)
 //	data.PrevCommand = structures.Commands["shop_services"]
