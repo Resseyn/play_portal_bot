@@ -12,12 +12,14 @@ import (
 var MongoDB *mongo.Client
 var MongoContext context.Context
 
-func InitMongo() {
-	MongoContext, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	MongoDB, err := mongo.Connect(MongoContext, options.Client().ApplyURI("mongodb://localhost:27017"))
+func InitMongo() error {
+	var err error
+	MongoContext, _ = context.WithTimeout(context.Background(), 10*time.Second)
+	MongoDB, err = mongo.Connect(MongoContext, options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
 		loggers.ErrorLogger.Println(err)
-		return
+		return err
 	}
 	err = MongoDB.Ping(MongoContext, readpref.Primary())
+	return err
 }

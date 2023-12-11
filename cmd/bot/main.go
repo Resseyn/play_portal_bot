@@ -27,7 +27,18 @@ func main() {
 	fmt.Println(time.Now().Format("02.01.2006 15:04"))
 	loggers.InitLogger()
 	database.InitDatabase()
+	err := database.InitMongo()
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return
+	}
 	databaseModels.InitModels()
+
+	err = databaseModels.AddNewPageToMongo(&structures.TypicalPage{}, "", []string{}, []float64{}, map[string]string{}, []string{})
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return
+	}
 
 	//for i := 0; i < 8; i++ {
 	//	go func() {
@@ -36,7 +47,7 @@ func main() {
 	//}
 	mux := server.CreateMux()
 	go http.ListenAndServe("localhost:8080", mux)
-	err := botBase.BotStart()
+	err = botBase.BotStart()
 	if err != nil {
 		panic(err)
 	}
