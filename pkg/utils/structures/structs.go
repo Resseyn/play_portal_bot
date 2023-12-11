@@ -1,6 +1,8 @@
 package structures
 
-import "sync"
+import (
+	"sync"
+)
 
 // UserStates Словарь с взаимодействиями пользователей с ботом (взаимодейсвия, в которых требуется несколько раз что-то ввести и т.д)
 // НЕ ИСПОЛЬЗОВАТЬ ДЛЯ ВЗАИМОДЕЙСТВИЯ С ОПЛАТАМИ
@@ -8,7 +10,27 @@ var GlobalMutex sync.Mutex
 
 var UserStates = make(map[int64]*UserInteraction)
 
-// Moderators is array of chatID's of whom the tickets will be sent
+// Goods - key - название товара, value - 0 - главное меню товара [0] - текст, [1] - url картинки, 1 - первый товар [0] -
+// название кнопки, [1] - код товара, [2] - url на картинку, [3] - текст внутри товара
+
+type TypicalPage struct {
+	URL      string
+	Text     string
+	Commands [][]Command
+	Data     *MessageData
+	//code
+	//price
+
+}
+
+var Goods = map[string][][]interface{}{
+	"spotify": {
+		{"выберите товра", "url"},
+		{"Спотифайт 1 месйц", "spoa", "urlnakartinku", "подписка на спотик"},
+	},
+} //nodeMap - node, {connectedNodes}   	nodeInfo - node - params(столбики всякие) ({connectedNodes})
+
+// Moderators are array of chatID's of whom the tickets will be sent
 var Moderators = []string{"2038902313", "464644572"}
 
 // UserOrders - Словарь для редиректа у кнопки, появляющейся после пополнения счета. содержит код заказа
@@ -35,6 +57,24 @@ var Parameters = map[string][]string{
 
 	"spotifyHandler": {"Введите логин от Spotify", "Введите пароль от Spotify", "cкинь писю"},
 	"keyHandler":     {},
+}
+
+var Pages = map[string]*TypicalPage{
+	"aaaa": &TypicalPage{
+		URL:  "",
+		Text: "Ukfdyjt me.nu",
+		Commands: [][]Command{
+			{
+				{Text: "Магазин", Command: Commands["shop"]},
+				{Text: "Кабинет", Command: Commands["personalCabinet"]}},
+			{
+				{Text: "Поддержка", Command: Commands["support"]},
+				{Text: "FAQ", Command: Commands["faq"]}},
+		},
+		Data: &MessageData{
+			Command: Commands["mainMenu"],
+		},
+	},
 }
 
 // Commands - словарь, в котором хранятся коды команд (прим. mainMenu - a1jg; по ключу menu выдаст a1jg)

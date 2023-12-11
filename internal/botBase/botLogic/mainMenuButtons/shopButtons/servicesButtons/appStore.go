@@ -7,6 +7,10 @@ import (
 	"play_portal_bot/pkg/utils/structures"
 )
 
+func GoodGenerator(goodName string) {
+
+}
+
 func AppStore(c telebot.Context) error {
 
 	// =========PARAMS=========

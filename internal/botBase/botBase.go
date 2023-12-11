@@ -99,6 +99,7 @@ func BotStart() error {
 
 // CallbackHandle handles all the existing callbacks
 func CallbackHandle(c telebot.Context) error {
+	//TODO:ЕСЛИ В PAges ЕСТЬ data.Command ==> GenerateTypicalPage
 	data := helpingMethods.ParseData(c.Callback().Data)
 	fmt.Println("STATE:", structures.UserStates[c.Chat().ID])
 	fmt.Println("CALLBACK DATA:", data)

@@ -13,6 +13,13 @@ import (
 )
 
 func main() {
+	//Pages = unmarshal from MONGO
+	fuc := time.Now()
+	//for i := 0; i < 10000000; i++ {
+	//	structures.Commands["Success"] = strconv.FormatInt(int64(i), 10)
+	//}//TODO: тест с редисом
+	fmt.Println(time.Now().Sub(fuc))
+
 	for k, v := range structures.Codes {
 		fmt.Println(k+":", v)
 	}
