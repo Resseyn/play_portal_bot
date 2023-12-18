@@ -1,0 +1,4 @@
+logs/errlog.txt
+logs/globallog.txt
+bot/main.go
+internal/botBase/keys/keys.go

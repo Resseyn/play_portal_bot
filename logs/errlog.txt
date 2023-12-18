@@ -1,0 +1,51 @@
+2023/12/01 20:52:24 pq: relation "userinfo" does not exist
+2023/12/01 20:52:24 pq: relation "userinfo" does not exist
+2023/12/01 20:53:49 pq: relation "userinfo" does not exist
+2023/12/01 20:53:49 pq: relation "userinfo" does not exist
+2023/12/01 20:55:24 pq: relation "userinfo" does not exist
+2023/12/01 20:55:24 pq: column "balance" does not exist
+2023/12/01 20:56:02 pq: column "chatid" of relation "user_info" does not exist
+2023/12/01 20:56:02 pq: column "balance" does not exist
+2023/12/01 20:57:55 sql: Scan error on column index 2, name "amount": destination not a pointer
+2023/12/01 21:00:58 pq: duplicate key value violates unique constraint "UserInfo_pkey"
+2023/12/01 21:00:58 pq: duplicate key value violates unique constraint "Orders_pkey"
+2023/12/01 21:00:58 sql: no rows in result set
+2023/12/01 21:01:13 pq: duplicate key value violates unique constraint "UserInfo_pkey"
+2023/12/01 21:01:13 pq: duplicate key value violates unique constraint "Orders_pkey"
+2023/12/01 21:02:14 pq: duplicate key value violates unique constraint "UserInfo_pkey"
+2023/12/01 21:04:24 sql: no rows in result set
+2023/12/01 21:05:08 pq: insert or update on table "orders" violates foreign key constraint "fk_chatID"
+2023/12/01 21:05:08 sql: no rows in result set
+2023/12/01 21:08:44 pq: insert or update on table "orders" violates foreign key constraint "fk_chatID"
+2023/12/01 21:08:44 sql: no rows in result set
+2023/12/01 21:09:16 sql: no rows in result set
+2023/12/01 21:19:49 pq: duplicate key value violates unique constraint "Orders_pkey"
+2023/12/01 21:20:42 pq: duplicate key value violates unique constraint "Orders_pkey"
+2023/12/01 21:27:21 pq: duplicate key value violates unique constraint "Orders_pkey"
+2023/12/01 21:27:21 pq: duplicate key value violates unique constraint "order_id_uniq"
+2023/12/01 23:29:16 telegram: Bad Request: there is no media in the message to edit (400)
+2023/12/01 23:38:47 telegram: Bad Request: there is no media in the message to edit (400)
+2023/12/03 00:41:18 pq: duplicate key value violates unique constraint "checks_pkey"
+2023/12/03 00:54:23 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/12/03 01:29:43 pq: value too long for type character varying(4)
+2023/12/04 14:27:41 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/12/04 15:01:03 telegram: Bad Request: canceled by new editMessageMedia request (400)
+2023/12/04 15:01:03 telegram: Bad Request: canceled by new editMessageMedia request (400)
+2023/12/04 15:01:03 telegram: Bad Request: canceled by new editMessageMedia request (400)
+2023/12/04 15:01:03 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/12/04 15:04:22 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/12/04 16:40:40 sql: expected 6 destination arguments in Scan, not 5
+2023/12/04 16:40:45 sql: expected 6 destination arguments in Scan, not 5
+2023/12/04 16:41:31 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/12/04 16:41:55 sql: expected 6 destination arguments in Scan, not 5
+2023/12/04 17:07:52 telegram: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message (400)
+2023/12/04 17:23:53 pq: duplicate key value violates unique constraint "checks_pkey"
+2023/12/04 17:24:09 pq: duplicate key value violates unique constraint "checks_pkey"
+2023/12/04 23:15:46 telegram: Bad Request: there is no media in the message to edit (400)
+2023/12/05 00:06:18 telegram: Bad Request: canceled by new editMessageMedia request (400)
+2023/12/06 00:11:48 telegram: Bad Request: there is no media in the message to edit (400)
+2023/12/06 00:45:37 sql: no rows in result set
+2023/12/09 20:43:22 pq: duplicate key value violates unique constraint "checks_pkey"
+2023/12/09 20:43:51 pq: duplicate key value violates unique constraint "checks_pkey"
+2023/12/09 20:45:34 pq: duplicate key value violates unique constraint "checks_pkey"
+2023/12/09 20:59:52 pq: duplicate key value violates unique constraint "checks_pkey"
