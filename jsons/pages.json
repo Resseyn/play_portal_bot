@@ -1,0 +1,732 @@
+{
+  "7tvV":{
+    "URL":"pkg/utils/data/img/mainMenuImages/faq.png",
+    "Text":"Купить подписку 7TV",
+    "MainCommand":"",
+    "Commands":[
+      [
+        {
+          "Text":"Купить",
+          "Command":"aaaf"
+        }
+      ]
+    ],
+    "Data":{
+      "Command":"",
+      "PrevCommand":"",
+      "Price":5999,
+      "Custom":"7tvC"
+    },
+    "PrevPage":"aaah",
+    "Custom":"",
+    "Goods":null
+  },
+  "a12k":{
+    "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
+    "Text":"Выберите товар:",
+    "MainCommand":"aaaj",
+    "Commands":[
+      [
+        {
+          "Text":"Spotify Individual 1 месяц",
+          "Command":"aa1k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 3 месяца",
+          "Command":"aa3k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 6 месяцев",
+          "Command":"aa6k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 12 месяцев",
+          "Command":"a12k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify DUO 1 месяц",
+          "Command":"duo1"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Family 1 месяц",
+          "Command":"fam1"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaah",
+    "Custom":"",
+    "Goods":[
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoa",
+        "Command":"aa1k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spob",
+        "Command":"aa3k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoc",
+        "Command":"aa6k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spod",
+        "Command":"a12k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_duo_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoe",
+        "Command":"duo1"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spof",
+        "Command":"fam1"
+      }
+    ]
+  },
+  "aa1k":{
+    "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
+    "Text":"Выберите товар:",
+    "MainCommand":"aaaj",
+    "Commands":[
+      [
+        {
+          "Text":"Spotify Individual 1 месяц",
+          "Command":"aa1k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 3 месяца",
+          "Command":"aa3k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 6 месяцев",
+          "Command":"aa6k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 12 месяцев",
+          "Command":"a12k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify DUO 1 месяц",
+          "Command":"duo1"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Family 1 месяц",
+          "Command":"fam1"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaah",
+    "Custom":"",
+    "Goods":[
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoa",
+        "Command":"aa1k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spob",
+        "Command":"aa3k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoc",
+        "Command":"aa6k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spod",
+        "Command":"a12k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_duo_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoe",
+        "Command":"duo1"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spof",
+        "Command":"fam1"
+      }
+    ]
+  },
+  "aa3k":{
+    "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
+    "Text":"Выберите товар:",
+    "MainCommand":"aaaj",
+    "Commands":[
+      [
+        {
+          "Text":"Spotify Individual 1 месяц",
+          "Command":"aa1k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 3 месяца",
+          "Command":"aa3k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 6 месяцев",
+          "Command":"aa6k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 12 месяцев",
+          "Command":"a12k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify DUO 1 месяц",
+          "Command":"duo1"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Family 1 месяц",
+          "Command":"fam1"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaah",
+    "Custom":"",
+    "Goods":[
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoa",
+        "Command":"aa1k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spob",
+        "Command":"aa3k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoc",
+        "Command":"aa6k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spod",
+        "Command":"a12k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_duo_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoe",
+        "Command":"duo1"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spof",
+        "Command":"fam1"
+      }
+    ]
+  },
+  "aa6k":{
+    "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
+    "Text":"Выберите товар:",
+    "MainCommand":"aaaj",
+    "Commands":[
+      [
+        {
+          "Text":"Spotify Individual 1 месяц",
+          "Command":"aa1k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 3 месяца",
+          "Command":"aa3k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 6 месяцев",
+          "Command":"aa6k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 12 месяцев",
+          "Command":"a12k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify DUO 1 месяц",
+          "Command":"duo1"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Family 1 месяц",
+          "Command":"fam1"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaah",
+    "Custom":"",
+    "Goods":[
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoa",
+        "Command":"aa1k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spob",
+        "Command":"aa3k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoc",
+        "Command":"aa6k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spod",
+        "Command":"a12k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_duo_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoe",
+        "Command":"duo1"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spof",
+        "Command":"fam1"
+      }
+    ]
+  },
+  "aaab":{
+    "URL":"pkg/utils/data/img/mainMenuImages/gettyimages-1067956982.jpg",
+    "Text":"МАГАЗИН ИГР 'ЗМЕЙ ГЕРОИНЫЧ' через пэйдеж",
+    "MainCommand":"",
+    "Commands":[
+      [
+        {
+          "Text":"Игровые сервисы",
+          "Command":"aaag"
+        },
+        {
+          "Text":"Сервисы",
+          "Command":"aaah"
+        }
+      ],
+      [
+        {
+          "Text":"Pepega(насвай не завезли)",
+          "Command":""
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaaa",
+    "Custom":"",
+    "Goods":null
+  },
+  "aaae":{
+    "URL":"pkg/utils/data/img/mainMenuImages/faq.png",
+    "Text":"Здесь можно почитать ответы на Часто задаваемые вопросы. НУ И ТИПО ССЫЛОЧКУ СЮДА АГА",
+    "MainCommand":"",
+    "Commands":[
+      [ ]
+    ],
+    "Data":null,
+    "PrevPage":"aaaa",
+    "Custom":"",
+    "Goods":null
+  },
+  "aaag":{
+    "URL":"pkg/utils/data/img/shopImages/gameServices.jpg",
+    "Text":"Выберите категорию",
+    "MainCommand":"",
+    "Commands":[
+      [
+        {
+          "Text":"Steam",
+          "Command":""
+        },
+        {
+          "Text":"Xbox/Microsoft",
+          "Command":""
+        }
+      ],
+      [
+        {
+          "Text":"Playstation",
+          "Command":""
+        },
+        {
+          "Text":"ИГРЫ",
+          "Command":""
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaab",
+    "Custom":"",
+    "Goods":null
+  },
+  "aaah":{
+    "URL":"pkg/utils/data/img/shopImages/gameServices.jpg",
+    "Text":"Выберите категорию",
+    "MainCommand":"",
+    "Commands":[
+      [
+        {
+          "Text":"Подписка 7TV",
+          "Command":"7tvV"
+        },
+        {
+          "Text":"Spotify",
+          "Command":"aaaj"
+        }
+      ],
+      [
+        {
+          "Text":"AppStore",
+          "Command":"apps"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaab",
+    "Custom":"",
+    "Goods":null
+  },
+  "aaaj":{
+    "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
+    "Text":"Выберите товар:",
+    "MainCommand":"aaaj",
+    "Commands":[
+      [
+        {
+          "Text":"Spotify Individual 1 месяц",
+          "Command":"aa1k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 3 месяца",
+          "Command":"aa3k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 6 месяцев",
+          "Command":"aa6k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 12 месяцев",
+          "Command":"a12k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify DUO 1 месяц",
+          "Command":"duo1"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Family 1 месяц",
+          "Command":"fam1"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaah",
+    "Custom":"",
+    "Goods":[
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoa",
+        "Command":"aa1k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spob",
+        "Command":"aa3k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoc",
+        "Command":"aa6k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spod",
+        "Command":"a12k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_duo_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoe",
+        "Command":"duo1"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spof",
+        "Command":"fam1"
+      }
+    ]
+  },
+  "duo1":{
+    "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
+    "Text":"Выберите товар:",
+    "MainCommand":"aaaj",
+    "Commands":[
+      [
+        {
+          "Text":"Spotify Individual 1 месяц",
+          "Command":"aa1k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 3 месяца",
+          "Command":"aa3k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 6 месяцев",
+          "Command":"aa6k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 12 месяцев",
+          "Command":"a12k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify DUO 1 месяц",
+          "Command":"duo1"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Family 1 месяц",
+          "Command":"fam1"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaah",
+    "Custom":"",
+    "Goods":[
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoa",
+        "Command":"aa1k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spob",
+        "Command":"aa3k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoc",
+        "Command":"aa6k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spod",
+        "Command":"a12k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_duo_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoe",
+        "Command":"duo1"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spof",
+        "Command":"fam1"
+      }
+    ]
+  },
+  "fam1":{
+    "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify.jpg",
+    "Text":"Выберите товар:",
+    "MainCommand":"aaaj",
+    "Commands":[
+      [
+        {
+          "Text":"Spotify Individual 1 месяц",
+          "Command":"aa1k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 3 месяца",
+          "Command":"aa3k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 6 месяцев",
+          "Command":"aa6k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Individual 12 месяцев",
+          "Command":"a12k"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify DUO 1 месяц",
+          "Command":"duo1"
+        }
+      ],
+      [
+        {
+          "Text":"Spotify Family 1 месяц",
+          "Command":"fam1"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaah",
+    "Custom":"",
+    "Goods":[
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoa",
+        "Command":"aa1k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_3.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spob",
+        "Command":"aa3k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_6.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoc",
+        "Command":"aa6k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_individual_12.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spod",
+        "Command":"a12k"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_duo_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spoe",
+        "Command":"duo1"
+      },
+      {
+        "URL":"pkg/utils/data/img/shopImages/servicesImages/spotify/spotify_family_1.jpg",
+        "Text":"Выберите товар",
+        "Custom":"spof",
+        "Command":"fam1"
+      }
+    ]
+  },
+  "hist":{
+    "URL":"pkg/utils/data/img/mainMenuImages/faq.png",
+    "Text":"Какую историю желаете посмотреть?",
+    "MainCommand":"",
+    "Commands":[
+      [
+        {
+          "Text":"Историю пополнений",
+          "Command":"hisF"
+        }
+      ],
+      [
+        {
+          "Text":"Историю покупок",
+          "Command":"hisT"
+        }
+      ]
+    ],
+    "Data":null,
+    "PrevPage":"aaac",
+    "Custom":"",
+    "Goods":null
+  }
+}

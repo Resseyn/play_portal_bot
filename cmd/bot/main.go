@@ -34,9 +34,15 @@ func main() {
 	}
 	databaseModels.InitModels()
 
-	err = databaseModels.AddNewPageToMongo(&structures.TypicalPage{}, "", []string{}, []float64{}, map[string]string{}, []string{})
+	//err = databaseModels.AddNewPageToMongo(&structures.TypicalPage{}, "", []string{}, []float64{}, map[string]string{}, []string{})
+	//if err != nil {
+	//	loggers.ErrorLogger.Println(err)
+	//	return
+	//}
+	//helpingMethods.ParseMaps() //TODO: only for debugging database
+	err = databaseModels.GetAllOfMapsFromMongo()
 	if err != nil {
-		loggers.ErrorLogger.Println(err)
+		loggers.ErrorLogger.Fatal(err)
 		return
 	}
 

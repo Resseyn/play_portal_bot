@@ -1,9 +1,11 @@
 package helpingMethods
 
 import (
+	"encoding/json"
 	"fmt"
 	"gopkg.in/telebot.v3"
 	"math/rand"
+	"os"
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/utils/structures"
 	"strconv"
@@ -110,4 +112,18 @@ func SendTypicalPage(c telebot.Context) error {
 	}
 	fmt.Println(time.Now().Sub(fm).Seconds())
 	return nil
+}
+func ParseMaps() {
+	com, _ := json.Marshal(structures.Commands)
+	os.WriteFile("jsons/commands.json", com, 0666)
+	com, _ = json.Marshal(structures.Codes)
+	os.WriteFile("jsons/codes.json", com, 0666)
+	com, _ = json.Marshal(structures.Handlers)
+	os.WriteFile("jsons/handlers.json", com, 0666)
+	com, _ = json.Marshal(structures.Pages)
+	os.WriteFile("jsons/pages.json", com, 0666)
+	com, _ = json.Marshal(structures.Prices)
+	os.WriteFile("jsons/prices.json", com, 0666)
+	com, _ = json.Marshal(structures.Parameters)
+	os.WriteFile("jsons/parameters.json", com, 0666)
 }

@@ -14,14 +14,14 @@ var UserStates = make(map[int64]*UserInteraction)
 // название кнопки, [1] - код товара, [2] - url на картинку, [3] - текст внутри товара
 
 type TypicalPage struct {
-	URL         string
-	Text        string
-	MainCommand string
-	Commands    [][]Command
-	Data        *MessageData
-	PrevPage    string
-	Custom      string
-	Goods       []Good
+	URL         string       `bson:"url"`
+	Text        string       `bson:"text"`
+	MainCommand string       `bson:"maincommand"`
+	Commands    [][]Command  `bson:"commands"`
+	Data        *MessageData `bson:"data"`
+	PrevPage    string       `bson:"prevpage"`
+	Custom      string       `bson:"custom"`
+	Goods       []Good       `bson:"goods"`
 }
 
 // ========GOOD_PAGES========//========GOOD_PAGES========//========GOOD_PAGES========
@@ -77,10 +77,10 @@ var (
 // ========GOOD_PAGES========//========GOOD_PAGES========//========GOOD_PAGES========
 
 type Good struct {
-	URL     string
-	Text    string
-	Custom  string
-	Command string
+	URL     string `bson:"url"`
+	Text    string `bson:"text"`
+	Custom  string `bson:"custom"`
+	Command string `bson:"command"`
 }
 
 //nodeMap - node, {connectedNodes}   	nodeInfo - node - params(столбики всякие) ({connectedNodes})
@@ -243,9 +243,10 @@ var Commands = map[string]string{
 	// я изменял хуйню с миллиономами хэндлеров, теперь вся инфа - это код заказа, которой декодируется в название, и его цена
 	"steam_topUpBalance": "aaal",
 
-	"adminPanel":     "aaam",
-	"showAdminPanel": "aaao",
-	"showReports":    "aaan",
+	"adminPanel":       "aaam",
+	"showAdminPanel":   "aaao",
+	"showReports":      "aaan",
+	"createNewProduct": "prod",
 
 	"pingModer": "ping",
 }
@@ -293,8 +294,8 @@ type MessageData struct {
 }
 
 type Command struct {
-	Text    string
-	Command string
+	Text    string `bson:"text"`
+	Command string `bson:"command"`
 }
 type UserInteraction struct {
 	IsInteracting bool   //optional probably

@@ -1,0 +1,11 @@
+{
+  "7tvHandler":[
+    "Введите логин от 7TV"
+  ],
+  "keyHandler":[ ],
+  "spotifyHandler":[
+    "Введите логин от Spotify",
+    "Введите пароль от Spotify",
+    "cкинь писю"
+  ]
+}

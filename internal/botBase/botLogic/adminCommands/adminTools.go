@@ -24,7 +24,8 @@ func ShowAdminPanel(c telebot.Context) error {
 	commands := [][]structures.Command{
 		{
 			{Text: "Показать репорты", Command: structures.Commands["showReports"]},
-			{Text: "Падрачить хуй", Command: structures.Commands["showAdminPanel"]}}}
+			{Text: "Падрачить хуй", Command: structures.Commands["showAdminPanel"]},
+			{Text: "Создать товар", Command: structures.Commands["createNewProduct"]}}}
 
 	// =========PARAMS=========
 
@@ -40,7 +41,6 @@ func ShowAdminPanel(c telebot.Context) error {
 
 // условно из FAQ идет то самое создание тикета и вот допустим они сюда идут ну я думаю потом придумаем куда это чисто временная прикольная хуйня
 func ShowReports(c telebot.Context) error {
-
 	// =========PARAMS=========
 	picPath := "pkg/utils/data/img/adminImages/astronaut.jpg"
 	messageContent := "долбаебы понапишут вопросов через факью и они все сюда"
@@ -58,5 +58,29 @@ func ShowReports(c telebot.Context) error {
 		File:    telebot.FromDisk(picPath),
 		Caption: messageContent,
 	}, keyboard)
+	return err
+}
+
+func CreateNewProduct(c telebot.Context) error {
+	// =========PARAMS=========
+	picPath := "pkg/utils/data/img/adminImages/astronaut.jpg"
+	messageContent := "долбаебы понапишут вопросов через факью и они все сюда"
+	messageData := &structures.MessageData{
+		Command:     structures.Commands["showReports"],
+		PrevCommand: structures.Commands["showAdminPanel"],
+		Price:       0,
+		Custom:      "",
+	}
+	commands := [][]structures.Command{{}}
+	// =========PARAMS=========
+
+	helpingMethods.NewInteraction("creatingPage", c.Chat().ID, 0, "", make([]string, 2))
+
+	keyboard := helpingMethods.CreateInline(messageData, commands...)
+	err := c.Edit(&telebot.Photo{
+		File:    telebot.FromDisk(picPath),
+		Caption: messageContent,
+	}, keyboard)
+
 	return err
 }

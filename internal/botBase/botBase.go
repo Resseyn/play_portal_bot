@@ -195,10 +195,13 @@ func CallbackHandle(c telebot.Context) error {
 		return adminCommands.ShowAdminPanel(c)
 	case structures.Commands["showReports"]:
 		return adminCommands.ShowReports(c)
+	case structures.Commands["createNewProduct"]:
+		return adminCommands.CreateNewProduct(c)
 
 	case structures.Commands["pingModer"]:
 		return orderMethods.PingModer(c)
 	}
+
 	return nil
 }
 

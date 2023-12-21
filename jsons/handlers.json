@@ -1,0 +1,14 @@
+{
+  "7tvC":"7tvHandler",
+  "app1":"keyHandler",
+  "app2":"keyHandler",
+  "app3":"keyHandler",
+  "app4":"keyHandler",
+  "app5":"keyHandler",
+  "spoa":"spotifyHandler",
+  "spob":"spotifyHandler",
+  "spoc":"spotifyHandler",
+  "spod":"spotifyHandler",
+  "spoe":"spotifyHandler",
+  "spof":"spotifyHandler"
+}
