@@ -118,14 +118,14 @@ func HandleCreatingState(c telebot.Context) error {
 		params := strings.Split(c.Message().Text, ",")
 		state.HandlerParams = params
 		state.Step++
-		c.Send("Тееперь скинь код страницы, с которой должен быть товар")
+		c.Send("Тееперь скинь комманду для страницы, с которой должен быть товар")
 
 	} else if state.Step == 5 && c.Message().Text != "" {
 		if _, ok := structures.Commands[c.Message().Text]; !ok {
 			c.Send("Такой команды нет!")
 			return nil
 		}
-		state.PrevPage = c.Message().Text
+		state.PrevPage = structures.Commands[c.Message().Text]
 		state.Step++
 		c.Send("Теперь заполним каждый товар. Скинь картинку первого")
 		state.EndStep = 6 + (state.NumberOfGoods * 4) + 1
