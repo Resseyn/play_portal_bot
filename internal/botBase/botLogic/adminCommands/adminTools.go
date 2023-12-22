@@ -70,12 +70,13 @@ func CreateNewProduct(c telebot.Context) error {
 	messageContent := "Отправь краткое название товара без пробелов на английском (spotify, appStore)"
 	// =========PARAMS=========
 	randCommand := helpingMethods.GenerateUniqueCommand(structures.Commands)
-	structures.CreatingStates[c.Chat().ID] = &structures.CreatingState{Step: 0, EndStep: -1, MainCommand: randCommand, PrevPage: structures.Commands["shop"]}
+	structures.CreatingStates[c.Chat().ID] = &structures.CreatingState{Step: 0, EndStep: -1, MainCommand: randCommand, PrevPage: structures.Commands["shop_gameServices"]}
 	err := c.Send(messageContent)
 	return err
 }
 
 func HandleCreatingState(c telebot.Context) error {
+	//TODO; добавить ввод предыдущей страницы + проверка, можно ли ее изменить (есть ли она в монго)
 	state := structures.CreatingStates[c.Chat().ID]
 	if state.Step == 0 && c.Message().Text != "" {
 		state.MainCommandName = c.Message().Text
@@ -117,11 +118,21 @@ func HandleCreatingState(c telebot.Context) error {
 		params := strings.Split(c.Message().Text, ",")
 		state.HandlerParams = params
 		state.Step++
+		c.Send("Тееперь скинь код страницы, с которой должен быть товар")
+
+	} else if state.Step == 5 && c.Message().Text != "" {
+		if _, ok := structures.Commands[c.Message().Text]; !ok {
+			c.Send("Такой команды нет!")
+			return nil
+		}
+		state.PrevPage = c.Message().Text
+		state.Step++
 		c.Send("Теперь заполним каждый товар. Скинь картинку первого")
-		state.EndStep = 5 + (state.NumberOfGoods * 4) + 1
-	} else if state.Step > 5 && state.Step < state.EndStep {
-		currentGood := (state.Step - 6) / 4
-		switch (state.Step - 6) % 4 {
+		state.EndStep = 6 + (state.NumberOfGoods * 4) + 1
+
+	} else if state.Step > 6 && state.Step < state.EndStep {
+		currentGood := (state.Step - 7) / 4
+		switch (state.Step - 7) % 4 {
 		case 0:
 			if c.Message().Photo == nil {
 				c.Send("пикчу")
@@ -165,11 +176,25 @@ func HandleCreatingState(c telebot.Context) error {
 				if state.Step == state.EndStep {
 					fmt.Println(*state)
 					inlineCommands := make([][]structures.Command, state.NumberOfGoods)
-					for i, command := range state.GoodCommands {
-						comm := structures.Command{Text: state.GoodCommandsNames[i],
-							Command: command}
-						inlineCommands[i] = []structures.Command{comm}
+					if len(state.GoodCommands) >= 8 {
+						for i, command := range state.GoodCommands {
+							comm := structures.Command{Text: state.GoodCommandsNames[i],
+								Command: command}
+							if i%2 == 0 {
+								inlineCommands[i/2] = []structures.Command{comm}
+							} else {
+								inlineCommands[i/2] = append(inlineCommands[i/2], comm)
+							}
+
+						}
+					} else {
+						for i, command := range state.GoodCommands {
+							comm := structures.Command{Text: state.GoodCommandsNames[i],
+								Command: command}
+							inlineCommands[i] = []structures.Command{comm}
+						}
 					}
+
 					page := &structures.TypicalPage{
 						URL:         state.PicFIleID,
 						Text:        state.MainText,

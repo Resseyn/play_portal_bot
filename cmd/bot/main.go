@@ -50,6 +50,7 @@ func main() {
 	//		database.GlobalDatabase.Exec("INSERT INTO keys (key, key_code, avaliable) VALUES ($1, $2, $3)", helpingMethods.RandStringRunes(8), "app5", true)
 	//	}()
 	//}
+
 	mux := server.CreateMux()
 	go http.ListenAndServe("localhost:8080", mux)
 	err = botBase.BotStart()

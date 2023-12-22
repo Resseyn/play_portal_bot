@@ -3,6 +3,7 @@ package databaseModels
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"play_portal_bot/internal/loggers"
 	"play_portal_bot/pkg/database"
 	"play_portal_bot/pkg/utils/structures"
 )
@@ -168,7 +169,36 @@ func AddNewPageToMongo(page *structures.TypicalPage, goodPages []*structures.Typ
 	rawFilter := cur.Current.Lookup("_id")
 	filter := bson.D{}
 	rawFilter.Unmarshal(&filter)
-	_, err := pages.UpdateOne(ctx, filter, bson.M{"$set": map[string]*structures.TypicalPage{page.MainCommand: page}})
+	prevPageCur := cur.Current.Lookup(page.PrevPage)
+	prevPage := structures.TypicalPage{}
+	err := prevPageCur.Unmarshal(&prevPage)
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+	edited := false
+	for i, commandRow := range prevPage.Commands {
+		for j, commmand := range commandRow {
+			if mainCommandName == commmand.Text {
+				prevPage.Commands[i][j].Command = page.MainCommand
+				edited = true
+				break
+			}
+		}
+		if edited {
+			break
+		}
+		if i == len(prevPage.Commands)-1 {
+			prevPage.Commands = append(prevPage.Commands,
+				[]structures.Command{{Text: mainCommandName, Command: page.MainCommand}})
+		}
+	}
+	_, err = pages.UpdateOne(ctx, filter, bson.M{"$set": map[string]*structures.TypicalPage{page.PrevPage: &prevPage}})
+	if err != nil {
+		loggers.ErrorLogger.Println(err)
+		return err
+	}
+	_, err = pages.UpdateOne(ctx, filter, bson.M{"$set": map[string]*structures.TypicalPage{page.MainCommand: page}})
 	if err != nil {
 		return err
 	}
@@ -179,7 +209,6 @@ func AddNewPageToMongo(page *structures.TypicalPage, goodPages []*structures.Typ
 				return err
 			}
 		}
-
 	}
 	// Добавление обработчика
 	handlers := database.MongoDB.Database("play_bot_DB").Collection("handlers")
