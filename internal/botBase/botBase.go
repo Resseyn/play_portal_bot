@@ -39,9 +39,16 @@ func BotStart() error {
 	b.Handle(fmt.Sprintf("/tool%v", keys.ToolKey), botCommands.CreateAdminPanel)
 
 	b.Handle(telebot.OnCallback, CallbackHandle)
-
+	b.Handle(telebot.OnPhoto, func(c telebot.Context) error {
+		if _, ok := structures.CreatingStates[c.Chat().ID]; ok {
+			return adminCommands.HandleCreatingState(c)
+		}
+		return nil
+	})
 	b.Handle(telebot.OnText, func(c telebot.Context) error {
-		if state, ok := structures.UserStates[c.Chat().ID]; ok {
+		if _, ok := structures.CreatingStates[c.Chat().ID]; ok {
+			return adminCommands.HandleCreatingState(c)
+		} else if state, ok := structures.UserStates[c.Chat().ID]; ok {
 			fmt.Println("STATE:", state, "asfasfasf")
 			if state.IsInteracting {
 				switch structures.UserStates[c.Chat().ID].Type {

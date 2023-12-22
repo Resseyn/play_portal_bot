@@ -129,7 +129,7 @@ func GetAllOfMapsFromMongo() error {
 	return nil
 }
 
-func AddNewPageToMongo(page *structures.TypicalPage, handlerName string, handlerParams []string, prices []float64, codesTexts map[string]string, goodsNames []string) error {
+func AddNewPageToMongo(page *structures.TypicalPage, goodPages []*structures.TypicalPage, mainCommandName string, handlerName string, handlerParams []string, prices []float64, codesTexts map[string]string) error {
 	////TODO: тестовые значения
 	//goodsNames = []string{"tovar1,", "tovar2"}
 	//page = &structures.TypicalPage{
@@ -159,10 +159,8 @@ func AddNewPageToMongo(page *structures.TypicalPage, handlerName string, handler
 	//prices = []float64{333.0, 666.0}
 	//codesTexts = map[string]string{page.MainCommand: "Новый спотик"}
 	//codesTexts - словарь с кастомом товара и его названием, которое юзер должен ввести в хендлере до этой функции
-	for i, good := range page.Goods {
-		codesTexts[good.Custom] = goodsNames[i]
-	}
 	ctx := context.Background()
+
 	// Добавление страницы
 	pages := database.MongoDB.Database("play_bot_DB").Collection("pages")
 	cur, _ := pages.Find(context.Background(), bson.D{})
@@ -174,7 +172,15 @@ func AddNewPageToMongo(page *structures.TypicalPage, handlerName string, handler
 	if err != nil {
 		return err
 	}
+	if len(goodPages) != 0 {
+		for i, goodPage := range goodPages {
+			_, err := pages.UpdateOne(ctx, filter, bson.M{"$set": map[string]*structures.TypicalPage{page.Goods[i].Command: goodPage}})
+			if err != nil {
+				return err
+			}
+		}
 
+	}
 	// Добавление обработчика
 	handlers := database.MongoDB.Database("play_bot_DB").Collection("handlers")
 	cur, _ = handlers.Find(context.Background(), bson.D{})
@@ -217,7 +223,10 @@ func AddNewPageToMongo(page *structures.TypicalPage, handlerName string, handler
 		}
 
 	}
-
+	_, err = commandsColl.UpdateOne(ctx, filter, bson.M{"$set": map[string]string{mainCommandName: page.MainCommand}})
+	if err != nil {
+		return err
+	}
 	// Добавление цен
 	pricesCollection := database.MongoDB.Database("play_bot_DB").Collection("prices")
 	cur, _ = pricesCollection.Find(context.Background(), bson.D{})

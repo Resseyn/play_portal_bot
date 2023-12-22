@@ -75,8 +75,14 @@ func SendTypicalPage(c telebot.Context) error {
 					data.Custom = good.Custom
 					data.Price = int(structures.Prices[good.Custom])
 					data.PrevCommand = params.MainCommand
+					var File telebot.File
+					if len(good.URL) == 83 && good.URL[0:3] != "pkg" {
+						File = telebot.File{FileID: good.URL}
+					} else {
+						File = telebot.FromDisk(good.URL)
+					}
 					msg := &telebot.Photo{
-						File:    telebot.FromDisk(good.URL),
+						File:    File,
 						Caption: good.Text,
 					}
 					commands := [][]structures.Command{
@@ -100,8 +106,14 @@ func SendTypicalPage(c telebot.Context) error {
 			data.PrevCommand = params.PrevPage
 		}
 	}
+	var File telebot.File
+	if len(params.URL) == 83 && params.URL[0:3] != "pkg" {
+		File = telebot.File{FileID: params.URL}
+	} else {
+		File = telebot.FromDisk(params.URL)
+	}
 	msg := &telebot.Photo{
-		File:    telebot.FromDisk(params.URL),
+		File:    File,
 		Caption: params.Text,
 	}
 	keyboard := CreateInline(data, params.Commands...)
@@ -126,4 +138,12 @@ func ParseMaps() {
 	os.WriteFile("jsons/prices.json", com, 0666)
 	com, _ = json.Marshal(structures.Parameters)
 	os.WriteFile("jsons/parameters.json", com, 0666)
+}
+
+func GenerateUniqueCommand(mapp map[string]string) string {
+	randMainCommand := RandStringRunes(4)
+	if _, ok := FindKeyByValue(mapp, randMainCommand); ok {
+		return GenerateUniqueCommand(mapp) // Если ключ уже существует, вызываем функцию снова
+	}
+	return randMainCommand // Если ключа нет, возвращаем сгенерированную строку
 }

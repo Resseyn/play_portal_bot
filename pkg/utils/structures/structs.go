@@ -132,7 +132,7 @@ var Pages = map[string]*TypicalPage{
 	},
 	Commands["shop_gameServices"]: &TypicalPage{
 		URL:  "pkg/utils/data/img/shopImages/gameServices.jpg",
-		Text: "Выберите категорию",
+		Text: "Выберите категорию через пэд",
 		Commands: [][]Command{
 			{
 				{Text: "Steam", Command: ""},
@@ -304,6 +304,26 @@ type UserInteraction struct {
 	Price         float64
 	Order         string
 	DataCase      []string
+}
+
+var CreatingStates = make(map[int64]*CreatingState)
+
+type CreatingState struct {
+	Step              int
+	PicFIleID         string
+	MainText          string
+	MainCommandName   string
+	MainCommand       string
+	NumberOfGoods     int
+	PrevPage          string
+	Handler           string
+	HandlerParams     []string
+	Goods             []Good
+	Prices            []float64
+	GoodCommands      []string
+	GoodCommandsNames []string
+	GoodCustoms       []string
+	EndStep           int
 }
 
 //type UserTransaction struct {

@@ -34,7 +34,7 @@ func main() {
 	}
 	databaseModels.InitModels()
 
-	//err = databaseModels.AddNewPageToMongo(&structures.TypicalPage{}, "", []string{}, []float64{}, map[string]string{}, []string{})
+	//err = databaseModels.AddNewPageToMongo(&structures.TypicalPage{}, "", []string{}, []float64{}, map[string]string{})
 	//if err != nil {
 	//	loggers.ErrorLogger.Println(err)
 	//	return
@@ -45,7 +45,6 @@ func main() {
 		loggers.ErrorLogger.Fatal(err)
 		return
 	}
-
 	//for i := 0; i < 8; i++ {
 	//	go func() {
 	//		database.GlobalDatabase.Exec("INSERT INTO keys (key, key_code, avaliable) VALUES ($1, $2, $3)", helpingMethods.RandStringRunes(8), "app5", true)
