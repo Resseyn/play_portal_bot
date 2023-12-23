@@ -107,7 +107,7 @@ func SendTypicalPage(c telebot.Context) error {
 		}
 	}
 	var File telebot.File
-	if len(params.URL) == 83 && params.URL[0:3] != "pkg" {
+	if params.URL[0:3] != "pkg" {
 		File = telebot.File{FileID: params.URL}
 	} else {
 		File = telebot.FromDisk(params.URL)

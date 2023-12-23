@@ -171,26 +171,32 @@ func editPages(pages *mongo.Collection, ctx context.Context, page *structures.Ty
 		return err
 	}
 	edited := false
-	for i, commandRow := range prevPage.Commands {
-		for j, commmand := range commandRow {
-			if mainCommandName == commmand.Text {
-				prevPage.Commands[i][j].Command = page.MainCommand
-				edited = true
+	if len(prevPage.Commands) == 0 {
+		prevPage.Commands = make([][]structures.Command, 1)
+		prevPage.Commands = append(prevPage.Commands,
+			[]structures.Command{{Text: mainCommandName, Command: page.MainCommand}})
+	} else {
+		for i, commandRow := range prevPage.Commands {
+			for j, commmand := range commandRow {
+				if mainCommandName == commmand.Text {
+					prevPage.Commands[i][j].Command = page.MainCommand
+					edited = true
+					break
+				}
+			}
+			if edited {
 				break
 			}
-		}
-		if edited {
-			break
-		}
-		if i == len(prevPage.Commands)-1 {
-			if len(prevPage.Commands[i]) == 1 {
-				prevPage.Commands[i] = append(prevPage.Commands[i],
-					structures.Command{Text: mainCommandName, Command: page.MainCommand})
-			} else {
-				prevPage.Commands = append(prevPage.Commands,
-					[]structures.Command{{Text: mainCommandName, Command: page.MainCommand}})
-			}
+			if i == len(prevPage.Commands)-1 {
+				if len(prevPage.Commands[i]) == 1 {
+					prevPage.Commands[i] = append(prevPage.Commands[i],
+						structures.Command{Text: mainCommandName, Command: page.MainCommand})
+				} else {
+					prevPage.Commands = append(prevPage.Commands,
+						[]structures.Command{{Text: mainCommandName, Command: page.MainCommand}})
+				}
 
+			}
 		}
 	}
 	_, err = pages.UpdateOne(ctx, filter, bson.M{"$set": map[string]*structures.TypicalPage{page.PrevPage: &prevPage}})

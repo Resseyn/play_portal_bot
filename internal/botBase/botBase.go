@@ -105,9 +105,9 @@ func BotStart() error {
 // CallbackHandle handles all the existing callbacks
 func CallbackHandle(c telebot.Context) error {
 	data := helpingMethods.ParseData(c.Callback().Data)
-	fmt.Println("STATE:", structures.UserStates[c.Chat().ID])
-	fmt.Println("CALLBACK DATA:", data)
-	fmt.Println("USER REDIRECTS:", structures.UserOrders[c.Chat().ID])
+	//fmt.Println("STATE:", structures.UserStates[c.Chat().ID])
+	//fmt.Println("CALLBACK DATA:", data)
+	//fmt.Println("USER REDIRECTS:", structures.UserOrders[c.Chat().ID])
 	if _, ok := structures.Pages[data.Command]; ok {
 		return helpingMethods.SendTypicalPage(c)
 	} //TODO: интегрировать этот иф в дефолт

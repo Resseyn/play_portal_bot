@@ -137,11 +137,11 @@ func HandleCreatingState(c telebot.Context) error {
 		}
 		state.Step++
 		c.Send("Теперь заполним каждый товар. Скинь картинку первого")
-		state.EndStep = 7 + (state.NumberOfGoods * 4) + 1
+		state.EndStep = 7 + (state.NumberOfGoods * 4)
 
-	} else if state.Step > 7 && state.Step < state.EndStep { //TODO: if 0
-		currentGood := (state.Step - 8) / 4
-		switch (state.Step - 8) % 4 {
+	} else if state.Step > 6 && state.Step < state.EndStep {
+		currentGood := (state.Step - 7) / 4
+		switch (state.Step - 7) % 4 {
 		case 0:
 			if c.Message().Photo == nil {
 				c.Send("пикчу")
