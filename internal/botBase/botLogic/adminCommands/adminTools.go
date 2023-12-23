@@ -76,7 +76,6 @@ func CreateNewProduct(c telebot.Context) error {
 }
 
 func HandleCreatingState(c telebot.Context) error {
-	//TODO; добавить ввод предыдущей страницы + проверка, можно ли ее изменить (есть ли она в монго)
 	state := structures.CreatingStates[c.Chat().ID]
 	if state.Step == 0 && c.Message().Text != "" {
 		state.MainCommandName = c.Message().Text
@@ -89,13 +88,18 @@ func HandleCreatingState(c telebot.Context) error {
 	} else if state.Step == 2 && c.Message().Text != "" {
 		state.MainText = c.Message().Text
 		state.Step++
-		c.Send("Теперь отправь количество типов товара")
+		c.Send("Теперь отправь количество типов товара. Если 0 - создастся обычная страница")
 	} else if state.Step == 3 && c.Message().Text != "" {
 		var err error
 		state.NumberOfGoods, err = strconv.Atoi(c.Message().Text)
 		if err != nil {
 			c.Send("цифрой")
 			return err
+		}
+		if state.NumberOfGoods == 0 {
+			state.Step = 6
+			c.Send("Теперь скинь команду для страницы, с которой должна быть страница")
+			return nil
 		}
 		state.Goods = make([]structures.Good, state.NumberOfGoods)
 		state.Prices = make([]float64, state.NumberOfGoods)
@@ -107,8 +111,8 @@ func HandleCreatingState(c telebot.Context) error {
 	} else if state.Step == 4 && c.Message().Text != "" {
 		if c.Message().Text == "keyHandler" {
 			state.Step = 6
-			c.Send("Теперь заполним каждый товар. Скинь картинку первого")
-			state.EndStep = 5 + (state.NumberOfGoods * 4) + 1
+			c.Send("Теперь скинь команду для страницы, с которой должен быть товар")
+			state.EndStep = 7 + (state.NumberOfGoods * 4) + 1
 			return nil
 		}
 		state.Handler = c.Message().Text
@@ -118,21 +122,26 @@ func HandleCreatingState(c telebot.Context) error {
 		params := strings.Split(c.Message().Text, ",")
 		state.HandlerParams = params
 		state.Step++
-		c.Send("Тееперь скинь комманду для страницы, с которой должен быть товар")
+		c.Send("Теперь скинь команду для страницы, с которой должен быть товар")
 
-	} else if state.Step == 5 && c.Message().Text != "" {
+	} else if state.Step == 6 && c.Message().Text != "" {
 		if _, ok := structures.Commands[c.Message().Text]; !ok {
 			c.Send("Такой команды нет!")
 			return nil
 		}
 		state.PrevPage = structures.Commands[c.Message().Text]
+		if state.NumberOfGoods == 0 {
+			state.Step = state.EndStep
+			c.Send("Напиши еще что-то и создатся страница")
+			return nil
+		}
 		state.Step++
 		c.Send("Теперь заполним каждый товар. Скинь картинку первого")
-		state.EndStep = 6 + (state.NumberOfGoods * 4) + 1
+		state.EndStep = 7 + (state.NumberOfGoods * 4) + 1
 
-	} else if state.Step > 6 && state.Step < state.EndStep {
-		currentGood := (state.Step - 7) / 4
-		switch (state.Step - 7) % 4 {
+	} else if state.Step > 7 && state.Step < state.EndStep { //TODO: if 0
+		currentGood := (state.Step - 8) / 4
+		switch (state.Step - 8) % 4 {
 		case 0:
 			if c.Message().Photo == nil {
 				c.Send("пикчу")
@@ -201,8 +210,7 @@ func HandleCreatingState(c telebot.Context) error {
 						MainCommand: state.MainCommand,
 						Commands:    inlineCommands,
 						PrevPage:    state.PrevPage,
-						//TODO: check if needed Data:        &structures.MessageData{Command: state.MainCommand},
-						Goods: state.Goods,
+						Goods:       state.Goods,
 					}
 					handlerName := state.Handler
 					handlerParams := state.HandlerParams
@@ -220,15 +228,37 @@ func HandleCreatingState(c telebot.Context) error {
 						loggers.ErrorLogger.Fatal(err)
 						return err
 					}
-					c.Send("Товар добавлен в бд! теперь дело времени, когда модер прикрутит кнопку в основной магаз")
+					c.Send("Товар добавлен в бд!")
 					delete(structures.CreatingStates, c.Chat().ID)
-					//todo:HANDLE ALL
 					return nil
 				}
 				c.Send("Теперь картинку следующего товара")
 			}
 		}
+	} else if state.Step == state.EndStep { //for normal pages
+		fmt.Println(*state)
+		inlineCommands := make([][]structures.Command, state.NumberOfGoods)
 
+		page := &structures.TypicalPage{
+			URL:         state.PicFIleID,
+			Text:        state.MainText,
+			MainCommand: state.MainCommand,
+			Commands:    inlineCommands,
+			PrevPage:    state.PrevPage,
+		}
+		handlerName := ""
+		handlerParams := make([]string, 0)
+		codesText := make(map[string]string, 0)
+		goodPages := make([]*structures.TypicalPage, 0)
+		mainCommandName := state.MainCommandName
+		err := databaseModels.AddNewPageToMongo(page, goodPages, mainCommandName, handlerName, handlerParams, state.Prices, codesText)
+		if err != nil {
+			loggers.ErrorLogger.Fatal(err)
+			return err
+		}
+		c.Send("Страница добавлена в бд!")
+		delete(structures.CreatingStates, c.Chat().ID)
+		return nil
 	}
 	return nil
 }

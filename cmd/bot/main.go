@@ -8,7 +8,6 @@ import (
 	"play_portal_bot/internal/loggers"
 	"play_portal_bot/internal/server"
 	"play_portal_bot/pkg/database"
-	"play_portal_bot/pkg/utils/structures"
 	"time"
 )
 
@@ -20,9 +19,6 @@ func main() {
 	//}//TODO: тест с редисом
 	fmt.Println(time.Now().Sub(fuc))
 
-	for k, v := range structures.Codes {
-		fmt.Println(k+":", v)
-	}
 	fmt.Println("hello world")
 	fmt.Println(time.Now().Format("02.01.2006 15:04"))
 	loggers.InitLogger()
